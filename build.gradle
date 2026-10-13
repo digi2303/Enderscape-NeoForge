@@ -129,11 +129,50 @@ def generateDevAccessTransformer = tasks.register("generateDevAccessTransformer"
 	}
 }
 
+def ffapiInterfaceInjectionFiles = configurations.create("ffapiInterfaceInjection") {
+	canBeConsumed = false
+	canBeResolved = true
+	attributes {
+		attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, "interfaceinjection"))
+	}
+}
+
+def generateDevInterfaceInjection = tasks.register("generateDevInterfaceInjection") {
+	def output = layout.buildDirectory.file("neoforge/interfaceinjection.json")
+	inputs.files(ffapiInterfaceInjectionFiles)
+	outputs.file(output)
+
+	doLast {
+		def simpleName = { String name -> name.replaceFirst(/<.*$/, "").tokenize("/").last() }
+		def merged = new LinkedHashMap<String, List<String>>()
+		ffapiInterfaceInjectionFiles.files.each { file ->
+			new groovy.json.JsonSlurper().parse(file).each { String target, List<String> interfaces ->
+				def kept = merged.computeIfAbsent(target) { [] }
+				interfaces.each { String injected ->
+					def clash = kept.find { simpleName(it) == simpleName(injected) }
+					if (clash == null) {
+						kept.add(injected)
+					} else {
+						logger.warn("Skipping interface injection of {} into {}, its simple name clashes with {}", injected, target, clash)
+					}
+				}
+			}
+		}
+		def target = output.get().asFile
+		target.parentFile.mkdirs()
+		target.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(merged))
+	}
+}
+
 neoForge {
 	version = project.neo_version
 
 	accessTransformers {
 		from(generateDevAccessTransformer)
+	}
+
+	interfaceInjectionData {
+		from(generateDevInterfaceInjection)
 	}
 
 	runs {
@@ -169,7 +208,7 @@ dependencies {
 	implementation "org.sinytra.launchpad:launchpad:${project.launchpad_version}"
 	implementation "org.sinytra.forgified-fabric-api:forgified-fabric-api:${project.ffapi_version}"
 	accessTransformers "org.sinytra.forgified-fabric-api:forgified-fabric-api:${project.ffapi_version}"
-	interfaceInjectionData "org.sinytra.forgified-fabric-api:forgified-fabric-api:${project.ffapi_version}"
+	ffapiInterfaceInjection "org.sinytra.forgified-fabric-api:forgified-fabric-api:${project.ffapi_version}"
 
 	compileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		transitive = false
