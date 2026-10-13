@@ -135,7 +135,7 @@ public abstract class PlayerMixin extends LivingEntity {
     }
 
     @ModifyArg(
-            method = "doSweepAttack",
+            method = "doSweepAttack*",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/player/Player;playServerSideSound(Lnet/minecraft/sounds/SoundEvent;)V"

@@ -65,17 +65,17 @@ public abstract class EntityMixin {
         return original;
     }
 
-    @ModifyArg(method = "playCombinationStepSounds", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
+    @ModifyArg(method = "playCombinationStepSounds", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;playStepSound(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;FF)V"), index = 3)
     public float Enderscape$adjustCombinationStepSoundVolume(float original) {
         return Math.max(0, original * (float) EnderscapeAttributes.getStealthMultiplier(self));
     }
 
-    @ModifyArg(method = "playStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
+    @ModifyArg(method = "playStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;playStepSound(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;FF)V"), index = 3)
     public float Enderscape$adjustStepSoundVolume(float original) {
         return Math.max(0, original * (float) EnderscapeAttributes.getStealthMultiplier(self));
     }
 
-    @ModifyArg(method = "playMuffledStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
+    @ModifyArg(method = "playMuffledStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;playStepSound(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;FF)V"), index = 3)
     public float Enderscape$adjustMuffledStepSoundVolume(float original) {
         return Math.max(0, original * (float) EnderscapeAttributes.getStealthMultiplier(self));
     }
