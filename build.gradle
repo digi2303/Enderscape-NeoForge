@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'net.neoforged.moddev' version "${moddev_version}"
 	id 'maven-publish'
 	id "me.modmuss50.mod-publish-plugin" version "2.2.0"
 }
@@ -52,6 +52,12 @@ repositories {
 		name = "Cassian's Maven"
 		url = uri("https://maven.cassian.cc")
 	}
+
+	maven {
+		name = "Sinytra"
+		url = uri("https://maven.sinytra.org")
+	}
+	mavenCentral()
 }
 
 def dateFormat = new Date().format("yy.MM.dd")
@@ -72,41 +78,102 @@ gradle.taskGraph.whenReady { graph ->
 	}
 }
 
-loom {
-	accessWidenerPath = file("src/main/resources/enderscape.accesswidener")
+sourceSets {
+	main {
+		java {
+			srcDir "src/client/java"
+		}
+		resources {
+			srcDir "src/client/resources"
+			srcDir "src/main/generated"
+			exclude ".cache/**"
+		}
+	}
+}
+
+def accessWidenerFile = file("src/main/resources/enderscape.accesswidener")
+
+def generateDevAccessTransformer = tasks.register("generateDevAccessTransformer") {
+	def output = layout.buildDirectory.file("neoforge/accesstransformer.cfg")
+	inputs.file(accessWidenerFile)
+	outputs.file(output)
+
+	doLast {
+		def entries = []
+		accessWidenerFile.eachLine { raw ->
+			def line = raw.replaceFirst(/#.*$/, "").trim()
+			if (line.isEmpty()) {
+				return
+			}
+			def parts = line.split(/\s+/)
+			if (parts[0] == "classTweaker" || parts[0] == "accessWidener") {
+				return
+			}
+			def directive = parts[0].replaceFirst(/^transitive-/, "")
+			def kind = parts[1]
+			def owner = parts[2].replace("/", ".")
+			def modifier = switch (directive + " " + kind) {
+				case "accessible class", "accessible method", "accessible field" -> "public"
+				case "extendable class", "extendable method", "mutable field" -> "public-f"
+				default -> throw new GradleException("Unsupported class tweaker entry: " + raw)
+			}
+			switch (kind) {
+				case "class" -> entries.add(modifier + " " + owner)
+				case "method" -> entries.add(modifier + " " + owner + " " + parts[3] + parts[4])
+				case "field" -> entries.add(modifier + " " + owner + " " + parts[3])
+			}
+		}
+		def target = output.get().asFile
+		target.parentFile.mkdirs()
+		target.text = entries.join("\n") + "\n"
+	}
+}
+
+neoForge {
+	version = project.neo_version
+
+	accessTransformers {
+		from(generateDevAccessTransformer)
+	}
 
 	runs {
 		client {
-			runDir "run"
+			client()
+			gameDirectory = file("run")
 		}
 		server {
-			runDir "run_server"
+			server()
+			programArgument "--nogui"
+			gameDirectory = file("run_server")
+		}
+		datagen {
+			client()
+			gameDirectory = layout.buildDirectory.dir("datagen/run")
+			systemProperty "fabric-api.datagen", "true"
+			systemProperty "fabric-api.datagen.output-dir", layout.buildDirectory.dir("datagen/output").get().asFile.absolutePath
+			systemProperty "fabric-api.datagen.modid", "enderscape"
+		}
+		configureEach {
+			systemProperty "mixin.debug.export", "true"
 		}
 	}
-
-	splitEnvironmentSourceSets()
 
 	mods {
 		enderscape {
 			sourceSet sourceSets.main
-			sourceSet sourceSets.client
 		}
 	}
 }
 
-fabricApi {
-	configureDataGeneration {
-		client = true
-	}
-}
-
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "org.sinytra.launchpad:launchpad:${project.launchpad_version}"
+	implementation "org.sinytra.forgified-fabric-api:forgified-fabric-api:${project.ffapi_version}"
+	accessTransformers "org.sinytra.forgified-fabric-api:forgified-fabric-api:${project.ffapi_version}"
+	interfaceInjectionData "org.sinytra.forgified-fabric-api:forgified-fabric-api:${project.ffapi_version}"
 
-	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
-	implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	compileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") {
+		transitive = false
+	}
 	implementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 
 	implementation "maven.modrinth:lithostitched:${project.lithostitched_version}"
@@ -115,25 +182,45 @@ dependencies {
 	compileOnly("mezz.jei:jei-26.1.2-common-api:${jei_version}") {
 		transitive = false
 	}
-	compileOnly("mezz.jei:jei-26.1.2-fabric-api:${jei_version}") {
+	compileOnly("mezz.jei:jei-26.1.2-neoforge-api:${jei_version}") {
 		transitive = false
 	}
 
-	compileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${rrv_version}") {
+	compileOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${rrv_version}") {
 		transitive = false
 	}
 
 	switch (project.recipe_viewer) {
-		case "rrv" -> runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${rrv_version}")
-		case "jei" -> runtimeOnly("mezz.jei:jei-26.1.2-fabric:${jei_version}")
+		case "rrv" -> runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${rrv_version}")
+		case "jei" -> runtimeOnly("mezz.jei:jei-26.1.2-neoforge:${jei_version}")
 	}
 }
+
+configurations.runtimeClasspath {
+	exclude group: "org.sinytra", module: "forgified-fabric-loader"
+}
+
+def fabricModJson = new groovy.json.JsonSlurper().parse(file("src/main/resources/fabric.mod.json"))
 
 processResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
 		expand "version": inputs.properties.version
+	}
+
+	def placeholderProperties = [
+		"version"        : project.version,
+		"mod_name"       : fabricModJson.name,
+		"mod_authors"    : fabricModJson.authors.collect { it instanceof Map ? it.name : it }.join(", "),
+		"mod_description": fabricModJson.description,
+		"mod_license"    : fabricModJson.license,
+		"mod_logo"       : fabricModJson.icon
+	]
+	inputs.properties placeholderProperties
+
+	filesMatching("META-INF/neoforge.mods.toml") {
+		expand placeholderProperties
 	}
 }
 
@@ -144,8 +231,7 @@ tasks.withType(JavaCompile).configureEach {
 java {
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_25
-	targetCompatibility = JavaVersion.VERSION_25
+	toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 jar {
@@ -172,7 +258,7 @@ publishMods {
 	changelog = System.getenv("CHANGELOG")
 	type = project.mod_version.contains("-") ? BETA : STABLE
 	file = jar.archiveFile
-	modLoaders.add("fabric")
+	modLoaders.add("neoforge")
 
 	if (System.getenv("CURSEFORGE")) {
 		curseforge {
@@ -188,7 +274,8 @@ publishMods {
 				}
 			}
 
-			requires("fabric-api")
+			requires("forgified-fabric-api")
+			requires("launchpad")
 			requires("yacl")
 			requires("lithostitched")
 			requires("trim-patcher")
@@ -207,7 +294,8 @@ publishMods {
 				}
 			}
 
-			requires("fabric-api")
+			requires("forgified-fabric-api")
+			requires("launchpad")
 			requires("yacl")
 			requires("lithostitched")
 			requires("trim-patcher")
