@@ -1,0 +1,16 @@
+{
+    "required": true,
+    "package": "net.penumbra.enderscape.neoforge.mixin",
+    "plugin": "net.penumbra.enderscape.neoforge.EnderscapeNeoForgeMixinPlugin",
+    "compatibilityLevel": "JAVA_25",
+    "mixins": [
+        "LiquidBlockMixin",
+        "PoiTypesMixin"
+    ],
+    "client": [
+        "client.EnderscapeModMenuInvoker"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
