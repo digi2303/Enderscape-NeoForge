@@ -19,12 +19,12 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         super(menuType, i, inventory, containerLevelAccess, itemCombinerMenuSlotDefinition);
     }
 
-    @WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z", ordinal = 1), method = "createResult")
+    @WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z", ordinal = 1), method = "createResultInternal")
     public boolean Enderscape$allowCombiningFueledTools(ItemStack stack, Operation<Boolean> original) {
         return (original.call(stack) || is(stack)) && !stack.is(EnderscapeItemTags.CANNOT_COMBINE_IN_ANVIL);
     }
 
-    @WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 4), method = "createResult")
+    @WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 4), method = "createResultInternal")
     public void Enderscape$combineFuelAmounts(ResultContainer container, int i, ItemStack result, Operation<Void> original) {
         ItemStack input1 = inputSlots.getItem(0).copy();
         ItemStack input2 = inputSlots.getItem(1).copy();

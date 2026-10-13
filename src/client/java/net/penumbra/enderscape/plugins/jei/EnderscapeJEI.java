@@ -1,7 +1,6 @@
 package net.penumbra.enderscape.plugins.jei;
 
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -28,7 +27,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-@JeiPlugin
 public class EnderscapeJEI implements IModPlugin {
 
     public static final Logger LOGGER = LogManager.getLogger();

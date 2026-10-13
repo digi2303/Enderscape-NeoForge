@@ -21,7 +21,7 @@ public abstract class CameraMixin {
     private Minecraft minecraft;
 
     @ModifyReturnValue(
-            method = "modifyFovBasedOnDeathOrFluid",
+            method = "modifyFovBasedOnDeathOrFluid(FFZ)F",
             at = @At(value = "RETURN")
     )
     public float Enderscape$modifyFovInsideVoidLachryma(float original) {

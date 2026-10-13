@@ -265,9 +265,12 @@ public abstract class LivingEntityMixin extends Entity {
         return original || EnderscapeMobEffects.isStunned(entity);
     }
 
-    @ModifyExpressionValue(method = "updatingUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isSameItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean Enderscape$cancelItemUsing(boolean original) {
-        return original && !EnderscapeMobEffects.isStunned(entity);
+    @Inject(method = "updatingUsingItem", at = @At("HEAD"), cancellable = true)
+    private void Enderscape$cancelItemUsing(CallbackInfo info) {
+        if (entity.isUsingItem() && EnderscapeMobEffects.isStunned(entity)) {
+            entity.stopUsingItem();
+            info.cancel();
+        }
     }
 
     @Unique

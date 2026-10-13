@@ -72,7 +72,7 @@ public abstract class GuiMixin {
     }
 
     @Inject(
-            method = "extractPlayerHealth",
+            method = "extractHealthLevel",
             at = @At(
                     value = "FIELD",
                     target = "Lnet/minecraft/client/gui/Hud;lastHealth:I",
@@ -129,7 +129,7 @@ public abstract class GuiMixin {
      */
 
     @WrapOperation(
-            method = "extractHotbarAndDecorations",
+            method = "extractContextualInfoBarBackground",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/contextualbar/ContextualBar;extractBackground(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V"
@@ -144,7 +144,7 @@ public abstract class GuiMixin {
     }
 
     @WrapOperation(
-            method = "extractHotbarAndDecorations",
+            method = "extractContextualInfoBar",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/contextualbar/ContextualBar;extractRenderState(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V"
