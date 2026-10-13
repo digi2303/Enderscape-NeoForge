@@ -4,6 +4,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.registration.IAdvancedRegistration;
+import mezz.jei.api.registration.IAdvancedSearchRegistration;
 import mezz.jei.api.registration.IExtraIngredientRegistration;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IIngredientAliasRegistration;
@@ -14,8 +15,10 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.registration.IRuntimeRegistration;
+import mezz.jei.api.registration.ISlotDisplayInterpreterRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
+import mezz.jei.api.runtime.IJeiFeatures;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.config.IJeiConfigManager;
 import net.fabricmc.api.EnvType;
@@ -30,10 +33,16 @@ public class EnderscapeNeoForgeJEI implements IModPlugin {
 
     private IModPlugin delegate;
     private IJeiConfigManager pendingConfigManager;
+    private IJeiFeatures pendingFeatures;
 
     private IModPlugin delegate() {
         if (delegate == null) {
             delegate = new EnderscapeJEI();
+
+            if (pendingFeatures != null) {
+                delegate.configureJei(pendingFeatures);
+                pendingFeatures = null;
+            }
 
             if (pendingConfigManager != null) {
                 delegate.onConfigManagerAvailable(pendingConfigManager);
@@ -47,6 +56,15 @@ public class EnderscapeNeoForgeJEI implements IModPlugin {
     @Override
     public Identifier getPluginUid() {
         return Enderscape.id("jei");
+    }
+
+    @Override
+    public void configureJei(IJeiFeatures jeiFeatures) {
+        if (delegate == null) {
+            pendingFeatures = jeiFeatures;
+        } else {
+            delegate.configureJei(jeiFeatures);
+        }
     }
 
     @Override
@@ -66,6 +84,11 @@ public class EnderscapeNeoForgeJEI implements IModPlugin {
     @Override
     public <T> void registerFluidSubtypes(ISubtypeRegistration registration, IPlatformFluidHelper<T> platformFluidHelper) {
         delegate().registerFluidSubtypes(registration, platformFluidHelper);
+    }
+
+    @Override
+    public void registerSlotDisplayInterpreters(ISlotDisplayInterpreterRegistration registration) {
+        delegate().registerSlotDisplayInterpreters(registration);
     }
 
     @Override
@@ -121,6 +144,11 @@ public class EnderscapeNeoForgeJEI implements IModPlugin {
     @Override
     public void registerAdvanced(IAdvancedRegistration registration) {
         delegate().registerAdvanced(registration);
+    }
+
+    @Override
+    public void registerAdvancedSearch(IAdvancedSearchRegistration registration) {
+        delegate().registerAdvancedSearch(registration);
     }
 
     @Override
