@@ -117,7 +117,7 @@ public abstract class LivingEntityMixin extends Entity {
         return original;
     }
 
-    @WrapOperation(method = "canGlide", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;onGround()Z"))
+    @WrapOperation(method = "canGlide(Z)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;onGround()Z"))
     private boolean Enderscape$changeOnGroundCheck(LivingEntity instance, Operation<Boolean> original) {
         return ElytraManager.shouldDisallowFallFlying(entity, original.call(instance));
     }
