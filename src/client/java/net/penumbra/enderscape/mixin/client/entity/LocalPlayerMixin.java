@@ -1,10 +1,10 @@
 package net.penumbra.enderscape.mixin.client.entity;
 
 import com.mojang.authlib.GameProfile;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.penumbra.enderscape.manager.EndHavenManager;
 import net.penumbra.enderscape.network.ServerboundRespawnFromEndHavenPayload;
 import net.penumbra.enderscape.registry.entity.EnderscapeDamageTypes;
@@ -28,7 +28,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     @Inject(method = "respawn", at = @At("HEAD"))
     public void Enderscape$setSpawnFromHaven(CallbackInfo info) {
         if (EndHavenManager.promptHavenRespawnChoice(this) && !shouldShowDeathScreen()) {
-            ClientPlayNetworking.send(new ServerboundRespawnFromEndHavenPayload());
+            ClientPacketDistributor.sendToServer(new ServerboundRespawnFromEndHavenPayload());
         }
     }
 

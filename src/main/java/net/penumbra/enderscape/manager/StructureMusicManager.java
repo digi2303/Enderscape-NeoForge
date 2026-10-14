@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -13,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.network.ClientboundStructureChangedPayload;
 
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class StructureMusicManager {
 
     private static void sendStructureToClient(ServerPlayer player, Identifier structure) {
         if (player != null) {
-            ServerPlayNetworking.send(player, new ClientboundStructureChangedPayload(structure));
+            PacketDistributor.sendToPlayer(player, new ClientboundStructureChangedPayload(structure));
         }
     }
 

@@ -2,7 +2,6 @@ package net.penumbra.enderscape.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
@@ -41,6 +40,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.item.ItemStackContext;
 import net.penumbra.enderscape.item.LodestoneTeleportationCheck;
 import net.penumbra.enderscape.item.LodestoneTrackerContext;
@@ -224,7 +224,7 @@ public record LodestoneTeleportation(
             teleportToLocation(context, BlockPos.containing(position), sameDimension ? TeleportTransition.DO_NOTHING : entity -> {
                 if (entity instanceof ServerPlayer player) {
                     LodestoneTeleportation teleportation = LodestoneTeleportation.get(context.stack());
-                    ServerPlayNetworking.send(player, new ClientboundTransdimensionalTravelSoundPayload(teleportation.sounds().transdimensionalTravel().value().location()));
+                    PacketDistributor.sendToPlayer(player, new ClientboundTransdimensionalTravelSoundPayload(teleportation.sounds().transdimensionalTravel().value().location()));
                 }
             });
             awardStatistics(context, prior, destination, fromDispenser);

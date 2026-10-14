@@ -1,9 +1,9 @@
 package net.penumbra.enderscape.mixin.item;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ServerItemCooldowns;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.network.ClientboundRubbleShieldCooldownSoundPayload;
 import net.penumbra.enderscape.references.EnderscapeItemIds;
 import org.spongepowered.asm.mixin.Final;
@@ -23,7 +23,7 @@ public class ServerItemCooldownsMixin {
     @Inject(at = @At("TAIL"), method = "onCooldownEnded")
     private void Enderscape$sendCooldownPacket(Identifier location, CallbackInfo ci) {
         if (location.equals(EnderscapeItemIds.RUBBLE_SHIELD.identifier())) {
-            ServerPlayNetworking.send(player, new ClientboundRubbleShieldCooldownSoundPayload());
+            PacketDistributor.sendToPlayer(player, new ClientboundRubbleShieldCooldownSoundPayload());
         }
     }
 }

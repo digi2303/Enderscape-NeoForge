@@ -2,7 +2,6 @@ package net.penumbra.enderscape.manager;
 
 import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.protocol.Packet;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.block.EndHavenCoreBlock;
 import net.penumbra.enderscape.network.ClientboundSystemMessagePayload;
 import net.penumbra.enderscape.registry.entity.EnderscapeAttachments;
@@ -73,7 +73,7 @@ public class EndHavenManager {
         ServerPlayer player = instance.getPlayer();
 
         if (shouldRespawnFromHaven(player)) {
-            ServerPlayNetworking.send(player, new ClientboundSystemMessagePayload("block.enderscape.end_haven_core.invalid_respawn_point"));
+            PacketDistributor.sendToPlayer(player, new ClientboundSystemMessagePayload("block.enderscape.end_haven_core.invalid_respawn_point"));
         } else {
             original.call(instance, packet);
         }
@@ -84,7 +84,7 @@ public class EndHavenManager {
             player.removeAttached(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA);
             player.removeAttached(PENDING_END_HAVEN_RESPAWN);
 
-            ServerPlayNetworking.send(player, new ClientboundSystemMessagePayload("block.enderscape.end_haven_core.severed_respawn_point"));
+            PacketDistributor.sendToPlayer(player, new ClientboundSystemMessagePayload("block.enderscape.end_haven_core.severed_respawn_point"));
         }
     }
 

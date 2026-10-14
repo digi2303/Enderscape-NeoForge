@@ -2,7 +2,6 @@ package net.penumbra.enderscape.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -16,6 +15,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.item.ItemStackContext;
 import net.penumbra.enderscape.item.component.value.DashCharge;
 import net.penumbra.enderscape.item.component.value.DashPower;
@@ -106,7 +106,7 @@ public record DashJump(
             Vec3 pos = player.position();
 
             level.sendParticles(ParticleTypes.POOF, pos.x, pos.y + 0.5, pos.z, 5, 0, 0, 0, 0.1);
-            level.players().stream().filter(other -> other.distanceToSqr(pos) < 4096).forEach(other -> ServerPlayNetworking.send(other, new ClientboundDashJumpSoundPayload(player.getId(), dashJump.sound().value().location())));
+            level.players().stream().filter(other -> other.distanceToSqr(pos) < 4096).forEach(other -> PacketDistributor.sendToPlayer(other, new ClientboundDashJumpSoundPayload(player.getId(), dashJump.sound().value().location())));
 
             player.setAttached(DASH_JUMP_TICKS, (int) (dashJump.dashDuration() * 20));
 
@@ -119,7 +119,7 @@ public record DashJump(
             player.gameEvent(EnderscapeGameEvents.DASH_JUMP);
 
             EnderscapeCriteria.DASH_JUMP.trigger(player, stack);
-            ServerPlayNetworking.send(player, new ClientboundDashJumpPayload(dashJump.power().calculate(player)));
+            PacketDistributor.sendToPlayer(player, new ClientboundDashJumpPayload(dashJump.power().calculate(player)));
             FueledTool.useFuelOrDamage(context, dashJump.durabilityDamage().calculate(player).asInteger(), player.getUsedItemHand().asEquipmentSlot());
 
             player.causeFoodExhaustion(dashJump.foodExhaustion().calculate(player).asFloat());

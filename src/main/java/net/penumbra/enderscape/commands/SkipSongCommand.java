@@ -1,10 +1,10 @@
 package net.penumbra.enderscape.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.network.ClientboundSkipSongPayload;
 import net.penumbra.enderscape.registry.server.EnderscapeCommands;
 
@@ -22,7 +22,7 @@ public final class SkipSongCommand {
         if (player == null) {
             return EnderscapeCommands.failure(source, "no_player");
         } else {
-            ServerPlayNetworking.send(player, new ClientboundSkipSongPayload());
+            PacketDistributor.sendToPlayer(player, new ClientboundSkipSongPayload());
             return EnderscapeCommands.success(source, NAME);
         }
     }

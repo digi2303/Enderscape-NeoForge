@@ -5,11 +5,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.state.level.PlayerRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.penumbra.enderscape.EnderscapeClient;
 import net.penumbra.enderscape.manager.ClientsideVariables;
 import net.penumbra.enderscape.network.ServerboundSpawnTotemParticlesPayload;
@@ -60,7 +60,7 @@ public abstract class ScreenEffectRendererMixin {
                 original.call(pose, 0.0F, 0.0F, -9999.0F);
 
                 if (itemActivationTicks == TOTEM_SHATTER_TIMESTAMP)
-                    ClientPlayNetworking.send(new ServerboundSpawnTotemParticlesPayload());
+                    ClientPacketDistributor.sendToServer(new ServerboundSpawnTotemParticlesPayload());
 
                 return;
             } else if (itemActivationTicks <= TOTEM_GLITCH_TIMESTAMP) {

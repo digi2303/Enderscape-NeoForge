@@ -1,11 +1,11 @@
 package net.penumbra.enderscape.entity.effect;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.manager.VoidManager;
 import net.penumbra.enderscape.network.ClientboundHealthVoidPurifySoundPayload;
 import net.penumbra.enderscape.registry.entity.EnderscapeDamageTypes;
@@ -36,7 +36,7 @@ public class VoidPurificationEffect extends MobEffect {
 
         if (VoidManager.hasVoidedHealth(entity)) {
             VoidManager.modifyVoidedHealth(entity, value -> value - 2);
-            if (entity instanceof ServerPlayer player) ServerPlayNetworking.send(player, new ClientboundHealthVoidPurifySoundPayload());
+            if (entity instanceof ServerPlayer player) PacketDistributor.sendToPlayer(player, new ClientboundHealthVoidPurifySoundPayload());
         } else if (entity.is(HEALED_BY_VOID_PURIFICATION)) {
             entity.heal(1);
         }

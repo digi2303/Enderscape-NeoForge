@@ -1,6 +1,5 @@
 package net.penumbra.enderscape.registry.networking;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -19,10 +18,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.penumbra.enderscape.EnderscapeClient;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.manager.ClientsideConstants;
 import net.penumbra.enderscape.manager.ClientsideVariables;
+import net.penumbra.enderscape.neoforge.EnderscapeNeoForge;
 import net.penumbra.enderscape.network.*;
 import net.penumbra.enderscape.registry.EnderscapeRegistries;
 import net.penumbra.enderscape.registry.sound.EnderscapeBlockSounds;
@@ -35,8 +37,8 @@ import java.util.Optional;
 
 public class EnderscapeClientNetworking {
 
-    private static void receiveDashJumpPayload(ClientboundDashJumpPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveDashJumpPayload(ClientboundDashJumpPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
         Vec2 power = payload.power();
 
@@ -52,8 +54,8 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveDashJumpSoundPayload(ClientboundDashJumpSoundPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveDashJumpSoundPayload(ClientboundDashJumpSoundPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
 
         minecraft.execute(() -> {
             ClientLevel level = minecraft.level;
@@ -70,8 +72,8 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveHealthVoidPurifySoundPayload(ClientboundHealthVoidPurifySoundPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveHealthVoidPurifySoundPayload(ClientboundHealthVoidPurifySoundPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
 
         minecraft.execute(() -> {
@@ -81,8 +83,8 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveLodestoneTeleportationInfoPayload(ClientboundLodestoneTeleportationInfoPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveLodestoneTeleportationInfoPayload(ClientboundLodestoneTeleportationInfoPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         ClientsideVariables variables = EnderscapeClient.clientsideVariables();
 
         minecraft.execute(() -> {
@@ -92,8 +94,8 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveNebuliteOreSoundPayload(ClientboundNebuliteOreSoundPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveNebuliteOreSoundPayload(ClientboundNebuliteOreSoundPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         minecraft.execute(() -> {
             BlockPos nebulite = payload.globalPos().pos();
             ResourceKey<Level> dimension = payload.globalPos().dimension();
@@ -121,22 +123,22 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveRubbleShieldCooldownSoundPayload(ClientboundRubbleShieldCooldownSoundPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveRubbleShieldCooldownSoundPayload(ClientboundRubbleShieldCooldownSoundPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         minecraft.execute(() -> {
             if (minecraft.player != null) minecraft.getSoundManager().play(SimpleSoundInstance.forUI(EnderscapeUiSounds.RUBBLE_SHIELD_COOLDOWN_OVER, 1));
         });
     }
 
-    private static void receiveSkipSongPayload(ClientboundSkipSongPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveSkipSongPayload(ClientboundSkipSongPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         minecraft.execute(() -> {
             minecraft.getMusicManager().stopPlaying();
         });
     }
 
-    private static void receiveStructureChangedPayload(ClientboundStructureChangedPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveStructureChangedPayload(ClientboundStructureChangedPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         ClientsideVariables variables = EnderscapeClient.clientsideVariables();
         Identifier location = payload.location();
         LocalPlayer player = minecraft.player;
@@ -155,8 +157,8 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveSystemMessagePayload(ClientboundSystemMessagePayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveSystemMessagePayload(ClientboundSystemMessagePayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
 
         minecraft.execute(() -> {
@@ -166,8 +168,8 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveTargetedByEndermanPayload(ClientboundTargetedByEndermanPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveTargetedByEndermanPayload(ClientboundTargetedByEndermanPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         ClientsideVariables variables = EnderscapeClient.clientsideVariables();
         int endermanId = payload.endermanId();
         boolean playStereoStareSound = payload.playStereoStareSound();
@@ -185,8 +187,8 @@ public class EnderscapeClientNetworking {
         });
     }
 
-    private static void receiveTransdimensionalTravelSoundPayload(ClientboundTransdimensionalTravelSoundPayload payload, ClientPlayNetworking.Context context) {
-        Minecraft minecraft = context.client();
+    private static void receiveTransdimensionalTravelSoundPayload(ClientboundTransdimensionalTravelSoundPayload payload, IPayloadContext context) {
+        Minecraft minecraft = Minecraft.getInstance();
         minecraft.execute(() -> {
             ClientLevel level = minecraft.level;
 
@@ -199,16 +201,18 @@ public class EnderscapeClientNetworking {
     }
 
     static {
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundDashJumpPayload.TYPE, EnderscapeClientNetworking::receiveDashJumpPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundDashJumpSoundPayload.TYPE, EnderscapeClientNetworking::receiveDashJumpSoundPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundHealthVoidPurifySoundPayload.TYPE, EnderscapeClientNetworking::receiveHealthVoidPurifySoundPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundLodestoneTeleportationInfoPayload.TYPE, EnderscapeClientNetworking::receiveLodestoneTeleportationInfoPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundNebuliteOreSoundPayload.TYPE, EnderscapeClientNetworking::receiveNebuliteOreSoundPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundRubbleShieldCooldownSoundPayload.TYPE, EnderscapeClientNetworking::receiveRubbleShieldCooldownSoundPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundSkipSongPayload.TYPE, EnderscapeClientNetworking::receiveSkipSongPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundStructureChangedPayload.TYPE, EnderscapeClientNetworking::receiveStructureChangedPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundSystemMessagePayload.TYPE, EnderscapeClientNetworking::receiveSystemMessagePayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundTargetedByEndermanPayload.TYPE, EnderscapeClientNetworking::receiveTargetedByEndermanPayload);
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundTransdimensionalTravelSoundPayload.TYPE, EnderscapeClientNetworking::receiveTransdimensionalTravelSoundPayload);
+        EnderscapeNeoForge.modEventBus().addListener(RegisterClientPayloadHandlersEvent.class, event -> {
+            event.register(ClientboundDashJumpPayload.TYPE, EnderscapeClientNetworking::receiveDashJumpPayload);
+            event.register(ClientboundDashJumpSoundPayload.TYPE, EnderscapeClientNetworking::receiveDashJumpSoundPayload);
+            event.register(ClientboundHealthVoidPurifySoundPayload.TYPE, EnderscapeClientNetworking::receiveHealthVoidPurifySoundPayload);
+            event.register(ClientboundLodestoneTeleportationInfoPayload.TYPE, EnderscapeClientNetworking::receiveLodestoneTeleportationInfoPayload);
+            event.register(ClientboundNebuliteOreSoundPayload.TYPE, EnderscapeClientNetworking::receiveNebuliteOreSoundPayload);
+            event.register(ClientboundRubbleShieldCooldownSoundPayload.TYPE, EnderscapeClientNetworking::receiveRubbleShieldCooldownSoundPayload);
+            event.register(ClientboundSkipSongPayload.TYPE, EnderscapeClientNetworking::receiveSkipSongPayload);
+            event.register(ClientboundStructureChangedPayload.TYPE, EnderscapeClientNetworking::receiveStructureChangedPayload);
+            event.register(ClientboundSystemMessagePayload.TYPE, EnderscapeClientNetworking::receiveSystemMessagePayload);
+            event.register(ClientboundTargetedByEndermanPayload.TYPE, EnderscapeClientNetworking::receiveTargetedByEndermanPayload);
+            event.register(ClientboundTransdimensionalTravelSoundPayload.TYPE, EnderscapeClientNetworking::receiveTransdimensionalTravelSoundPayload);
+        });
     }
 }
