@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'net.neoforged.moddev' version "${moddev_version}"
 	id 'maven-publish'
 	id "me.modmuss50.mod-publish-plugin" version "2.2.0"
 }
@@ -23,8 +23,8 @@ repositories {
 		}
 	}
 	maven {
-		name = 'TerraformersMC'
-		url = 'https://maven.terraformersmc.com/'
+		name = 'NeoForged'
+		url = 'https://maven.neoforged.net/releases'
 	}
 	maven {
 		name 'Xander Maven'
@@ -72,67 +72,84 @@ gradle.taskGraph.whenReady { graph ->
 	}
 }
 
-loom {
-	accessWidenerPath = file("src/main/resources/enderscape.accesswidener")
+sourceSets {
+	main {
+		java {
+			srcDir "src/client/java"
+		}
+		resources {
+			srcDir "src/client/resources"
+			srcDir "src/main/generated"
+			exclude ".cache/**"
+		}
+	}
+}
+
+neoForge {
+	version = project.neo_version
+	validateAccessTransformers = true
 
 	runs {
 		client {
-			runDir "run"
+			client()
+			gameDirectory = file("run")
+			systemProperty "mixin.debug.export", "true"
 		}
 		server {
-			runDir "run_server"
+			server()
+			programArgument "--nogui"
+			gameDirectory = file("run_server")
+			systemProperty "mixin.debug.export", "true"
+		}
+		data {
+			clientData()
+			gameDirectory = layout.buildDirectory.dir("datagen/run")
+			programArguments.addAll("--mod", "enderscape", "--all", "--flat", "--output", file("src/main/generated").absolutePath, "--existing", file("src/main/resources").absolutePath)
 		}
 	}
-
-	splitEnvironmentSourceSets()
 
 	mods {
 		enderscape {
 			sourceSet sourceSets.main
-			sourceSet sourceSets.client
 		}
 	}
 }
 
-fabricApi {
-	configureDataGeneration {
-		client = true
-	}
-}
-
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-
-	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
-	implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	implementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 
 	implementation "maven.modrinth:lithostitched:${project.lithostitched_version}"
 
-	compileOnly("mezz.jei:jei-26.2-common-api:${jei_version}") {
+	compileOnly("mezz.jei:jei-${project.jei_minecraft_version}-common-api:${jei_version}") {
 		transitive = false
 	}
-	compileOnly("mezz.jei:jei-26.2-fabric-api:${jei_version}") {
+	compileOnly("mezz.jei:jei-${project.jei_minecraft_version}-neoforge-api:${jei_version}") {
 		transitive = false
 	}
 
-	compileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${rrv_version}") {
+	compileOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${rrv_version}") {
 		transitive = false
 	}
 
 	switch (project.recipe_viewer) {
-		case "rrv" -> runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${rrv_version}")
-		case "jei" -> runtimeOnly("mezz.jei:jei-26.2-fabric:${jei_version}")
+		case "rrv" -> runtimeOnly("cc.cassian.rrv:reliable-recipe-viewer-neoforge:${rrv_version}")
+		case "jei" -> runtimeOnly("mezz.jei:jei-${project.jei_minecraft_version}-neoforge:${jei_version}")
 	}
 }
 
 processResources {
-	inputs.property "version", project.version
+	def modProperties = [
+		"version"                    : project.version,
+		"loader_version_range"       : project.loader_version_range,
+		"neo_version_range"          : project.neo_version_range,
+		"minecraft_version_range"    : project.minecraft_version_range,
+		"yacl_version_range"         : project.yacl_version_range,
+		"lithostitched_version_range": project.lithostitched_version_range
+	]
+	inputs.properties modProperties
 
-	filesMatching("fabric.mod.json") {
-		expand "version": inputs.properties.version
+	filesMatching("META-INF/neoforge.mods.toml") {
+		expand modProperties
 	}
 }
 
@@ -143,8 +160,7 @@ tasks.withType(JavaCompile).configureEach {
 java {
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_25
-	targetCompatibility = JavaVersion.VERSION_25
+	toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 jar {
@@ -171,7 +187,7 @@ publishMods {
 	changelog = System.getenv("CHANGELOG")
 	type = project.mod_version.contains("-") ? BETA : STABLE
 	file = jar.archiveFile
-	modLoaders.add("fabric")
+	modLoaders.add("neoforge")
 	version = "${mod_version}+mc${minecraft_version}"
 
 	if (System.getenv("CURSEFORGE")) {
@@ -188,7 +204,6 @@ publishMods {
 				}
 			}
 
-			requires("fabric-api")
 			requires("yacl")
 			requires("lithostitched")
 		}
@@ -206,7 +221,6 @@ publishMods {
 				}
 			}
 
-			requires("fabric-api")
 			requires("yacl")
 			requires("lithostitched")
 		}
