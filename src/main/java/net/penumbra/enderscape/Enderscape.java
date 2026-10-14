@@ -1,7 +1,6 @@
 package net.penumbra.enderscape;
 
 import com.google.common.reflect.Reflection;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.TheEndBiomes;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
@@ -44,7 +43,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class Enderscape implements ModInitializer {
+public class Enderscape {
 
     public static final String MOD_ID = "enderscape";
     public static final Logger LOGGER = LogManager.getLogger();
@@ -71,7 +70,6 @@ public class Enderscape implements ModInitializer {
         TheEndBiomes.addBarrensBiome(key, key, weight);
     }
 
-    @Override
     public void onInitialize() {
 
         Reflection.initialize(

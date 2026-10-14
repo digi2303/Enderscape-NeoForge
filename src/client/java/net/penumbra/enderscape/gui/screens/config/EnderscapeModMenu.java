@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.gui.screens.config;
 
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
@@ -18,15 +16,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class EnderscapeModMenu implements ModMenuApi {
-
-    @Override
-    public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return EnderscapeModMenu::buildMenu;
-    }
+public class EnderscapeModMenu {
 
     @Environment(EnvType.CLIENT)
-    private static Screen buildMenu(Screen parent) {
+    public static Screen buildMenu(Screen parent) {
         return YetAnotherConfigLib.create(EnderscapeConfig.HANDLER, EnderscapeModMenu::menuBuilder).generateScreen(parent);
     }
 
