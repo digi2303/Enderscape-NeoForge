@@ -1,13 +1,15 @@
 package net.penumbra.enderscape.gui.hud;
 
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
+import net.neoforged.neoforge.client.gui.GuiLayer;
 import net.penumbra.enderscape.EnderscapeClient;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.manager.ClientsideVariables;
 
-public abstract class EnderscapeHudElement implements HudElement {
+public abstract class EnderscapeHudElement implements GuiLayer {
 
     protected final Minecraft minecraft = Minecraft.getInstance();
     protected final EnderscapeConfig config = EnderscapeConfig.getInstance();
@@ -38,4 +40,13 @@ public abstract class EnderscapeHudElement implements HudElement {
     }
 
     public abstract void reset();
+
+    public abstract void extractRenderState(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker);
+
+    @Override
+    public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
+        if (!minecraft.gui.hud.isHidden()) {
+            extractRenderState(graphics, deltaTracker);
+        }
+    }
 }

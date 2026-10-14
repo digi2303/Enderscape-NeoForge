@@ -1,20 +1,22 @@
 package net.penumbra.enderscape;
 
 import com.google.common.reflect.Reflection;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.sprite.Material;
-import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.penumbra.enderscape.gui.tooltip.FueledToolTooltip;
 import net.penumbra.enderscape.item.tooltip.FueledToolComponent;
 import net.penumbra.enderscape.manager.ClientsideLodestoneTeleportationManager;
 import net.penumbra.enderscape.manager.ClientsideVariables;
+import net.penumbra.enderscape.neoforge.EnderscapeNeoForge;
 import net.penumbra.enderscape.registry.block.EnderscapeBlockEntities;
 import net.penumbra.enderscape.registry.block.EnderscapeBlockTintSources;
 import net.penumbra.enderscape.registry.block.EnderscapeFluids;
@@ -53,21 +55,22 @@ public class EnderscapeClient {
         BlockEntityRenderers.register(EnderscapeBlockEntities.MAGNIA_SPROUT, MagniaSproutRenderer::new);
         BlockEntityRenderers.register(EnderscapeBlockEntities.END_HAVEN_CORE, EndHavenCoreRenderer::new);
 
-        ClientTooltipComponentCallback.EVENT.register((component) -> component instanceof FueledToolComponent(ItemStack stack) ? new FueledToolTooltip(stack) : null);
-        ItemTooltipCallback.EVENT.register(ClientsideLodestoneTeleportationManager::appendTooltip);
+        EnderscapeNeoForge.modEventBus().addListener(RegisterClientTooltipComponentFactoriesEvent.class, event -> event.register(FueledToolComponent.class, component -> new FueledToolTooltip(component.stack())));
+        NeoForge.EVENT_BUS.addListener(ItemTooltipEvent.class, event -> ClientsideLodestoneTeleportationManager.appendTooltip(event.getItemStack(), event.getContext(), event.getFlags(), event.getToolTip()));
 
-        FluidRenderingRegistry.register(
-                EnderscapeFluids.VOID_LACHRYMA,
-                EnderscapeFluids.FLOWING_VOID_LACHRYMA,
+        EnderscapeNeoForge.modEventBus().addListener(RegisterFluidModelsEvent.class, event -> event.register(
                 new FluidModel.Unbaked(
                         new Material(Enderscape.id("block/void_lachryma_still")),
                         new Material(Enderscape.id("block/void_lachryma_flow")),
                         null,
                         EnderscapeBlockTintSources.voidLachryma()
-                )
-        );
+                ),
+                EnderscapeFluids.VOID_LACHRYMA,
+                EnderscapeFluids.FLOWING_VOID_LACHRYMA
+        ));
 
-        ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
+        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Pre.class, event -> {
+            Minecraft minecraft = Minecraft.getInstance();
             LocalPlayer player = minecraft.player;
 
             if (EnderscapeMobEffects.isStunned(player) && minecraft.gui.screen() instanceof AbstractContainerScreen<?>) {

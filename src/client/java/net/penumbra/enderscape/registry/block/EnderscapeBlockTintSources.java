@@ -1,6 +1,7 @@
 package net.penumbra.enderscape.registry.block;
 
-import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.penumbra.enderscape.neoforge.EnderscapeNeoForge;
 import net.penumbra.enderscape.renderer.block.NoiseBasedTintSource;
 import net.penumbra.enderscape.util.EnderscapeColors;
 
@@ -11,7 +12,7 @@ import static net.penumbra.enderscape.registry.block.EnderscapeBlocks.*;
 public class EnderscapeBlockTintSources {
 
     static {
-        BlockColorRegistry.register(List.of(blinklight()), BLINKLAMP, BLINKLIGHT_VINES_BODY, BLINKLIGHT_VINES_HEAD);
+        EnderscapeNeoForge.modEventBus().addListener(RegisterColorHandlersEvent.BlockTintSources.class, event -> event.register(List.of(blinklight()), BLINKLAMP, BLINKLIGHT_VINES_BODY, BLINKLIGHT_VINES_HEAD));
     }
 
     private static NoiseBasedTintSource blinklight() {

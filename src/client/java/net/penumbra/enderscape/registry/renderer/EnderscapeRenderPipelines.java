@@ -4,13 +4,15 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.renderpearl.api.pipeline.*;
 import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.penumbra.enderscape.Enderscape;
+import net.penumbra.enderscape.neoforge.EnderscapeNeoForge;
 
 import static net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED_SNIPPET;
 
 public class EnderscapeRenderPipelines {
 
-    public static final RenderPipeline IMPROVED_LIGHTMAP = RenderPipelines.register(
+    public static final RenderPipeline IMPROVED_LIGHTMAP = register(
             RenderPipeline.builder(RenderPipelines.GLOBALS_SNIPPET)
                     .withLocation(Enderscape.id("pipeline/improved_lightmap"))
                     .withVertexShader("core/screenquad")
@@ -21,7 +23,7 @@ public class EnderscapeRenderPipelines {
                     .build()
     );
 
-    public static final RenderPipeline MIDNIGHT_LIGHTMAP = RenderPipelines.register(
+    public static final RenderPipeline MIDNIGHT_LIGHTMAP = register(
             RenderPipeline.builder(RenderPipelines.GLOBALS_SNIPPET)
                     .withLocation(Enderscape.id("pipeline/midnight_lightmap"))
                     .withVertexShader("core/screenquad")
@@ -32,13 +34,13 @@ public class EnderscapeRenderPipelines {
                     .build()
     );
 
-    public static final RenderPipeline ALPHA_BASED_OVERLAY = RenderPipelines.register(
+    public static final RenderPipeline ALPHA_BASED_OVERLAY = register(
             RenderPipeline.builder(GUI_TEXTURED_SNIPPET)
                     .withLocation(Enderscape.id("pipeline/alpha_based_overlay"))
                     .withColorTargetState(new ColorTargetState(new BlendFunction(BlendFactor.SRC_ALPHA, BlendFactor.ONE_MINUS_CONSTANT_ALPHA)))
                     .build()
     );
-    public static final RenderPipeline NEBULAE_PIPELINE = RenderPipelines.register(
+    public static final RenderPipeline NEBULAE_PIPELINE = register(
             RenderPipeline.builder()
                     .withLocation(Enderscape.id("pipeline/nebulae"))
                     .withVertexShader("core/position_tex")
@@ -52,4 +54,9 @@ public class EnderscapeRenderPipelines {
                     .withPrimitiveTopology(PrimitiveTopology.QUADS)
                     .build()
     );
+
+    private static RenderPipeline register(RenderPipeline pipeline) {
+        EnderscapeNeoForge.modEventBus().addListener(RegisterRenderPipelinesEvent.class, event -> event.registerPipeline(pipeline));
+        return pipeline;
+    }
 }
