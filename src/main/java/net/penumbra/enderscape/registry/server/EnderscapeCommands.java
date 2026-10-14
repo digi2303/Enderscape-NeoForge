@@ -1,10 +1,11 @@
 package net.penumbra.enderscape.registry.server;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.penumbra.enderscape.commands.GatewaysCommand;
 import net.penumbra.enderscape.commands.KillEnderDragonCommand;
 import net.penumbra.enderscape.commands.SkipSongCommand;
@@ -42,11 +43,9 @@ public class EnderscapeCommands {
     }
 
     static {
-        CommandRegistrationCallback.EVENT.register((
-                dispatcher,
-                registries,
-                environment
-        ) -> dispatcher.register(
+        NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent.class, (
+                event
+        ) -> event.getDispatcher().register(
                 Commands.literal("enderscape").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(GatewaysCommand.builder())
                         .then(KillEnderDragonCommand.builder())

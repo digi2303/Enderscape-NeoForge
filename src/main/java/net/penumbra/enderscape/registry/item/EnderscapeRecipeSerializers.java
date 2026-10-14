@@ -1,7 +1,6 @@
 package net.penumbra.enderscape.registry.item;
 
 import com.mojang.serialization.MapCodec;
-import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -13,6 +12,7 @@ import net.penumbra.enderscape.item.crafting.MirrorDyingRecipe;
 import net.penumbra.enderscape.item.crafting.RustleRecipe;
 import net.penumbra.enderscape.item.crafting.ToolFuelingRecipe;
 import net.penumbra.enderscape.item.crafting.VoidLachrymaRecipe;
+import net.penumbra.enderscape.neoforge.item.EnderscapeRecipeSynchronization;
 
 public class EnderscapeRecipeSerializers {
 
@@ -23,7 +23,7 @@ public class EnderscapeRecipeSerializers {
 
     private static <T extends Recipe<?>> RecipeSerializer<T> register(String name, MapCodec<T> mapCodec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
         RecipeSerializer<T> serializer = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Enderscape.id(name), new RecipeSerializer<>(mapCodec, streamCodec));
-        RecipeSynchronization.synchronizeRecipeSerializer(serializer);
+        EnderscapeRecipeSynchronization.synchronizeRecipeSerializer(serializer);
         return serializer;
     }
 }

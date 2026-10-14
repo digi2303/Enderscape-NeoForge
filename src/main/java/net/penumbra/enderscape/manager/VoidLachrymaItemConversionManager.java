@@ -26,7 +26,7 @@ public class VoidLachrymaItemConversionManager {
         RECIPE_CACHE.clear();
 
         Map<Ingredient, List<VoidLachrymaRecipe>> map = new IdentityHashMap<>();
-        Collection<RecipeHolder<VoidLachrymaRecipe>> recipes = server.getRecipeManager().getAllOfType(VoidLachrymaRecipe.TYPE);
+        Collection<RecipeHolder<VoidLachrymaRecipe>> recipes = server.getRecipeManager().recipeMap().byType(VoidLachrymaRecipe.TYPE);
 
         recipes.forEach(conversion -> map.computeIfAbsent(conversion.value().input(), _ -> new ArrayList<>()).add(conversion.value()));
         map.forEach((item, list) -> RECIPE_CACHE.put(item, Collections.unmodifiableList(list)));

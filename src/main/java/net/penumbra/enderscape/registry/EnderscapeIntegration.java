@@ -1,19 +1,11 @@
 package net.penumbra.enderscape.registry;
 
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.entity.event.v1.effect.ServerMobEffectEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
-import net.fabricmc.fabric.api.event.registry.DynamicRegistryView;
 import net.fabricmc.fabric.api.item.v1.BlockTransformerHelper;
-import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
-import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.LandPathTypeRegistry;
 import net.fabricmc.fabric.api.registry.fluid.EntityFluidInteractionRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.dispenser.BlockSource;
@@ -22,6 +14,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,6 +33,18 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
+import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.block.dispenser.LodestoneTeleportationDispenserBehavior;
 import net.penumbra.enderscape.block.fluid.VoidLachrymaBehavior;
@@ -49,6 +54,9 @@ import net.penumbra.enderscape.manager.EndHavenManager;
 import net.penumbra.enderscape.manager.RustleItemConversionManager;
 import net.penumbra.enderscape.manager.VoidLachrymaItemConversionManager;
 import net.penumbra.enderscape.manager.VoidManager;
+import net.penumbra.enderscape.neoforge.EnderscapeNeoForge;
+import net.penumbra.enderscape.neoforge.entity.EnderscapeLivingDamage;
+import net.penumbra.enderscape.neoforge.registry.EnderscapeDynamicRegistrySetup;
 import net.penumbra.enderscape.registry.enchantment.EnderscapeEnchantments;
 import net.penumbra.enderscape.registry.entity.EnderscapeAttachments;
 import net.penumbra.enderscape.registry.entity.EnderscapeMobEffects;
@@ -62,6 +70,7 @@ import org.jspecify.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static net.minecraft.world.item.Items.CHORUS_FRUIT;
 import static net.minecraft.world.level.block.Blocks.CHORUS_FLOWER;
@@ -88,10 +97,10 @@ public class EnderscapeIntegration {
         LandPathTypeRegistry.register(VOID_LACHRYMA, (state, neighbor) -> EnderscapePathTypes.VOID_LACHRYMA);
         LandPathTypeRegistry.register(VOID_SHALE, (state, neighbor) -> EnderscapePathTypes.VOID_SHALE);
 
-        DefaultItemComponentEvents.MODIFY.register((context) -> {
-            context.modify(
-                    item -> item == Items.SHULKER_SHELL,
-                    (builder, item) -> builder.set(
+        EnderscapeNeoForge.modEventBus().addListener(ModifyDefaultComponentsEvent.class, (context) -> {
+            context.modifyMatching(
+                    (item, components) -> item == Items.SHULKER_SHELL,
+                    (builder, registries, item) -> builder.set(
                             DataComponents.EQUIPPABLE,
                             Equippable.builder(ArmorType.HELMET.getSlot())
                                     .setSwappable(false)
@@ -101,10 +110,10 @@ public class EnderscapeIntegration {
                     )
             );
 
-            context.modify(
-                    item -> item == Items.TOTEM_OF_UNDYING,
-                    (builder, item) -> {
-                        DeathProtection protection = item.components().getOrDefault(DataComponents.DEATH_PROTECTION, DeathProtection.TOTEM_OF_UNDYING);
+            context.modifyMatching(
+                    (item, components) -> item == Items.TOTEM_OF_UNDYING,
+                    (builder, registries, item) -> {
+                        DeathProtection protection = builder.getOrDefault(DataComponents.DEATH_PROTECTION, DeathProtection.TOTEM_OF_UNDYING);
                         builder.set(DataComponents.DEATH_PROTECTION, addDeathProtectionEffects(
                                 protection,
                                 new MobEffectInstance(EnderscapeMobEffects.VOID_RESISTANCE, 10 * 20))
@@ -113,49 +122,66 @@ public class EnderscapeIntegration {
             );
         });
 
-        LootTableEvents.MODIFY.register(Enderscape.id("inject_supplemental_loot_tables"), (key, builder, source, registries) -> {
+        NeoForge.EVENT_BUS.addListener(LootTableLoadEvent.class, (event) -> {
             addLootTableInjection(
-                    registries,
+                    event.getRegistries(),
                     CONFIG.supplementVanillaStrongholdLibraryLoot,
                     BuiltInLootTables.STRONGHOLD_LIBRARY,
                     EnderscapeLootTables.STRONGHOLD_LIBRARY_CHEST_SUPPLEMENTS,
-                    key,
-                    builder
+                    event.getKey(),
+                    event.getTable()
             );
         });
 
-        ServerLivingEntityEvents.ALLOW_DAMAGE.register(VoidManager::allowLivingEntityDamage);
-        ServerLivingEntityEvents.AFTER_DAMAGE.register(VoidManager::afterLivingEntityDamage);
-        ServerLivingEntityEvents.AFTER_DEATH.register(EnderscapeAttachments::afterLivingEntityDeath);
+        NeoForge.EVENT_BUS.addListener(LivingIncomingDamageEvent.class, (event) -> {
+            if (!VoidManager.allowLivingEntityDamage(event.getEntity(), event.getSource(), event.getAmount())) event.setCanceled(true);
+        });
+        NeoForge.EVENT_BUS.addListener(LivingDamageEvent.Post.class, (event) -> {
+            if (!event.getEntity().isDeadOrDying()) VoidManager.afterLivingEntityDamage(event.getEntity(), event.getSource(), event.getOriginalDamage(), EnderscapeLivingDamage.damageTaken(event), event.getBlockedDamage() > 0.0F);
+        });
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, LivingDeathEvent.class, (event) -> {
+            if (!event.getEntity().level().isClientSide()) EnderscapeAttachments.afterLivingEntityDeath(event.getEntity(), event.getSource());
+        });
 
-        ServerLifecycleEvents.SERVER_STARTING.register(RustleItemConversionManager::onServerStarting);
-        ServerLifecycleEvents.SERVER_STOPPING.register(RustleItemConversionManager::onServerStopping);
+        NeoForge.EVENT_BUS.addListener(ServerStartingEvent.class, (event) -> RustleItemConversionManager.onServerStarting(event.getServer()));
+        NeoForge.EVENT_BUS.addListener(ServerStoppingEvent.class, (event) -> RustleItemConversionManager.onServerStopping(event.getServer()));
 
-        ServerLifecycleEvents.SERVER_STARTING.register(VoidLachrymaItemConversionManager::onServerStarting);
-        ServerLifecycleEvents.SERVER_STOPPING.register(VoidLachrymaItemConversionManager::onServerStopping);
+        NeoForge.EVENT_BUS.addListener(ServerStartingEvent.class, (event) -> VoidLachrymaItemConversionManager.onServerStarting(event.getServer()));
+        NeoForge.EVENT_BUS.addListener(ServerStoppingEvent.class, (event) -> VoidLachrymaItemConversionManager.onServerStopping(event.getServer()));
 
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
-            if (success) {
-                RustleItemConversionManager.onServerStarting(server);
-                VoidLachrymaItemConversionManager.onServerStarting(server);
+        NeoForge.EVENT_BUS.addListener(OnDatapackSyncEvent.class, (event) -> {
+            if (event.getPlayer() == null) {
+                RustleItemConversionManager.onServerStarting(event.getPlayerList().getServer());
+                VoidLachrymaItemConversionManager.onServerStarting(event.getPlayerList().getServer());
             }
         });
 
-        ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> EndHavenManager.updateConnection(player));
+        NeoForge.EVENT_BUS.addListener(PlayerEvent.PlayerChangedDimensionEvent.class, (event) -> EndHavenManager.updateConnection(event.getEntity()));
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, PlayerEvent.Clone.class, (event) -> {
+            if (event.getOriginal().level() != event.getEntity().level()) EndHavenManager.updateConnection(event.getEntity());
+        });
 
-        ServerMobEffectEvents.BEFORE_ADD.register((instance, entity, context) -> {
-            if (instance.is(EnderscapeMobEffects.STUNNED)) {
+        NeoForge.EVENT_BUS.addListener(MobEffectEvent.Added.class, (event) -> {
+            MobEffectInstance instance = event.getEffectInstance();
+            LivingEntity entity = event.getEntity();
+
+            if (!entity.level().isClientSide() && instance.is(EnderscapeMobEffects.STUNNED)) {
                 entity.setAttached(EnderscapeAttachments.STUN_DURATION, instance.getDuration());
                 entity.setAttached(EnderscapeAttachments.STUN_TICKS, instance.getDuration());
             }
         });
 
-        ServerMobEffectEvents.BEFORE_REMOVE.register((instance, entity, context) -> {
-            if (instance.is(EnderscapeMobEffects.STUNNED)) {
+        Consumer<MobEffectEvent> beforeRemove = (event) -> {
+            MobEffectInstance instance = event.getEffectInstance();
+            LivingEntity entity = event.getEntity();
+
+            if (!entity.level().isClientSide() && instance != null && instance.is(EnderscapeMobEffects.STUNNED)) {
                 entity.removeAttached(EnderscapeAttachments.STUN_DURATION);
                 entity.removeAttached(EnderscapeAttachments.STUN_TICKS);
             }
-        });
+        };
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, MobEffectEvent.Remove.class, beforeRemove::accept);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, MobEffectEvent.Expired.class, beforeRemove::accept);
     }
 
     private static DeathProtection addDeathProtectionEffects(DeathProtection protection, MobEffectInstance ... effects) {
@@ -168,14 +194,14 @@ public class EnderscapeIntegration {
         return new DeathProtection(original);
     }
 
-    private static void addLootTableInjection(HolderLookup.Provider provider, boolean allowed, ResourceKey<LootTable> original, ResourceKey<LootTable> injection, ResourceKey<LootTable> key, LootTable.Builder builder) {
+    private static void addLootTableInjection(HolderGetter.Provider provider, boolean allowed, ResourceKey<LootTable> original, ResourceKey<LootTable> injection, ResourceKey<LootTable> key, LootTable table) {
         if (allowed && key.equals(original)) {
-            builder.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(NestedLootTable.lootTableReference(provider.getOrThrow(injection)).setWeight(1)));
+            table.addPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(NestedLootTable.lootTableReference(provider.getOrThrow(injection)).setWeight(1)).build());
         }
     }
 
     private static void registerAliases() {
-        DynamicRegistrySetupCallback.EVENT.register((registryView) -> {
+        EnderscapeDynamicRegistrySetup.register((registryView) -> {
             dynamicRegistryAlias(registryView, Registries.BIOME, "magnia_crags", EnderscapeBiomes.MAGNIA_FIELDS.identifier().getPath());
             dynamicRegistryAlias(registryView, Registries.DATA_COMPONENT_TYPE, "current_nebulite_fuel", "current_fuel");
             dynamicRegistryAlias(registryView, Registries.ENCHANTMENT, "lightspeed", EnderscapeEnchantments.RESONANCE.identifier().getPath());
@@ -198,7 +224,7 @@ public class EnderscapeIntegration {
         blockAndItemAlias("corrupt_path_block", "corrupt_path");
     }
 
-    private static <T> void dynamicRegistryAlias(DynamicRegistryView view, ResourceKey<Registry<T>> registry, String old_name, String new_name) {
+    private static <T> void dynamicRegistryAlias(EnderscapeDynamicRegistrySetup.View view, ResourceKey<Registry<T>> registry, String old_name, String new_name) {
         Optional<Registry<T>> optional = view.getOptional(registry);
         optional.ifPresent(value -> value.addAlias(Enderscape.id(old_name), Enderscape.id(new_name)));
     }
@@ -209,8 +235,8 @@ public class EnderscapeIntegration {
     }
 
     private static void registerCompostableItems() {
-        DefaultItemComponentEvents.MODIFY.register(modifyContext -> {
-            modifyContext.modify(CHORUS_FRUIT, ctx -> ctx.set(DataComponents.COMPOSTABLE, new Compostable(ContextIntProviders.COMPOSTABLE_LOW)));
+        EnderscapeNeoForge.modEventBus().addListener(ModifyDefaultComponentsEvent.class, modifyContext -> {
+            modifyContext.modify(CHORUS_FRUIT, (ctx, registries, item) -> ctx.set(DataComponents.COMPOSTABLE, new Compostable(ContextIntProviders.COMPOSTABLE_LOW)));
         });
     }
 

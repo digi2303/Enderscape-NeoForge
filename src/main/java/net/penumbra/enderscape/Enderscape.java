@@ -2,7 +2,6 @@ package net.penumbra.enderscape;
 
 import com.google.common.reflect.Reflection;
 import net.fabricmc.fabric.api.biome.v1.TheEndBiomes;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -17,6 +16,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.EntityBlock;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.manager.StructureMusicManager;
 import net.penumbra.enderscape.registry.EnderscapeIntegration;
@@ -48,7 +50,7 @@ public class Enderscape {
     public static final String MOD_ID = "enderscape";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final boolean IS_DEBUG = FabricLoader.getInstance().isDevelopmentEnvironment();
+    public static final boolean IS_DEBUG = !FMLEnvironment.isProduction();
 
     public static Identifier id(String path) {
         return Identifier.tryBuild(MOD_ID, path);
@@ -143,7 +145,7 @@ public class Enderscape {
         if (IS_DEBUG) {
 
             // Quick test for block entities being valid
-            ServerLifecycleEvents.SERVER_STARTED.register(_ -> {
+            NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, _ -> {
                 for (var block : BuiltInRegistries.BLOCK) {
                     if (block instanceof EntityBlock entityBlock) {
                         entityBlock.newBlockEntity(BlockPos.ZERO, block.defaultBlockState());

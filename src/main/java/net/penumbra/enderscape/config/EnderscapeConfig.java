@@ -3,7 +3,7 @@ package net.penumbra.enderscape.config;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLPaths;
 import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.config.value.EndFlashStyle;
 import net.penumbra.enderscape.config.value.LightingStyle;
@@ -13,7 +13,7 @@ public class EnderscapeConfig {
     public static final ConfigClassHandler<EnderscapeConfig> HANDLER = ConfigClassHandler.createBuilder(EnderscapeConfig.class)
             .id(Enderscape.id("config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
-                    .setPath(FabricLoader.getInstance().getConfigDir().resolve("enderscape.json5"))
+                    .setPath(FMLPaths.CONFIGDIR.get().resolve("enderscape.json5"))
                     .setJson5(true)
                     .build())
             .build();

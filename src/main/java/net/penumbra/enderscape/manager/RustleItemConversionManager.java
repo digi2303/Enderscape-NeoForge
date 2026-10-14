@@ -22,7 +22,7 @@ public class RustleItemConversionManager {
         RECIPE_CACHE.clear();
 
         Map<Ingredient, List<RustleRecipe>> map = new IdentityHashMap<>();
-        Collection<RecipeHolder<RustleRecipe>> recipes = server.getRecipeManager().getAllOfType(RustleRecipe.TYPE);
+        Collection<RecipeHolder<RustleRecipe>> recipes = server.getRecipeManager().recipeMap().byType(RustleRecipe.TYPE);
 
         recipes.forEach(conversion -> map.computeIfAbsent(conversion.value().input(), _ -> new ArrayList<>()).add(conversion.value()));
         map.forEach((item, list) -> RECIPE_CACHE.put(item, Collections.unmodifiableList(list)));

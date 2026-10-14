@@ -1,17 +1,18 @@
 package net.penumbra.enderscape.manager;
 
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.penumbra.enderscape.network.ClientboundStructureChangedPayload;
 
@@ -69,13 +70,17 @@ public class StructureMusicManager {
     }
 
     static {
-        ServerLevelEvents.UNLOAD.register((server, level) -> {
+        NeoForge.EVENT_BUS.addListener(LevelEvent.Unload.class, (event) -> {
+            if (!(event.getLevel() instanceof ServerLevel level)) return;
+
             for (ServerPlayer player : level.players()) {
                 removeFromAll(player);
             }
         });
 
-        ServerTickEvents.START_SERVER_TICK.register((server) -> {
+        NeoForge.EVENT_BUS.addListener(ServerTickEvent.Pre.class, (event) -> {
+            MinecraftServer server = event.getServer();
+
             if (!playerTimers.isEmpty()) {
                 Iterator<Map.Entry<ServerPlayer, Integer>> iterator = playerTimers.entrySet().iterator();
 
@@ -107,17 +112,17 @@ public class StructureMusicManager {
             }
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            removeFromAll(handler.getPlayer());
+        NeoForge.EVENT_BUS.addListener(PlayerEvent.PlayerLoggedOutEvent.class, (event) -> {
+            removeFromAll((ServerPlayer) event.getEntity());
         });
 
-        ServerEntityEvents.ENTITY_UNLOAD.register((entity, level) -> {
-            if (entity instanceof ServerPlayer player) removeFromAll(player);
+        NeoForge.EVENT_BUS.addListener(EntityLeaveLevelEvent.class, (event) -> {
+            if (event.getEntity() instanceof ServerPlayer player) removeFromAll(player);
         });
 
-        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-            removeFromAll(oldPlayer);
-            sendStructureToClient(newPlayer, NONE);
+        NeoForge.EVENT_BUS.addListener(PlayerEvent.Clone.class, (event) -> {
+            removeFromAll((ServerPlayer) event.getOriginal());
+            sendStructureToClient((ServerPlayer) event.getEntity(), NONE);
         });
     }
 }

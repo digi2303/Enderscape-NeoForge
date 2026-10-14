@@ -71,6 +71,7 @@
     "level.PathTypeMixin",
     "level.WorldDimensionsMixin",
     "level.WorldDimensionsMixin$Entry",
+    "neoforge.RegistryDataLoaderMixin",
     "server.NaturalSpawnerMixin",
     "server.PlayerListMixin",
     "server.ServerChunkCacheAccessor",
