@@ -3,6 +3,7 @@ package net.penumbra.enderscape.registry.lithostitched;
 import dev.worldgen.lithostitched.api.registry.LithostitchedRegistries;
 import dev.worldgen.lithostitched.api.util.InjectionType;
 import dev.worldgen.lithostitched.api.worldgen.modifier.WorldgenModifier;
+import dev.worldgen.lithostitched.api.worldgen.modifier.target.HolderTarget;
 import dev.worldgen.lithostitched.impl.worldgen.modifier.SetDimensionAttributesModifier;
 import dev.worldgen.lithostitched.impl.worldgen.modifier.SetTimelineTracksModifier;
 import net.minecraft.core.HolderGetter;
@@ -74,7 +75,7 @@ public class EnderscapeWorldgenModifiers {
         context.register(DIMENSION_ATTRIBUTES_END, new SetDimensionAttributesModifier(
                 Optional.empty(),
                 WorldgenModifier.DEFAULT_PRIORITY,
-                HolderSet.direct(context.lookup(Registries.DIMENSION_TYPE).getOrThrow(BuiltinDimensionTypes.END)),
+                HolderTarget.of(HolderSet.direct(context.lookup(Registries.DIMENSION_TYPE).getOrThrow(BuiltinDimensionTypes.END))),
                 EnvironmentAttributeMap.builder()
                         .set(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, ARGB.vector3fFromRGB24(0x1A1E1A))
                         .set(EnvironmentAttributes.AMBIENT_PARTICLES, AmbientParticle.of(EnderscapeParticles.VOID_STARS, 0.003F))
@@ -101,7 +102,7 @@ public class EnderscapeWorldgenModifiers {
         context.register(DIMENSION_ATTRIBUTES_OVERWORLD, new SetDimensionAttributesModifier(
                 Optional.empty(),
                 WorldgenModifier.DEFAULT_PRIORITY,
-                HolderSet.direct(context.lookup(Registries.DIMENSION_TYPE).getOrThrow(BuiltinDimensionTypes.OVERWORLD)),
+                HolderTarget.of(HolderSet.direct(context.lookup(Registries.DIMENSION_TYPE).getOrThrow(BuiltinDimensionTypes.OVERWORLD))),
                 EnvironmentAttributeMap.builder().set(EnderscapeEnvironmentAttributes.PURIFIES_VOIDED_HEALTH, true).build(),
                 true
         ));
@@ -109,7 +110,7 @@ public class EnderscapeWorldgenModifiers {
         context.register(TIMELINES_OVERWORLD_DAY, new SetTimelineTracksModifier(
                 Optional.empty(),
                 WorldgenModifier.DEFAULT_PRIORITY,
-                HolderSet.direct(context.lookup(Registries.TIMELINE).getOrThrow(Timelines.OVERWORLD_DAY)),
+                HolderTarget.of(HolderSet.direct(context.lookup(Registries.TIMELINE).getOrThrow(Timelines.OVERWORLD_DAY))),
                 Map.of(
                         EnderscapeEnvironmentAttributes.PURIFIES_VOIDED_HEALTH, new AttributeTrack<>(
                                 BooleanModifier.AND,

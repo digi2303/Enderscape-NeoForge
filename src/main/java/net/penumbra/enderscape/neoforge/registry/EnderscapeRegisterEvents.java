@@ -93,6 +93,7 @@ public final class EnderscapeRegisterEvents {
         add(Registries.SPAWN_CONDITION_TYPE, EnderscapeSpawnConditionTypes.class);
         add(Registries.ENVIRONMENT_ATTRIBUTE, EnderscapeEnvironmentAttributes.class);
         add(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, EnderscapeAttachments.class);
+        add(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, EnderscapeBiomeModifierTypes.class);
         add(NeoForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, EnderscapeEntityDataSerializers.class);
         add(NeoForgeRegistries.Keys.FLUID_TYPES, EnderscapeFluidTypes.class);
     }

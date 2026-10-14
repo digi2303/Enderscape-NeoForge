@@ -1,7 +1,6 @@
 package net.penumbra.enderscape;
 
 import com.google.common.reflect.Reflection;
-import net.fabricmc.fabric.api.biome.v1.TheEndBiomes;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -21,6 +20,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.manager.StructureMusicManager;
+import net.penumbra.enderscape.neoforge.level.EnderscapeEndBiomes;
 import net.penumbra.enderscape.registry.EnderscapeIntegration;
 import net.penumbra.enderscape.registry.EnderscapePacks;
 import net.penumbra.enderscape.registry.EnderscapeRegistries;
@@ -67,9 +67,9 @@ public class Enderscape {
     }
 
     private static void addBiomeForVanillaWorldgen(ResourceKey<Biome> key, double weight) {
-        TheEndBiomes.addHighlandsBiome(key, weight);
-        TheEndBiomes.addMidlandsBiome(key, key, weight);
-        TheEndBiomes.addBarrensBiome(key, key, weight);
+        EnderscapeEndBiomes.addHighlandsBiome(key, weight);
+        EnderscapeEndBiomes.addMidlandsBiome(key, key, weight);
+        EnderscapeEndBiomes.addBarrensBiome(key, key, weight);
     }
 
     public void onInitialize() {
@@ -112,7 +112,6 @@ public class Enderscape {
                 EnderscapeCommands.class,
                 EnderscapeServerNetworking.class,
                 EnderscapeIntegration.class,
-                EnderscapeBiomeModifications.class,
                 EnderscapeSoundTypeOverrides.class,
                 EnderscapeCreativeModeTab.class,
                 EnderscapeDataComponents.class,
