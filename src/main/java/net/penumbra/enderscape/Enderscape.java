@@ -1,10 +1,6 @@
 package net.penumbra.enderscape;
 
 import com.google.common.reflect.Reflection;
-import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
-import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -15,12 +11,15 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.EntityBlock;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.manager.StructureMusicManager;
 import net.penumbra.enderscape.neoforge.level.EnderscapeEndBiomes;
+import net.penumbra.enderscape.neoforge.registry.EnderscapeBuiltInPacks;
 import net.penumbra.enderscape.registry.EnderscapeIntegration;
 import net.penumbra.enderscape.registry.EnderscapePacks;
 import net.penumbra.enderscape.registry.EnderscapeRegistries;
@@ -43,7 +42,6 @@ import net.penumbra.enderscape.registry.server.EnderscapeServerNetworking;
 import net.penumbra.enderscape.registry.sound.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
 public class Enderscape {
 
@@ -127,18 +125,6 @@ public class Enderscape {
         addBiomeForVanillaWorldgen(EnderscapeBiomes.CORRUPT_BARRENS, 0.5);
         addBiomeForVanillaWorldgen(EnderscapeBiomes.CELESTIAL_GROVE, 0.3);
 
-        FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container -> {
-            EnderscapeConfig config = EnderscapeConfig.getInstance();
-
-            registerBuiltInPack(EnderscapePacks.IMPROVED_VISUALS, container, config.defaultResourcePackImprovedVisuals);
-
-            registerBuiltInPack(EnderscapePacks.FIX_LEVITATION_ADVANCEMENT, container, config.defaultDataPackFixLevitationAdvancement);
-            registerBuiltInPack(EnderscapePacks.FIX_VANILLA_RECIPES, container, config.defaultDataPackFixVanillaRecipes);
-            registerBuiltInPack(EnderscapePacks.NEW_END_CITIES, container, config.defaultDataPackNewEndCities);
-            registerBuiltInPack(EnderscapePacks.NEW_STRONGHOLDS, container, config.defaultDataPackNewStrongholds);
-            registerBuiltInPack(EnderscapePacks.NEW_TERRAIN, container, config.defaultDataPackNewTerrain);
-        });
-
         LOGGER.info("Enderscape initialized!");
 
         if (IS_DEBUG) {
@@ -154,12 +140,21 @@ public class Enderscape {
         }
     }
 
-    private static void registerBuiltInPack(Identifier name, ModContainer container, boolean config) {
-        ResourceLoader.registerBuiltinPack(name, container, Component.translatable("pack.enderscape." + name.getPath()), getActivationType(config));
+    public static void registerBuiltInPacks() {
+        ModList.get().getModContainerById(MOD_ID).ifPresent(container -> {
+            EnderscapeConfig config = EnderscapeConfig.getInstance();
+
+            registerBuiltInPack(EnderscapePacks.IMPROVED_VISUALS, container, config.defaultResourcePackImprovedVisuals);
+
+            registerBuiltInPack(EnderscapePacks.FIX_LEVITATION_ADVANCEMENT, container, config.defaultDataPackFixLevitationAdvancement);
+            registerBuiltInPack(EnderscapePacks.FIX_VANILLA_RECIPES, container, config.defaultDataPackFixVanillaRecipes);
+            registerBuiltInPack(EnderscapePacks.NEW_END_CITIES, container, config.defaultDataPackNewEndCities);
+            registerBuiltInPack(EnderscapePacks.NEW_STRONGHOLDS, container, config.defaultDataPackNewStrongholds);
+            registerBuiltInPack(EnderscapePacks.NEW_TERRAIN, container, config.defaultDataPackNewTerrain);
+        });
     }
 
-    @NotNull
-    private static PackActivationType getActivationType(boolean value) {
-        return value ? PackActivationType.DEFAULT_ENABLED : PackActivationType.NORMAL;
+    private static void registerBuiltInPack(Identifier name, ModContainer container, boolean config) {
+        EnderscapeBuiltInPacks.register(name, container, Component.translatable("pack.enderscape." + name.getPath()), config);
     }
 }

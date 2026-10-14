@@ -14,6 +14,7 @@
         "multiplayer.ClientLevelDataMixin",
         "multiplayer.ClientLevelMixin",
         "multiplayer.ClientPacketListenerMixin",
+        "neoforge.OptionsMixin",
         "particle.CoolingDripHangParticleMixin",
         "particle.PortalParticleMixin",
         "renderer.AtmosphericFogEnvironmentMixin",
