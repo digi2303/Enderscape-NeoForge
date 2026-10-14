@@ -11,6 +11,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.InsideBlockEffectType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
@@ -18,10 +20,13 @@ import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.penumbra.enderscape.entity.ai.EnderscapePathTypes;
 import net.penumbra.enderscape.registry.entity.EnderscapeDamageTypes;
 import net.penumbra.enderscape.registry.particle.EnderscapeParticles;
 import net.penumbra.enderscape.registry.sound.EnderscapeBlockSounds;
 import net.penumbra.enderscape.registry.tag.EnderscapeBlockTags;
+import org.jspecify.annotations.Nullable;
 
 import static net.penumbra.enderscape.manager.VoidManager.*;
 
@@ -29,6 +34,16 @@ public class VoidFireBlock extends BaseFireBlock {
 
     public VoidFireBlock(final BlockBehaviour.Properties properties) {
         super(properties, 1.0F);
+    }
+
+    @Override
+    public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+        return EnderscapePathTypes.VOID_FIRE;
+    }
+
+    @Override
+    public @Nullable PathType getAdjacentBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob, PathType originalType) {
+        return null;
     }
 
     @Override

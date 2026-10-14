@@ -7,15 +7,18 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.penumbra.enderscape.registry.level.EnderscapeGameEvents;
 import net.penumbra.enderscape.registry.sound.EnderscapeBlockSounds;
+import org.jspecify.annotations.Nullable;
 
 public class DriftJellyBlock extends HalfTransparentBlock {
 
@@ -23,6 +26,11 @@ public class DriftJellyBlock extends HalfTransparentBlock {
 
     public DriftJellyBlock(Properties settings) {
         super(settings);
+    }
+
+    @Override
+    public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+        return PathType.DAMAGING;
     }
 
     @Override

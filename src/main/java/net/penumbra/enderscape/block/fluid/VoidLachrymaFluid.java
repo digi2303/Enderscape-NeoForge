@@ -30,6 +30,8 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.penumbra.enderscape.neoforge.registry.EnderscapeFluidTypes;
 import net.penumbra.enderscape.registry.block.EnderscapeBlocks;
 import net.penumbra.enderscape.registry.block.EnderscapeFluids;
 import net.penumbra.enderscape.registry.item.EnderscapeItems;
@@ -64,6 +66,11 @@ public abstract class VoidLachrymaFluid extends FlowingFluid {
     @Override
     public Item getBucket() {
         return EnderscapeItems.VOID_LACHRYMA_BUCKET;
+    }
+
+    @Override
+    public FluidType getFluidType() {
+        return EnderscapeFluidTypes.VOID_LACHRYMA;
     }
 
     @Override

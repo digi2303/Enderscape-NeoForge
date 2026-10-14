@@ -72,6 +72,8 @@
     "level.WorldDimensionsMixin",
     "level.WorldDimensionsMixin$Entry",
     "neoforge.RegistryDataLoaderMixin",
+    "neoforge.VoidLachrymaEntityMixin",
+    "neoforge.VoidLachrymaLivingEntityMixin",
     "server.NaturalSpawnerMixin",
     "server.PlayerListMixin",
     "server.ServerChunkCacheAccessor",

@@ -1,9 +1,5 @@
 package net.penumbra.enderscape.registry;
 
-import net.fabricmc.fabric.api.item.v1.BlockTransformerHelper;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.LandPathTypeRegistry;
-import net.fabricmc.fabric.api.registry.fluid.EntityFluidInteractionRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
@@ -26,8 +22,9 @@ import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -47,9 +44,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.block.dispenser.LodestoneTeleportationDispenserBehavior;
-import net.penumbra.enderscape.block.fluid.VoidLachrymaBehavior;
 import net.penumbra.enderscape.config.EnderscapeConfig;
-import net.penumbra.enderscape.entity.ai.EnderscapePathTypes;
 import net.penumbra.enderscape.manager.EndHavenManager;
 import net.penumbra.enderscape.manager.RustleItemConversionManager;
 import net.penumbra.enderscape.manager.VoidLachrymaItemConversionManager;
@@ -64,7 +59,6 @@ import net.penumbra.enderscape.registry.item.EnderscapeEquipmentAssets;
 import net.penumbra.enderscape.registry.level.EnderscapeBiomes;
 import net.penumbra.enderscape.registry.server.EnderscapeLootTables;
 import net.penumbra.enderscape.registry.sound.EnderscapeItemSounds;
-import net.penumbra.enderscape.registry.tag.EnderscapeFluidTags;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -87,15 +81,6 @@ public class EnderscapeIntegration {
         registerCompostableItems();
         registerDispenserBehavior();
         registerFlammableBlocks();
-        registerStrippableBlocks();
-
-        //noinspection UnstableApiUsage
-        EntityFluidInteractionRegistry.register(EnderscapeFluidTags.VOID_LACHRYMA, new VoidLachrymaBehavior());
-
-        LandPathTypeRegistry.register(DRIFT_JELLY_BLOCK, (state, neighbor) -> PathType.DAMAGING);
-        LandPathTypeRegistry.register(VOID_FIRE, (state, neighbor) -> EnderscapePathTypes.VOID_FIRE);
-        LandPathTypeRegistry.register(VOID_LACHRYMA, (state, neighbor) -> EnderscapePathTypes.VOID_LACHRYMA);
-        LandPathTypeRegistry.register(VOID_SHALE, (state, neighbor) -> EnderscapePathTypes.VOID_SHALE);
 
         EnderscapeNeoForge.modEventBus().addListener(ModifyDefaultComponentsEvent.class, (context) -> {
             context.modifyMatching(
@@ -281,82 +266,75 @@ public class EnderscapeIntegration {
     }
 
     private static void registerFlammableBlocks() {
-        FlammableBlockRegistry.getDefaultInstance().add(DRY_END_GROWTH, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(CHORUS_SPROUTS, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(WISP_GROWTH, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(WISP_SPROUTS, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(WISP_FLOWER, 60, 100);
+        FireBlock fire = (FireBlock) Blocks.FIRE;
 
-        FlammableBlockRegistry.getDefaultInstance().add(CHORUS_PLANT, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(CHORUS_FLOWER, 5, 5);
+        fire.setFlammable(DRY_END_GROWTH, 60, 100);
+        fire.setFlammable(CHORUS_SPROUTS, 60, 100);
+        fire.setFlammable(WISP_GROWTH, 60, 100);
+        fire.setFlammable(WISP_SPROUTS, 60, 100);
+        fire.setFlammable(WISP_FLOWER, 60, 100);
 
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_LOG, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_WOOD, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_VEILED_LOG, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_VEILED_WOOD, 5, 5);
+        fire.setFlammable(CHORUS_PLANT, 5, 5);
+        fire.setFlammable(CHORUS_FLOWER, 5, 5);
 
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_PLANKS, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_SLAB, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_FENCE_GATE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_FENCE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_STAIRS, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_SHELF, 30, 20);
+        fire.setFlammable(VEILED_LOG, 5, 5);
+        fire.setFlammable(VEILED_WOOD, 5, 5);
+        fire.setFlammable(STRIPPED_VEILED_LOG, 5, 5);
+        fire.setFlammable(STRIPPED_VEILED_WOOD, 5, 5);
 
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_SAPLING, 15, 60);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_LEAVES, 30, 60);
-        FlammableBlockRegistry.getDefaultInstance().add(VEILED_LEAF_PILE, 60, 20);
+        fire.setFlammable(VEILED_PLANKS, 5, 5);
+        fire.setFlammable(VEILED_SLAB, 5, 5);
+        fire.setFlammable(VEILED_FENCE_GATE, 5, 5);
+        fire.setFlammable(VEILED_FENCE, 5, 5);
+        fire.setFlammable(VEILED_STAIRS, 5, 5);
+        fire.setFlammable(VEILED_SHELF, 30, 20);
 
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_STEM, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_HYPHAE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_CELESTIAL_STEM, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_CELESTIAL_HYPHAE, 5, 5);
+        fire.setFlammable(VEILED_SAPLING, 15, 60);
+        fire.setFlammable(VEILED_LEAVES, 30, 60);
+        fire.setFlammable(VEILED_LEAF_PILE, 60, 20);
 
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_PLANKS, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_SLAB, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_FENCE_GATE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_FENCE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_STAIRS, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_SHELF, 30, 20);
+        fire.setFlammable(CELESTIAL_STEM, 5, 5);
+        fire.setFlammable(CELESTIAL_HYPHAE, 5, 5);
+        fire.setFlammable(STRIPPED_CELESTIAL_STEM, 5, 5);
+        fire.setFlammable(STRIPPED_CELESTIAL_HYPHAE, 5, 5);
 
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_CAP, 30, 60);
+        fire.setFlammable(CELESTIAL_PLANKS, 5, 5);
+        fire.setFlammable(CELESTIAL_SLAB, 5, 5);
+        fire.setFlammable(CELESTIAL_FENCE_GATE, 5, 5);
+        fire.setFlammable(CELESTIAL_FENCE, 5, 5);
+        fire.setFlammable(CELESTIAL_STAIRS, 5, 5);
+        fire.setFlammable(CELESTIAL_SHELF, 30, 20);
 
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_STEM, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_HYPHAE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_MURUBLIGHT_STEM, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_MURUBLIGHT_HYPHAE, 5, 5);
+        fire.setFlammable(CELESTIAL_CAP, 30, 60);
 
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_PLANKS, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_SLAB, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_FENCE_GATE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_FENCE, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_STAIRS, 5, 5);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_SHELF, 30, 20);
+        fire.setFlammable(MURUBLIGHT_STEM, 5, 5);
+        fire.setFlammable(MURUBLIGHT_HYPHAE, 5, 5);
+        fire.setFlammable(STRIPPED_MURUBLIGHT_STEM, 5, 5);
+        fire.setFlammable(STRIPPED_MURUBLIGHT_HYPHAE, 5, 5);
 
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_CAP, 30, 60);
+        fire.setFlammable(MURUBLIGHT_PLANKS, 5, 5);
+        fire.setFlammable(MURUBLIGHT_SLAB, 5, 5);
+        fire.setFlammable(MURUBLIGHT_FENCE_GATE, 5, 5);
+        fire.setFlammable(MURUBLIGHT_FENCE, 5, 5);
+        fire.setFlammable(MURUBLIGHT_STAIRS, 5, 5);
+        fire.setFlammable(MURUBLIGHT_SHELF, 30, 20);
+
+        fire.setFlammable(MURUBLIGHT_CAP, 30, 60);
         
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_GROWTH, 60, 60);
-        FlammableBlockRegistry.getDefaultInstance().add(BULB_FLOWER, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(PURUBERRY_VINE, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(PURUBERRY_FLOWER, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(UNRIPE_PURUBERRY_BLOCK, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(RIPE_PURUBERRY_BLOCK, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(CELESTIAL_CHANTERELLE, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_CHANTERELLE, 60, 100);
+        fire.setFlammable(CELESTIAL_GROWTH, 60, 60);
+        fire.setFlammable(BULB_FLOWER, 60, 100);
+        fire.setFlammable(PURUBERRY_VINE, 60, 100);
+        fire.setFlammable(PURUBERRY_FLOWER, 60, 100);
+        fire.setFlammable(UNRIPE_PURUBERRY_BLOCK, 60, 100);
+        fire.setFlammable(RIPE_PURUBERRY_BLOCK, 60, 100);
+        fire.setFlammable(CELESTIAL_CHANTERELLE, 60, 100);
+        fire.setFlammable(MURUBLIGHT_CHANTERELLE, 60, 100);
 
-        FlammableBlockRegistry.getDefaultInstance().add(CORRUPT_GROWTH, 60, 100);
-        FlammableBlockRegistry.getDefaultInstance().add(BLINKLIGHT_VINES_BODY, 15, 60);
-        FlammableBlockRegistry.getDefaultInstance().add(BLINKLIGHT_VINES_HEAD, 15, 60);
-        FlammableBlockRegistry.getDefaultInstance().add(MURUBLIGHT_BRACKET, 60, 100);
+        fire.setFlammable(CORRUPT_GROWTH, 60, 100);
+        fire.setFlammable(BLINKLIGHT_VINES_BODY, 15, 60);
+        fire.setFlammable(BLINKLIGHT_VINES_HEAD, 15, 60);
+        fire.setFlammable(MURUBLIGHT_BRACKET, 60, 100);
 
-        FlammableBlockRegistry.getDefaultInstance().add(VOID_SHALE, 5, 5);
-    }
-
-    private static void registerStrippableBlocks() {
-        BlockTransformerHelper.registerStripping(VEILED_LOG, STRIPPED_VEILED_LOG);
-        BlockTransformerHelper.registerStripping(VEILED_WOOD, STRIPPED_VEILED_WOOD);
-        BlockTransformerHelper.registerStripping(CELESTIAL_STEM, STRIPPED_CELESTIAL_STEM);
-        BlockTransformerHelper.registerStripping(CELESTIAL_HYPHAE, STRIPPED_CELESTIAL_HYPHAE);
-        BlockTransformerHelper.registerStripping(MURUBLIGHT_STEM, STRIPPED_MURUBLIGHT_STEM);
-        BlockTransformerHelper.registerStripping(MURUBLIGHT_HYPHAE, STRIPPED_MURUBLIGHT_HYPHAE);
+        fire.setFlammable(VOID_SHALE, 5, 5);
     }
 }

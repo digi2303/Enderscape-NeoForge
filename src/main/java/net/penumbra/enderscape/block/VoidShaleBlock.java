@@ -10,17 +10,22 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.penumbra.enderscape.block.state.StateProperties;
+import net.penumbra.enderscape.entity.ai.EnderscapePathTypes;
 import net.penumbra.enderscape.registry.block.EnderscapeBlocks;
 import net.penumbra.enderscape.registry.tag.EnderscapeEntityTags;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -55,6 +60,11 @@ public class VoidShaleBlock extends Block {
         super(properties);
 
         registerDefaultState(defaultBlockState().setValue(NATURAL, true).setValue(ITERATION, 0).setValue(STRESS, 0));
+    }
+
+    @Override
+    public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+        return EnderscapePathTypes.VOID_SHALE;
     }
 
     @Override
