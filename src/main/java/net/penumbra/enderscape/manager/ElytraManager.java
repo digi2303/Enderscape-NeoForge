@@ -1,6 +1,5 @@
 package net.penumbra.enderscape.manager;
 
-import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.registry.entity.EnderscapeAttributes;
 import net.penumbra.enderscape.registry.sound.EnderscapeItemSounds;
@@ -25,7 +25,7 @@ public class ElytraManager {
     public static final int MAX_ELYTRA_GROUND_TICKS = 5;
 
     public static void modifyElytraGroundTicks(LivingEntity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(ELYTRA_GROUND_TICKS)) {
+        if (!entity.hasData(ELYTRA_GROUND_TICKS)) {
             setElytraGroundTicks(entity, 0);
         }
 
@@ -54,18 +54,18 @@ public class ElytraManager {
     public static void tickEntityAtTail(LivingEntity entity) {
         if (!entity.isAlive() || entity.isSpectator()) return;
 
-        if (!entity.isFallFlying() || !entity.onGround()) entity.removeAttached(ELYTRA_GROUND_TICKS);
+        if (!entity.isFallFlying() || !entity.onGround()) entity.removeData(ELYTRA_GROUND_TICKS);
     }
 
     public static void tickPlayerAtTail(Player player) {
         if (!player.isAlive() || player.isSpectator()) return;
 
         if (!player.onGround() && !player.isInLiquid()) {
-            if (player.getAttachedOrElse(MIDAIR_TICKS, 0) < 10) {
-                player.setAttached(MIDAIR_TICKS, player.getAttachedOrElse(MIDAIR_TICKS, 0) + 1);
+            if (player.getExistingData(MIDAIR_TICKS).orElse(0) < 10) {
+                player.setData(MIDAIR_TICKS, player.getExistingData(MIDAIR_TICKS).orElse(0) + 1);
             }
         } else {
-            player.removeAttached(MIDAIR_TICKS);
+            player.removeData(MIDAIR_TICKS);
         }
 
         tickDownThenRemove(player, START_GLIDING_SOUND_COOLDOWN);
@@ -90,7 +90,7 @@ public class ElytraManager {
     }
 
     public static boolean shouldDisallowFallFlying(LivingEntity entity, boolean onGround) {
-        boolean noMidairTime = !entity.isFallFlying() && entity.getAttachedOrElse(MIDAIR_TICKS, 0) < 1;
+        boolean noMidairTime = !entity.isFallFlying() && entity.getExistingData(MIDAIR_TICKS).orElse(0) < 1;
         boolean sneaking = entity.isShiftKeyDown() && EnderscapeConfig.getInstance().elytraSneakToStopGliding;
         boolean cannotRebound = onGround && !ElytraManager.canReboundFromGround(entity);
 
@@ -106,11 +106,11 @@ public class ElytraManager {
     }
 
     private static int elytraGroundTicks(LivingEntity entity) {
-        return entity.getAttachedOrElse(ELYTRA_GROUND_TICKS, 0);
+        return entity.getExistingData(ELYTRA_GROUND_TICKS).orElse(0);
     }
 
     private static void setElytraGroundTicks(LivingEntity entity, int value) {
-        entity.setAttached(ELYTRA_GROUND_TICKS, value);
+        entity.setData(ELYTRA_GROUND_TICKS, value);
     }
 
     private static void playStartOrStopGlidingSound(LivingEntity entity, boolean starting) {
@@ -122,7 +122,7 @@ public class ElytraManager {
         boolean configAllows = EnderscapeConfig.getInstance().elytraAddOpenCloseSounds;
         boolean hasGlider = !findFirstGlider(entity).isEmpty();
 
-        if (entity.level() instanceof ServerLevel server && !entity.hasAttached(cooldown) && configAllows && hasGlider) {
+        if (entity.level() instanceof ServerLevel server && !entity.hasData(cooldown) && configAllows && hasGlider) {
             server.playSound(
                     null,
                     entity,
@@ -132,7 +132,7 @@ public class ElytraManager {
                     Mth.nextFloat(entity.getRandom(), 0.8F, 1.2F)
             );
 
-            entity.setAttached(cooldown, 2);
+            entity.setData(cooldown, 2);
         }
     }
 
@@ -167,9 +167,9 @@ public class ElytraManager {
     }
 
     private static void tickDownThenRemove(Player player, AttachmentType<Integer> type) {
-        if (player.hasAttached(type)) {
-            player.modifyAttached(type, value -> value - 1);
-            if (player.getAttached(type) <= 0) player.removeAttached(type);
+        if (player.hasData(type)) {
+            player.setData(type, player.getData(type) - 1);
+            if (player.getExistingDataOrNull(type) <= 0) player.removeData(type);
         }
     }
 }

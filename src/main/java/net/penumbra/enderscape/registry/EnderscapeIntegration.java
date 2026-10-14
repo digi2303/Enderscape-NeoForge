@@ -151,8 +151,8 @@ public class EnderscapeIntegration {
             LivingEntity entity = event.getEntity();
 
             if (!entity.level().isClientSide() && instance.is(EnderscapeMobEffects.STUNNED)) {
-                entity.setAttached(EnderscapeAttachments.STUN_DURATION, instance.getDuration());
-                entity.setAttached(EnderscapeAttachments.STUN_TICKS, instance.getDuration());
+                entity.setData(EnderscapeAttachments.STUN_DURATION, instance.getDuration());
+                entity.setData(EnderscapeAttachments.STUN_TICKS, instance.getDuration());
             }
         });
 
@@ -161,8 +161,8 @@ public class EnderscapeIntegration {
             LivingEntity entity = event.getEntity();
 
             if (!entity.level().isClientSide() && instance != null && instance.is(EnderscapeMobEffects.STUNNED)) {
-                entity.removeAttached(EnderscapeAttachments.STUN_DURATION);
-                entity.removeAttached(EnderscapeAttachments.STUN_TICKS);
+                entity.removeData(EnderscapeAttachments.STUN_DURATION);
+                entity.removeData(EnderscapeAttachments.STUN_TICKS);
             }
         };
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, MobEffectEvent.Remove.class, beforeRemove::accept);

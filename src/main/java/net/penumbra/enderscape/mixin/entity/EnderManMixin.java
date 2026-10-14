@@ -54,13 +54,13 @@ public abstract class EnderManMixin extends Monster implements ImprovedEnderman 
     @Inject(method = "aiStep", at = @At("TAIL"))
     public void Enderscape$aiStep(CallbackInfo info) {
         if (level().isClientSide()) {
-            attackAnimationState.animateWhen(enderman.getAttachedOrElse(ATTACK_ANIMATION_REMAINING_TICKS, 0) > 0, tickCount);
+            attackAnimationState.animateWhen(enderman.getExistingData(ATTACK_ANIMATION_REMAINING_TICKS).orElse(0) > 0, tickCount);
         } else {
-            if (enderman.hasAttached(ATTACK_ANIMATION_REMAINING_TICKS)) {
-                enderman.modifyAttached(ATTACK_ANIMATION_REMAINING_TICKS, value -> value - 1);
+            if (enderman.hasData(ATTACK_ANIMATION_REMAINING_TICKS)) {
+                enderman.setData(ATTACK_ANIMATION_REMAINING_TICKS, enderman.getData(ATTACK_ANIMATION_REMAINING_TICKS) - 1);
 
-                if (enderman.getAttached(ATTACK_ANIMATION_REMAINING_TICKS) <= 0) {
-                    enderman.removeAttached(ATTACK_ANIMATION_REMAINING_TICKS);
+                if (enderman.getExistingDataOrNull(ATTACK_ANIMATION_REMAINING_TICKS) <= 0) {
+                    enderman.removeData(ATTACK_ANIMATION_REMAINING_TICKS);
                 }
             }
         }

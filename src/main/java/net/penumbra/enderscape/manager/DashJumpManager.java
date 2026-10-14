@@ -22,15 +22,15 @@ import static net.penumbra.enderscape.registry.entity.EnderscapeAttachments.DASH
 public class DashJumpManager {
 
     public static int dashJumpChargedDuration(LivingEntity entity) {
-        return entity.getAttachedOrElse(DASH_JUMP_CHARGING_TICKS, 0);
+        return entity.getExistingData(DASH_JUMP_CHARGING_TICKS).orElse(0);
     }
 
     public static boolean dashJumping(LivingEntity entity) {
-        return entity.hasAttached(DASH_JUMP_TICKS);
+        return entity.hasData(DASH_JUMP_TICKS);
     }
 
     public static int dashJumpDuration(LivingEntity entity) {
-        return entity.getAttachedOrElse(DASH_JUMP_TICKS, 0);
+        return entity.getExistingData(DASH_JUMP_TICKS).orElse(0);
     }
 
     public static void tryApply(ServerPlayer player) {
@@ -53,7 +53,7 @@ public class DashJumpManager {
     }
 
     public static void tickHead(LivingEntity entity) {
-        if (dashJumping(entity) && shouldStopDashing(entity)) entity.removeAttached(DASH_JUMP_TICKS);
+        if (dashJumping(entity) && shouldStopDashing(entity)) entity.removeData(DASH_JUMP_TICKS);
     }
 
     public static void tickTail(LivingEntity entity) {
@@ -66,9 +66,9 @@ public class DashJumpManager {
             trySlowMovement(entity);
             createDashJumpParticles(entity, jumpDuration, movement);
 
-            entity.modifyAttached(DASH_JUMP_TICKS, value -> value - 1);
+            entity.setData(DASH_JUMP_TICKS, entity.getData(DASH_JUMP_TICKS) - 1);
 
-            if (jumpDuration <= 0 || (jumpDuration < 50 && movement.lengthSqr() < 0.3)) entity.removeAttached(DASH_JUMP_TICKS);
+            if (jumpDuration <= 0 || (jumpDuration < 50 && movement.lengthSqr() < 0.3)) entity.removeData(DASH_JUMP_TICKS);
         }
     }
 
@@ -107,9 +107,9 @@ public class DashJumpManager {
         if (entity.level().isClientSide()) return;
 
         if (entity.getUseItem().has(EnderscapeDataComponents.DASH_JUMP)) {
-            entity.setAttached(DASH_JUMP_CHARGING_TICKS, dashJumpChargedDuration(entity) + 1);
+            entity.setData(DASH_JUMP_CHARGING_TICKS, dashJumpChargedDuration(entity) + 1);
         } else {
-            entity.removeAttached(DASH_JUMP_CHARGING_TICKS);
+            entity.removeData(DASH_JUMP_CHARGING_TICKS);
         }
     }
 

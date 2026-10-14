@@ -12,11 +12,11 @@ import static net.penumbra.enderscape.registry.entity.EnderscapeAttachments.MAGN
 public class MagniaAffected {
 
     public static int cooldown(Entity entity) {
-        return entity.getAttachedOrElse(MAGNIA_COOLDOWN_TIME, -1);
+        return entity.getExistingData(MAGNIA_COOLDOWN_TIME).orElse(-1);
     }
 
     public static void setCooldown(Entity entity, int value) {
-        entity.setAttached(MAGNIA_COOLDOWN_TIME, value);
+        entity.setData(MAGNIA_COOLDOWN_TIME, value);
 
         if (cooldown(entity) == 0) {
             MagniaInteractionBehavior.get(entity).stopMoving().apply(entity);
@@ -29,9 +29,9 @@ public class MagniaAffected {
 
     public static void setMoved(Entity entity, boolean value) {
         if (value) {
-            entity.setAttached(MAGNIA_COOLDOWN_TIME, 5);
+            entity.setData(MAGNIA_COOLDOWN_TIME, 5);
         } else {
-            entity.removeAttached(MAGNIA_COOLDOWN_TIME);
+            entity.removeData(MAGNIA_COOLDOWN_TIME);
         }
     }
 

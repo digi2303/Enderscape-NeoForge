@@ -201,7 +201,7 @@ public class VoidManager {
         if (hasOuterVoidTickRemovalDelay(entity)) {
             modifyOuterVoidTickRemovalDelay(entity, value -> value - 1);
         } else if (hasOuterVoidTicks(entity)) {
-            entity.removeAttached(OUTER_VOID_TICKS);
+            entity.removeData(OUTER_VOID_TICKS);
         }
 
         if (hasVoidTickDownDelay(entity)) {
@@ -310,7 +310,7 @@ public class VoidManager {
                 VoidManager.setOuterVoidTickRemovalDelay(entity, 20);
             }
         } else {
-            entity.removeAttached(OUTER_VOID_TICKS);
+            entity.removeData(OUTER_VOID_TICKS);
         }
     }
 
@@ -319,22 +319,22 @@ public class VoidManager {
      */
 
     public static int getOuterVoidTickRemovalDelay(Entity entity) {
-        return entity.getAttachedOrElse(OUTER_VOID_TICK_REMOVAL_DELAY, 0);
+        return entity.getExistingData(OUTER_VOID_TICK_REMOVAL_DELAY).orElse(0);
     }
 
     private static boolean hasOuterVoidTickRemovalDelay(Entity entity) {
-        return entity.hasAttached(OUTER_VOID_TICK_REMOVAL_DELAY);
+        return entity.hasData(OUTER_VOID_TICK_REMOVAL_DELAY);
     }
 
     public static void setOuterVoidTickRemovalDelay(Entity entity, int value) {
         if (entity.is(VOID_IMMUNE)) return;
 
-        entity.setAttached(OUTER_VOID_TICK_REMOVAL_DELAY, value);
-        if (getOuterVoidTickRemovalDelay(entity) <= 0) entity.removeAttached(OUTER_VOID_TICK_REMOVAL_DELAY);
+        entity.setData(OUTER_VOID_TICK_REMOVAL_DELAY, value);
+        if (getOuterVoidTickRemovalDelay(entity) <= 0) entity.removeData(OUTER_VOID_TICK_REMOVAL_DELAY);
     }
 
     public static void modifyOuterVoidTickRemovalDelay(Entity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(OUTER_VOID_TICK_REMOVAL_DELAY)) {
+        if (!entity.hasData(OUTER_VOID_TICK_REMOVAL_DELAY)) {
             setOuterVoidTickRemovalDelay(entity, 0);
         }
 
@@ -346,24 +346,24 @@ public class VoidManager {
      */
 
     public static int getVoidTickDownDelay(Entity entity) {
-        return entity.getAttachedOrElse(VOID_TICK_DOWN_DELAY, 0);
+        return entity.getExistingData(VOID_TICK_DOWN_DELAY).orElse(0);
     }
 
     private static boolean hasVoidTickDownDelay(Entity entity) {
-        return entity.hasAttached(VOID_TICK_DOWN_DELAY);
+        return entity.hasData(VOID_TICK_DOWN_DELAY);
     }
 
     public static void setVoidTickDownDelay(Entity entity, int value) {
         if (canBeVoided(entity)) {
-            entity.setAttached(VOID_TICK_DOWN_DELAY, value);
-            if (getVoidTickDownDelay(entity) <= 0) entity.removeAttached(VOID_TICK_DOWN_DELAY);
-        } else if (entity.hasAttached(VOID_TICK_DOWN_DELAY)) {
-            entity.removeAttached(VOID_TICK_DOWN_DELAY);
+            entity.setData(VOID_TICK_DOWN_DELAY, value);
+            if (getVoidTickDownDelay(entity) <= 0) entity.removeData(VOID_TICK_DOWN_DELAY);
+        } else if (entity.hasData(VOID_TICK_DOWN_DELAY)) {
+            entity.removeData(VOID_TICK_DOWN_DELAY);
         }
     }
 
     public static void modifyVoidTickDownDelay(Entity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(VOID_TICK_DOWN_DELAY)) {
+        if (!entity.hasData(VOID_TICK_DOWN_DELAY)) {
             setVoidTickDownDelay(entity, 0);
         }
 
@@ -387,7 +387,7 @@ public class VoidManager {
     public static int getVoidTicks(Entity entity) {
         if (!canBeVoided(entity)) return 0;
 
-        return entity.getAttachedOrElse(VOID_TICKS, 0);
+        return entity.getExistingData(VOID_TICKS).orElse(0);
     }
 
     public static float getVoidTicksPercentage(Entity entity) {
@@ -404,15 +404,15 @@ public class VoidManager {
 
     public static void setVoidTicks(Entity entity, int value) {
         if (canBeVoided(entity)) {
-            entity.setAttached(VOID_TICKS, Math.min(value, MAXIMUM_VOID_TICKS));
-            if (getVoidTicks(entity) <= 0) entity.removeAttached(VOID_TICKS);
-        } else if (entity.hasAttached(VOID_TICKS)) {
-            entity.removeAttached(VOID_TICKS);
+            entity.setData(VOID_TICKS, Math.min(value, MAXIMUM_VOID_TICKS));
+            if (getVoidTicks(entity) <= 0) entity.removeData(VOID_TICKS);
+        } else if (entity.hasData(VOID_TICKS)) {
+            entity.removeData(VOID_TICKS);
         }
     }
 
     public static void modifyVoidTicks(Entity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(VOID_TICKS)) {
+        if (!entity.hasData(VOID_TICKS)) {
             setVoidTicks(entity, 0);
         }
 
@@ -445,16 +445,16 @@ public class VoidManager {
     }
 
     public static int getOuterVoidTicks(Entity entity) {
-        return entity.getAttachedOrElse(OUTER_VOID_TICKS, 0);
+        return entity.getExistingData(OUTER_VOID_TICKS).orElse(0);
     }
 
     public static void setOuterVoidTicks(Entity entity, int value) {
-        entity.setAttached(OUTER_VOID_TICKS, Math.min(value, maxOuterVoidTicks(entity)));
-        if (getOuterVoidTicks(entity) <= 0) entity.removeAttached(OUTER_VOID_TICKS);
+        entity.setData(OUTER_VOID_TICKS, Math.min(value, maxOuterVoidTicks(entity)));
+        if (getOuterVoidTicks(entity) <= 0) entity.removeData(OUTER_VOID_TICKS);
     }
 
     public static void modifyOuterVoidTicks(Entity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(OUTER_VOID_TICKS)) {
+        if (!entity.hasData(OUTER_VOID_TICKS)) {
             setOuterVoidTicks(entity, 0);
         }
 
@@ -470,19 +470,19 @@ public class VoidManager {
     }
 
     public static float getVoidedHealth(LivingEntity entity) {
-        return entity.getAttachedOrElse(VOIDED_HEALTH, 0.0F);
+        return entity.getExistingData(VOIDED_HEALTH).orElse(0.0F);
     }
 
     public static void setVoidedHealth(LivingEntity entity, float value) {
         if (entity.is(VOID_IMMUNE)) return;
 
         float clamped = Math.clamp(value, 0.0F, entity.getMaxHealth());
-        entity.setAttached(VOIDED_HEALTH, clamped);
-        if (getVoidedHealth(entity) <= 0) entity.removeAttached(VOIDED_HEALTH);
+        entity.setData(VOIDED_HEALTH, clamped);
+        if (getVoidedHealth(entity) <= 0) entity.removeData(VOIDED_HEALTH);
     }
 
     public static void modifyVoidedHealth(LivingEntity entity, UnaryOperator<Float> modifier) {
-        if (!entity.hasAttached(VOIDED_HEALTH)) {
+        if (!entity.hasData(VOIDED_HEALTH)) {
             setVoidedHealth(entity, 0.0F);
         }
 
@@ -494,16 +494,16 @@ public class VoidManager {
      */
 
     public static int getVoidImmunityTicks(Entity entity) {
-        return entity.getAttachedOrElse(VOID_IMMUNITY_TICKS, 0);
+        return entity.getExistingData(VOID_IMMUNITY_TICKS).orElse(0);
     }
 
     public static void setVoidImmunityTicks(Entity entity, int value) {
-        entity.setAttached(VOID_IMMUNITY_TICKS, value);
-        if (getVoidImmunityTicks(entity) <= 0) entity.removeAttached(VOID_IMMUNITY_TICKS);
+        entity.setData(VOID_IMMUNITY_TICKS, value);
+        if (getVoidImmunityTicks(entity) <= 0) entity.removeData(VOID_IMMUNITY_TICKS);
     }
 
     public static void modifyVoidImmunityTicks(Entity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(VOID_IMMUNITY_TICKS)) {
+        if (!entity.hasData(VOID_IMMUNITY_TICKS)) {
             setVoidImmunityTicks(entity, 0);
         }
 
@@ -519,16 +519,16 @@ public class VoidManager {
      */
 
     public static int getVoidDestructionTicks(Entity entity) {
-        return entity.getAttachedOrElse(VOID_DESTRUCTION_TICKS, 0);
+        return entity.getExistingData(VOID_DESTRUCTION_TICKS).orElse(0);
     }
 
     public static void setVoidDestructionTicks(Entity entity, int value) {
-        entity.setAttached(VOID_DESTRUCTION_TICKS, value);
-        if (getVoidDestructionTicks(entity) <= 0) entity.removeAttached(VOID_DESTRUCTION_TICKS);
+        entity.setData(VOID_DESTRUCTION_TICKS, value);
+        if (getVoidDestructionTicks(entity) <= 0) entity.removeData(VOID_DESTRUCTION_TICKS);
     }
 
     public static void modifyVoidDestructionTicks(Entity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(VOID_DESTRUCTION_TICKS)) {
+        if (!entity.hasData(VOID_DESTRUCTION_TICKS)) {
             setVoidDestructionTicks(entity, 0);
         }
 

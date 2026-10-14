@@ -93,7 +93,7 @@ public class EndHavenCoreBlock extends BaseEntityBlock {
                         RespawnData data = newConfig.respawnData();
 
                         server.sendSystemMessage(Component.translatable("block.enderscape.end_haven_core.set_respawn_point"));
-                        server.setAttached(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA, data);
+                        server.setData(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA, data);
                         level.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, EnderscapeBlockSounds.END_HAVEN_CORE_SET_SPAWN, SoundSource.BLOCKS, 1.0F, 1.0F);
 
                         return InteractionResult.SUCCESS_SERVER;

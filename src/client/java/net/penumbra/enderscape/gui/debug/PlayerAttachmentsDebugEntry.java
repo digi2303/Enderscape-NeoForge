@@ -8,6 +8,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.penumbra.enderscape.Enderscape;
 import org.jspecify.annotations.Nullable;
 
@@ -27,8 +28,8 @@ public class PlayerAttachmentsDebugEntry implements DebugScreenEntry {
 
         if (CLIENT.level != null && player != null) {
             ATTACHMENT_TYPES.forEach(type -> {
-                if (player.hasAttached(type)) {
-                    list.add(type.identifier() + ": " + player.getAttached(type));
+                if (player.hasData(type)) {
+                    list.add(NeoForgeRegistries.ATTACHMENT_TYPES.getKey(type) + ": " + player.getExistingDataOrNull(type));
                 }
             });
         }

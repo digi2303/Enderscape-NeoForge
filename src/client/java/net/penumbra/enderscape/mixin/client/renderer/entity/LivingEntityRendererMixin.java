@@ -24,8 +24,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("RETURN"))
     private void Enderscape$extractRenderState(T entity, S state, float partialTicks, CallbackInfo info) {
         if (state instanceof StunTicksPercentage instance) {
-            float stunDuration = (float) entity.getAttachedOrElse(EnderscapeAttachments.STUN_DURATION, 0);
-            float stunTicks = (float) entity.getAttachedOrElse(EnderscapeAttachments.STUN_TICKS, 0);
+            float stunDuration = (float) entity.getExistingData(EnderscapeAttachments.STUN_DURATION).orElse(0);
+            float stunTicks = (float) entity.getExistingData(EnderscapeAttachments.STUN_TICKS).orElse(0);
 
             if (stunDuration > 0.0F && !entity.isSpectator()) {
                 instance.setStunTicksPercentage(Mth.clamp(stunTicks / stunDuration, 0.0F, 1.0F));

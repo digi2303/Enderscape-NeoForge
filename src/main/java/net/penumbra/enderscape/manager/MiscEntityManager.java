@@ -29,7 +29,7 @@ public class MiscEntityManager {
             }
 
             if (entity.hasEffect(EnderscapeMobEffects.STUNNED)) {
-                entity.setAttached(EnderscapeAttachments.STUN_TICKS, entity.getEffect(EnderscapeMobEffects.STUNNED).getDuration());
+                entity.setData(EnderscapeAttachments.STUN_TICKS, entity.getEffect(EnderscapeMobEffects.STUNNED).getDuration());
             }
 
             setLastPosition(entity, entity.position());
@@ -37,24 +37,24 @@ public class MiscEntityManager {
     }
 
     public static Vec3 lastPosition(LivingEntity entity) {
-        return entity.getAttachedOrElse(LAST_POSITION, Vec3.ZERO);
+        return entity.getExistingData(LAST_POSITION).orElse(Vec3.ZERO);
     }
 
     public static void setLastPosition(LivingEntity entity, Vec3 value) {
-        entity.setAttached(LAST_POSITION, value);
+        entity.setData(LAST_POSITION, value);
     }
 
     public static int idleTicks(LivingEntity entity) {
-        return entity.getAttachedOrElse(IDLE_TICKS, 0);
+        return entity.getExistingData(IDLE_TICKS).orElse(0);
     }
 
     public static void setIdleTicks(LivingEntity entity, int value) {
-        entity.setAttached(IDLE_TICKS, value);
-        if (idleTicks(entity) <= 0) entity.removeAttached(IDLE_TICKS);
+        entity.setData(IDLE_TICKS, value);
+        if (idleTicks(entity) <= 0) entity.removeData(IDLE_TICKS);
     }
 
     public static void modifyIdleTicks(LivingEntity entity, UnaryOperator<Integer> modifier) {
-        if (!entity.hasAttached(IDLE_TICKS)) {
+        if (!entity.hasData(IDLE_TICKS)) {
             setIdleTicks(entity, 0);
         }
 

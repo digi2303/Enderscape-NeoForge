@@ -31,7 +31,7 @@ public class EnderscapeMobEffects {
 
     public static boolean isStunned(Entity entity) {
         if (entity instanceof LivingEntity living && !living.isSpectator()) {
-            return living.hasEffect(EnderscapeMobEffects.STUNNED) || (living.level().isClientSide() && living.hasAttached(EnderscapeAttachments.STUN_TICKS));
+            return living.hasEffect(EnderscapeMobEffects.STUNNED) || (living.level().isClientSide() && living.hasData(EnderscapeAttachments.STUN_TICKS));
         } else {
             return false;
         }

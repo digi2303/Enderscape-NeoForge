@@ -139,10 +139,10 @@ public record StunAttack(
 
         if (attacker instanceof Player player) {
             try {
-                player.setAttached(EnderscapeAttachments.PERFORMING_STUN_ATTACK, Unit.INSTANCE);
+                player.setData(EnderscapeAttachments.PERFORMING_STUN_ATTACK, Unit.INSTANCE);
                 player.attack(victim);
             } finally {
-                player.removeAttached(EnderscapeAttachments.PERFORMING_STUN_ATTACK);
+                player.removeData(EnderscapeAttachments.PERFORMING_STUN_ATTACK);
             }
         }
     }

@@ -113,7 +113,7 @@ public abstract class LevelEventHandlerMixin {
             info.cancel();
         }
 
-        if (eventID == 3012 && !level.getEntitiesOfClass(Mob.class, new AABB(pos), entity -> entity.getAttachedOrElse(HAS_END_TRIAL_SPAWNER_EFFECTS, false)).isEmpty()) {
+        if (eventID == 3012 && !level.getEntitiesOfClass(Mob.class, new AABB(pos), entity -> entity.getExistingData(HAS_END_TRIAL_SPAWNER_EFFECTS).orElse(false)).isEmpty()) {
             level.playLocalSound(pos, SoundEvents.TRIAL_SPAWNER_SPAWN_MOB, SoundSource.BLOCKS, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F, true);
 
             for (int i = 0; i < 20; i++) {

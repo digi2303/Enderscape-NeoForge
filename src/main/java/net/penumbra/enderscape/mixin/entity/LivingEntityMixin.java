@@ -177,7 +177,7 @@ public abstract class LivingEntityMixin extends Entity {
     public float Enderscape$getSecondsToDisableBlocking(float original) {
         ItemStack weapon = StunAttack.getWeaponInfo(entity).stack();
 
-        if (entity.hasAttached(EnderscapeAttachments.PERFORMING_STUN_ATTACK) && StunAttack.is(weapon)) {
+        if (entity.hasData(EnderscapeAttachments.PERFORMING_STUN_ATTACK) && StunAttack.is(weapon)) {
             return StunAttack.get(weapon).shieldDisableDuration();
         } else {
             return original;

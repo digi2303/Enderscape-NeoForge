@@ -63,7 +63,7 @@ public abstract class PlayerMixin extends LivingEntity {
 
     @ModifyReturnValue(method = "createAttackSource", at = @At("RETURN"))
     public DamageSource Enderscape$createAttackSource(DamageSource original) {
-        if (player.hasAttached(EnderscapeAttachments.PERFORMING_STUN_ATTACK)) {
+        if (player.hasData(EnderscapeAttachments.PERFORMING_STUN_ATTACK)) {
             return level().damageSources().source(EnderscapeDamageTypes.STUN_ATTACK, player);
         } else {
             return original;

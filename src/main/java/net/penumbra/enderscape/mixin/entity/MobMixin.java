@@ -40,14 +40,14 @@ public abstract class MobMixin extends LivingEntity {
     @Inject(method = "finalizeSpawn", at = @At("TAIL"))
     public void Enderscape$applyOminous(ServerLevelAccessor level, DifficultyInstance instance, EntitySpawnReason reason, SpawnGroupData data, CallbackInfoReturnable<SpawnGroupData> info) {
         if (reason.equals(EntitySpawnReason.TRIAL_SPAWNER) && level.findBlocksInBoxByManhattanDistance(blockPosition(), 16, 16).filterState(state -> state.is(EnderscapeBlocks.END_TRIAL_SPAWNER)).findFirst().isPresent()) {
-            setAttached(HAS_END_TRIAL_SPAWNER_EFFECTS, true);
+            setData(HAS_END_TRIAL_SPAWNER_EFFECTS, true);
         }
     }
 
     @Inject(method = "doHurtTarget", at = @At(value = "RETURN"))
     public void Enderscape$triggerEndermanAttack(ServerLevel level, Entity target, CallbackInfoReturnable<Boolean> info) {
         if (entity instanceof Enderman) {
-            entity.setAttached(EnderscapeAttachments.ATTACK_ANIMATION_REMAINING_TICKS, 15);
+            entity.setData(EnderscapeAttachments.ATTACK_ANIMATION_REMAINING_TICKS, 15);
         }
     }
 

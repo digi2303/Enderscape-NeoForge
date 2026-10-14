@@ -58,15 +58,15 @@ public class EndHavenManager {
     }
 
     public static void setPendingRespawn(Player player) {
-        player.setAttached(PENDING_END_HAVEN_RESPAWN, Unit.INSTANCE);
+        player.setData(PENDING_END_HAVEN_RESPAWN, Unit.INSTANCE);
     }
 
     public static boolean shouldRespawnFromHaven(Player player) {
-        return player.hasAttached(PENDING_END_HAVEN_RESPAWN) && hasHavenRespawnData(player);
+        return player.hasData(PENDING_END_HAVEN_RESPAWN) && hasHavenRespawnData(player);
     }
 
     public static void clearPendingRespawn(Player player) {
-        player.removeAttached(PENDING_END_HAVEN_RESPAWN);
+        player.removeData(PENDING_END_HAVEN_RESPAWN);
     }
 
     public static void sendInvalidRespawnPayload(ServerGamePacketListenerImpl instance, Packet<?> packet, Operation<Void> original) {
@@ -80,9 +80,9 @@ public class EndHavenManager {
     }
 
     public static void updateConnection(Entity entity) {
-        if (entity instanceof ServerPlayer player && player.hasAttached(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA) && !endHavenCoreWorks(player.level())) {
-            player.removeAttached(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA);
-            player.removeAttached(PENDING_END_HAVEN_RESPAWN);
+        if (entity instanceof ServerPlayer player && player.hasData(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA) && !endHavenCoreWorks(player.level())) {
+            player.removeData(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA);
+            player.removeData(PENDING_END_HAVEN_RESPAWN);
 
             PacketDistributor.sendToPlayer(player, new ClientboundSystemMessagePayload("block.enderscape.end_haven_core.severed_respawn_point"));
         }
@@ -126,11 +126,11 @@ public class EndHavenManager {
     }
 
     public static Optional<LevelData.RespawnData> havenRespawnData(Player player) {
-        return hasHavenRespawnData(player) ? Optional.of(player.getAttachedOrThrow(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA)) : Optional.empty();
+        return hasHavenRespawnData(player) ? Optional.of(player.getExistingData(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA).orElseThrow()) : Optional.empty();
     }
 
     private static boolean hasHavenRespawnData(Player player) {
-        return player.hasAttached(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA);
+        return player.hasData(EnderscapeAttachments.END_HAVEN_RESPAWN_DATA);
     }
 
     private static Optional<Vec3> findRespawnPosition(final EntityType<?> type, final CollisionGetter level, final BlockPos pos, final boolean checkDangerous) {

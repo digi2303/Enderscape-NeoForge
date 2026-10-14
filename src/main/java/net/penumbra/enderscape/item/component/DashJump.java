@@ -108,7 +108,7 @@ public record DashJump(
             level.sendParticles(ParticleTypes.POOF, pos.x, pos.y + 0.5, pos.z, 5, 0, 0, 0, 0.1);
             level.players().stream().filter(other -> other.distanceToSqr(pos) < 4096).forEach(other -> PacketDistributor.sendToPlayer(other, new ClientboundDashJumpSoundPayload(player.getId(), dashJump.sound().value().location())));
 
-            player.setAttached(DASH_JUMP_TICKS, (int) (dashJump.dashDuration() * 20));
+            player.setData(DASH_JUMP_TICKS, (int) (dashJump.dashDuration() * 20));
 
             if (dashJump.stopUsingAfterwards()) {
                 player.stopUsingItem();
