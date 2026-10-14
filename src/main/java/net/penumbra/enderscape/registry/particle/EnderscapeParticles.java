@@ -1,7 +1,6 @@
 package net.penumbra.enderscape.registry.particle;
 
 import com.mojang.serialization.MapCodec;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -54,7 +53,7 @@ public class EnderscapeParticles {
     public static final SimpleParticleType VOID_STARS = register("void_stars", false);
 
     private static SimpleParticleType register(String name, boolean overrideLimiter) {
-        return Registry.register(BuiltInRegistries.PARTICLE_TYPE, Enderscape.id(name), FabricParticleTypes.simple(overrideLimiter));
+        return Registry.register(BuiltInRegistries.PARTICLE_TYPE, Enderscape.id(name), new SimpleParticleType(overrideLimiter));
     }
 
     private static <T extends ParticleOptions> ParticleType<T> register(String name, boolean overrideLimiter, Function<ParticleType<T>, MapCodec<T>> codecFunction, Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecFunction) {

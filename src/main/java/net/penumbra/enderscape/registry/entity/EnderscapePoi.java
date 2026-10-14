@@ -2,12 +2,16 @@ package net.penumbra.enderscape.registry.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.fabricmc.fabric.api.object.builder.v1.world.poi.PoiHelper;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.penumbra.enderscape.Enderscape;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static net.minecraft.world.level.block.Blocks.*;
@@ -22,8 +26,12 @@ public class EnderscapePoi {
         return ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, Enderscape.id(name));
     }
 
+    private static void register(Identifier id, int ticketCount, int searchDistance, Set<BlockState> states) {
+        Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, id, new PoiType(states, ticketCount, searchDistance));
+    }
+
     static {
-        PoiHelper.register(
+        register(
                 DRIFTER_HOME.identifier(),
                 4,
                 8,
@@ -39,7 +47,7 @@ public class EnderscapePoi {
 
 
 
-        PoiHelper.register(
+        register(
                 RUSTLE_SLEEPING_SPOT.identifier(),
                 1,
                 8,

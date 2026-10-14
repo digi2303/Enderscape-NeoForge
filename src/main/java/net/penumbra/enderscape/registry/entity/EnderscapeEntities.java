@@ -1,13 +1,14 @@
 package net.penumbra.enderscape.registry.entity;
 
 import com.google.common.reflect.Reflection;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.entity.ai.EnderscapeActivity;
 import net.penumbra.enderscape.entity.ai.EnderscapeMemory;
@@ -15,6 +16,7 @@ import net.penumbra.enderscape.entity.ai.EnderscapeSensors;
 import net.penumbra.enderscape.entity.drifter.Drifter;
 import net.penumbra.enderscape.entity.rubblemite.Rubblemite;
 import net.penumbra.enderscape.entity.rustle.Rustle;
+import net.penumbra.enderscape.neoforge.EnderscapeNeoForge;
 
 public class EnderscapeEntities {
 
@@ -50,13 +52,17 @@ public class EnderscapeEntities {
                 EnderscapeSensors.class
         );
 
-        SpawnPlacements.register(DRIFTER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Drifter::canSpawn);
-        SpawnPlacements.register(RUBBLEMITE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Rubblemite::canSpawn);
-        SpawnPlacements.register(RUSTLE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Rustle::canSpawn);
+        EnderscapeNeoForge.modEventBus().addListener(RegisterSpawnPlacementsEvent.class, event -> {
+            event.register(DRIFTER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Drifter::canSpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+            event.register(RUBBLEMITE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Rubblemite::canSpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+            event.register(RUSTLE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Rustle::canSpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        });
 
-        FabricDefaultAttributeRegistry.register(DRIFTER, Drifter.createAttributes());
-        FabricDefaultAttributeRegistry.register(RUBBLEMITE, Rubblemite.createAttributes());
-        FabricDefaultAttributeRegistry.register(RUSTLE, Rustle.createAttributes());
+        EnderscapeNeoForge.modEventBus().addListener(EntityAttributeCreationEvent.class, event -> {
+            event.put(DRIFTER, Drifter.createAttributes().build());
+            event.put(RUBBLEMITE, Rubblemite.createAttributes().build());
+            event.put(RUSTLE, Rustle.createAttributes().build());
+        });
     }
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {

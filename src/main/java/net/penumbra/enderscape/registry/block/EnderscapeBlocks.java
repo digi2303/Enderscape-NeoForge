@@ -1,6 +1,5 @@
 package net.penumbra.enderscape.registry.block;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -98,9 +97,9 @@ public class EnderscapeBlocks {
     public static final BlockSetType POLISHED_VERADITE_BLOCK_SET = new BlockSetType("polished_veradite", true, true, false, BlockSetType.PressurePlateSensitivity.MOBS, EnderscapeSoundTypes.VERADITE, SoundEvents.IRON_DOOR_CLOSE, SoundEvents.IRON_DOOR_OPEN, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundEvents.IRON_TRAPDOOR_OPEN, SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF, SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON, SoundEvents.STONE_BUTTON_CLICK_OFF, SoundEvents.STONE_BUTTON_CLICK_ON);
     public static final BlockSetType POLISHED_KURODITE_BLOCK_SET = new BlockSetType("polished_kurodite", true, true, false, BlockSetType.PressurePlateSensitivity.MOBS, EnderscapeSoundTypes.KURODITE, SoundEvents.IRON_DOOR_CLOSE, SoundEvents.IRON_DOOR_OPEN, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundEvents.IRON_TRAPDOOR_OPEN, SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF, SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON, SoundEvents.STONE_BUTTON_CLICK_OFF, SoundEvents.STONE_BUTTON_CLICK_ON);
 
-    public static final WoodType VEILED_WOOD_TYPE = new WoodTypeBuilder().soundType(EnderscapeSoundTypes.VEILED_PLANKS).fenceGateCloseSound(EnderscapeBlockSounds.VEILED_FENCE_GATE_CLOSE).fenceGateOpenSound(EnderscapeBlockSounds.VEILED_FENCE_GATE_OPEN).hangingSignSoundType(EnderscapeSoundTypes.VEILED_HANGING_SIGN).register(Enderscape.id("veiled"), VEILED_BLOCK_SET);
-    public static final WoodType CELESTIAL_WOOD_TYPE = new WoodTypeBuilder().soundType(EnderscapeSoundTypes.CELESTIAL_PLANKS).fenceGateCloseSound(EnderscapeBlockSounds.CELESTIAL_FENCE_GATE_CLOSE).fenceGateOpenSound(EnderscapeBlockSounds.CELESTIAL_FENCE_GATE_OPEN).hangingSignSoundType(EnderscapeSoundTypes.CELESTIAL_HANGING_SIGN).register(Enderscape.id("celestial"), CELESTIAL_BLOCK_SET);
-    public static final WoodType MURUBLIGHT_WOOD_TYPE = new WoodTypeBuilder().soundType(EnderscapeSoundTypes.MURUBLIGHT_PLANKS).fenceGateCloseSound(EnderscapeBlockSounds.MURUBLIGHT_FENCE_GATE_CLOSE).fenceGateOpenSound(EnderscapeBlockSounds.MURUBLIGHT_FENCE_GATE_OPEN).hangingSignSoundType(EnderscapeSoundTypes.MURUBLIGHT_HANGING_SIGN).register(Enderscape.id("murublight"), MURUBLIGHT_BLOCK_SET);
+    public static final WoodType VEILED_WOOD_TYPE = WoodType.register(new WoodType(Enderscape.id("veiled").toString(), VEILED_BLOCK_SET, EnderscapeSoundTypes.VEILED_PLANKS, EnderscapeSoundTypes.VEILED_HANGING_SIGN, EnderscapeBlockSounds.VEILED_FENCE_GATE_CLOSE, EnderscapeBlockSounds.VEILED_FENCE_GATE_OPEN));
+    public static final WoodType CELESTIAL_WOOD_TYPE = WoodType.register(new WoodType(Enderscape.id("celestial").toString(), CELESTIAL_BLOCK_SET, EnderscapeSoundTypes.CELESTIAL_PLANKS, EnderscapeSoundTypes.CELESTIAL_HANGING_SIGN, EnderscapeBlockSounds.CELESTIAL_FENCE_GATE_CLOSE, EnderscapeBlockSounds.CELESTIAL_FENCE_GATE_OPEN));
+    public static final WoodType MURUBLIGHT_WOOD_TYPE = WoodType.register(new WoodType(Enderscape.id("murublight").toString(), MURUBLIGHT_BLOCK_SET, EnderscapeSoundTypes.MURUBLIGHT_PLANKS, EnderscapeSoundTypes.MURUBLIGHT_HANGING_SIGN, EnderscapeBlockSounds.MURUBLIGHT_FENCE_GATE_CLOSE, EnderscapeBlockSounds.MURUBLIGHT_FENCE_GATE_OPEN));
 
     public static final Block DRIFT_JELLY_BLOCK = registerWithItem(EnderscapeBlockItemIds.DRIFT_JELLY_BLOCK, DriftJellyBlock::new, Properties.of()
             .mapColor(MapColor.WARPED_WART_BLOCK)

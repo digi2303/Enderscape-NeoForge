@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.registry.item;
 
-import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
-import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -18,6 +16,7 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.item.component.RubbleShieldVariant;
+import net.penumbra.enderscape.neoforge.item.EnderscapeCreativeModeTabOutput;
 import net.penumbra.enderscape.registry.component.EnderscapeDataComponents;
 import net.penumbra.enderscape.registry.enchantment.EnderscapeEnchantments;
 import net.penumbra.enderscape.registry.entity.EnderscapePaintingVariants;
@@ -31,7 +30,7 @@ import static net.penumbra.enderscape.registry.item.EnderscapeItems.*;
 
 public class EnderscapeCreativeModeTab {
 
-    public static final CreativeModeTab ENDERSCAPE = FabricCreativeModeTab.builder().title(Component.translatable("itemGroup.enderscape")).icon(NEBULITE::getDefaultInstance).displayItems((parameters, output) -> {
+    public static final CreativeModeTab ENDERSCAPE = CreativeModeTab.builder().title(Component.translatable("itemGroup.enderscape")).icon(NEBULITE::getDefaultInstance).displayItems((parameters, output) -> {
         if (!EnderscapeConfig.getInstance().creativeTabEnabled) return;
 
         HolderLookup.Provider holders = parameters.holders();
@@ -347,7 +346,7 @@ public class EnderscapeCreativeModeTab {
     }
 
     static {
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.BUILDING_BLOCKS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertAfter(END_STONE,
@@ -524,7 +523,7 @@ public class EnderscapeCreativeModeTab {
             );
         });
 
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.NATURAL_BLOCKS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertAfter(END_STONE,
@@ -575,7 +574,7 @@ public class EnderscapeCreativeModeTab {
             );
         });
 
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.FUNCTIONAL_BLOCKS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertBefore(REDSTONE_TORCH, VOID_TORCH_ITEM);
@@ -590,7 +589,7 @@ public class EnderscapeCreativeModeTab {
             output.insertBefore(SKELETON_SKULL, getEndCityBannerInstance(output.getContext().holders().lookupOrThrow(Registries.BANNER_PATTERN)));
         });
         
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.REDSTONE_BLOCKS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertBefore(PISTON, BLINKLIGHT);
@@ -599,7 +598,7 @@ public class EnderscapeCreativeModeTab {
             output.insertAfter(BIG_DRIPLEAF, ALLURING_MAGNIA_SPROUT, REPULSIVE_MAGNIA_SPROUT);
         });
 
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.TOOLS_AND_UTILITIES, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertAfter(LEAD, MAGNIA_ATTRACTOR);
@@ -621,7 +620,7 @@ public class EnderscapeCreativeModeTab {
             output.accept(MUSIC_DISC_BLISS);
         });
 
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.COMBAT, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             RubbleShieldVariant.VARIANTS.forEach(id -> output.insertBefore(LEATHER_HELMET, EnderscapeItems.rubbleShieldVariant(id)));
@@ -631,7 +630,7 @@ public class EnderscapeCreativeModeTab {
             output.insertAfter(TURTLE_HELMET, DRIFT_LEGGINGS);
         });
 
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.FOOD_AND_DRINKS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertBefore(CARROT, PURUBERRY, MURUBLIGHT_BRACKET_ITEM);
@@ -639,7 +638,7 @@ public class EnderscapeCreativeModeTab {
             output.insertAfter(HONEY_BOTTLE, DRIFT_JELLY_BOTTLE);
         });
 
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.INGREDIENTS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertBefore(SHULKER_SHELL, RUBBLE_CHITIN);
@@ -653,7 +652,7 @@ public class EnderscapeCreativeModeTab {
             output.insertBefore(ANGLER_POTTERY_SHERD, CRESCENT_BANNER_PATTERN);
         });
         
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.SPAWN_EGGS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.insertBefore(CREAKING_HEART, END_TRIAL_SPAWNER);
@@ -661,7 +660,7 @@ public class EnderscapeCreativeModeTab {
             output.insertAfter(SHULKER_SPAWN_EGG, RUSTLE_SPAWN_EGG, DRIFTER_SPAWN_EGG);
         });
 
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS).register(output -> {
+        EnderscapeCreativeModeTabOutput.modify(CreativeModeTabs.OP_BLOCKS, output -> {
             if (!EnderscapeConfig.getInstance().includeItemsInVanillaCreativeTabs) return;
 
             output.accept(HEALING);
