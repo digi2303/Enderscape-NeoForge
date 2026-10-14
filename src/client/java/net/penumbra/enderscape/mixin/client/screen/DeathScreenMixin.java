@@ -2,8 +2,6 @@ package net.penumbra.enderscape.mixin.client.screen;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.DeathScreen;
@@ -20,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 @Mixin(DeathScreen.class)
 public abstract class DeathScreenMixin extends Screen {
 

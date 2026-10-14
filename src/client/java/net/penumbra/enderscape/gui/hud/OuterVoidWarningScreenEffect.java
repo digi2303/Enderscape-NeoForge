@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.gui.hud;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -10,7 +8,6 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.penumbra.enderscape.Enderscape;
 
-@Environment(EnvType.CLIENT)
 public class OuterVoidWarningScreenEffect extends EnderscapeHudElement {
 
     public static final Identifier OUTER_VOID_WARNING_VIGNETTE = Enderscape.id("textures/misc/outer_void_warning_vignette.png");

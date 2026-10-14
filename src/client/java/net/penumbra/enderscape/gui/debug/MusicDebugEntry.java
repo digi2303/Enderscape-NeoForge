@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.gui.debug;
 
 import com.google.common.collect.Lists;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
@@ -18,7 +16,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-@Environment(EnvType.CLIENT)
 public class MusicDebugEntry implements DebugScreenEntry {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();

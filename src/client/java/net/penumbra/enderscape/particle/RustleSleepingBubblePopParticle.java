@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -10,7 +8,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 
-@Environment(EnvType.CLIENT)
 public class RustleSleepingBubblePopParticle extends SingleQuadParticle {
     private final SpriteSet sprites;
 
@@ -48,7 +45,6 @@ public class RustleSleepingBubblePopParticle extends SingleQuadParticle {
         return Layer.OPAQUE;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

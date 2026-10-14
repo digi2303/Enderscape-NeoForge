@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.gui.hud;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -11,7 +9,6 @@ import net.minecraft.world.entity.Entity;
 import net.penumbra.enderscape.registry.renderer.EnderscapeRenderPipelines;
 import net.penumbra.enderscape.util.ClientsideLightUtil;
 
-@Environment(EnvType.CLIENT)
 public class LodestoneTeleportationScreenEffect extends EnderscapeHudElement {
 
     private float alpha = 0, previousAlpha = 0;

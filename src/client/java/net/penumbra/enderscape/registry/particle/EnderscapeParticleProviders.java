@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.registry.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -16,7 +14,6 @@ import org.joml.Vector3f;
 import static net.penumbra.enderscape.registry.block.EnderscapeFluids.VOID_LACHRYMA;
 import static net.penumbra.enderscape.registry.particle.EnderscapeParticles.*;
 
-@Environment(EnvType.CLIENT)
 public class EnderscapeParticleProviders {
 
     public static final Vector3f DRIFT_JELLY_PARTICLE_COLOR = ARGB.vector3fFromRGB24(0x57C1A5);

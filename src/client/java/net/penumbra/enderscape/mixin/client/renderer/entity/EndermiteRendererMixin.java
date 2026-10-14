@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client.renderer.entity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.monster.endermite.EndermiteModel;
 import net.minecraft.client.renderer.entity.EndermiteRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -16,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Environment(EnvType.CLIENT)
 @Mixin(EndermiteRenderer.class)
 public abstract class EndermiteRendererMixin extends MobRenderer<Endermite, LivingEntityRenderState, EndermiteModel> {
 

@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.registry.networking;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -35,7 +33,6 @@ import net.penumbra.enderscape.util.BlockUtil;
 
 import java.util.Optional;
 
-@Environment(EnvType.CLIENT)
 public class EnderscapeClientNetworking {
 
     private static void receiveDashJumpPayload(ClientboundDashJumpPayload payload, ClientPlayNetworking.Context context) {

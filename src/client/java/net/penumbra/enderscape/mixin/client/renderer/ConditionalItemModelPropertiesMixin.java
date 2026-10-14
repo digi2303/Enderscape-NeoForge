@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client.renderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
 import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.renderer.item.EnabledItemModelProperty;
@@ -10,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Environment(EnvType.CLIENT)
 @Mixin(ConditionalItemModelProperties.class)
 public abstract class ConditionalItemModelPropertiesMixin  {
 

@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.gui.tooltip;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -12,7 +10,6 @@ import net.penumbra.enderscape.item.component.FueledTool;
 import net.penumbra.enderscape.item.component.value.FuelDisplay;
 import net.penumbra.enderscape.item.component.value.FuelTooltip;
 
-@Environment(EnvType.CLIENT)
 public class FueledToolTooltip implements ClientTooltipComponent {
 
     private final ItemStack stack;

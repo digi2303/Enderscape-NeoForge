@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.monster.endermite.EndermiteModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -13,7 +11,6 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.penumbra.enderscape.Enderscape;
 
-@Environment(EnvType.CLIENT)
 public class EndermiteEyesLayer extends RenderLayer<LivingEntityRenderState, EndermiteModel> {
     private static final RenderType ENDERMITE_EYES = RenderTypes.eyes(Enderscape.id("textures/entity/endermite/endermite_eyes.png"));
 

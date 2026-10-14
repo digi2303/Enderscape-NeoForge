@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.renderer.block;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
@@ -10,7 +8,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.penumbra.enderscape.util.OpenSimplexNoise;
 
-@Environment(EnvType.CLIENT)
 public class NoiseBasedTintSource implements BlockTintSource {
 
     private final double colorInterpolation;

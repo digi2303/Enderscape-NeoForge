@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -26,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
-@Environment(EnvType.CLIENT)
 @Mixin(MusicManager.class)
 public abstract class MusicManagerMixin {
 

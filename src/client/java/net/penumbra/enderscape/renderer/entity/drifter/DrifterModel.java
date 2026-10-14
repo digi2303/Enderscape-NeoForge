@@ -1,14 +1,11 @@
 package net.penumbra.enderscape.renderer.entity.drifter;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
-@Environment(EnvType.CLIENT)
 public class DrifterModel extends EntityModel<DrifterRenderState> {
     private final ModelPart head;
     private final ModelPart leftLeg;

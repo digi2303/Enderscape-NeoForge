@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -11,7 +9,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 
-@Environment(EnvType.CLIENT)
 public class EndTrialSpawnerExhaleParticle extends PortalParticle {
     EndTrialSpawnerExhaleParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, TextureAtlasSprite textureAtlasSprite) {
         super(level, x, y, z, xd, yd, zd, textureAtlasSprite);
@@ -37,7 +34,6 @@ public class EndTrialSpawnerExhaleParticle extends PortalParticle {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

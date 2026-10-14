@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -10,7 +8,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 
-@Environment(EnvType.CLIENT)
 public class VeiledLeavesParticle extends SingleQuadParticle {
     private float rotSpeed;
     private final float spinAcceleration;
@@ -98,7 +95,6 @@ public class VeiledLeavesParticle extends SingleQuadParticle {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

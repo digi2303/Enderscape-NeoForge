@@ -9,8 +9,6 @@ import com.mojang.renderpearl.api.commands.RenderPass;
 import com.mojang.renderpearl.api.pipeline.IndexType;
 import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
 import com.mojang.renderpearl.api.textures.GpuTextureView;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -42,7 +40,6 @@ import static net.penumbra.enderscape.registry.level.EnderscapeEnvironmentAttrib
  * Based on BetterEnd and Eden Ring skybox renderers
  * Credits to paulevs!
  */
-@Environment(EnvType.CLIENT)
 public class EnderscapeSkybox {
 
     public EnderscapeSkybox() {

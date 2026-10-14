@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.sound;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -11,7 +9,6 @@ import net.penumbra.enderscape.registry.sound.EnderscapeEntitySounds;
 
 import java.util.function.Consumer;
 
-@Environment(EnvType.CLIENT)
 public class VoidedLoopSoundInstance extends AbstractTickableSoundInstance {
     public final Consumer<VoidedLoopSoundInstance> remove;
 

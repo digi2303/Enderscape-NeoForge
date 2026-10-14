@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.gui.debug;
 
 import com.google.common.collect.Lists;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
 import net.minecraft.client.gui.components.debug.DebugScreenEntry;
@@ -17,7 +15,6 @@ import java.util.List;
 
 import static net.penumbra.enderscape.registry.entity.EnderscapeAttachments.ATTACHMENT_TYPES;
 
-@Environment(EnvType.CLIENT)
 public class PlayerAttachmentsDebugEntry implements DebugScreenEntry {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();

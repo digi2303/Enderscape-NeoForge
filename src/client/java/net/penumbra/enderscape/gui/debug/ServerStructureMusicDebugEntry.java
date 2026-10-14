@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.gui.debug;
 
 import com.google.common.collect.Lists;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
 import net.minecraft.client.gui.components.debug.DebugScreenEntry;
@@ -18,7 +16,6 @@ import java.util.List;
 import static net.penumbra.enderscape.manager.StructureMusicManager.playerStructures;
 import static net.penumbra.enderscape.manager.StructureMusicManager.playerTimers;
 
-@Environment(EnvType.CLIENT)
 public class ServerStructureMusicDebugEntry implements DebugScreenEntry {
 
     private static final Identifier GROUP = Enderscape.id("structure_music");

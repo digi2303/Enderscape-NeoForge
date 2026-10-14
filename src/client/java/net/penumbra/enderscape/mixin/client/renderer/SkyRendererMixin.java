@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.renderpearl.api.buffers.GpuBuffer;
 import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.renderpearl.api.commands.RenderPass;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SkyRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -31,7 +29,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-@Environment(EnvType.CLIENT)
 @Mixin(SkyRenderer.class)
 public abstract class SkyRendererMixin {
 

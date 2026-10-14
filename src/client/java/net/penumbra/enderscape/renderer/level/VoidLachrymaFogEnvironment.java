@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.renderer.level;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -14,7 +12,6 @@ import net.penumbra.enderscape.manager.ClientsideVoidManager;
 import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
 public class VoidLachrymaFogEnvironment extends FogEnvironment {
     private static final Vector3fc BASE_COLOR = ARGB.vector3fFromRGB24(0x06000C);
 

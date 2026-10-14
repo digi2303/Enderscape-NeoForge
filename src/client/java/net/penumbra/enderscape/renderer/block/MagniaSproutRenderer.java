@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -21,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.penumbra.enderscape.registry.gui.EnderscapeDebugScreenEntries.MAGNIA_SPROUT_RANGE;
 
-@Environment(EnvType.CLIENT)
 public class MagniaSproutRenderer implements BlockEntityRenderer<MagniaSproutBlockEntity, MagniaSproutState> {
 
     public MagniaSproutRenderer(BlockEntityRendererProvider.Context context) {}

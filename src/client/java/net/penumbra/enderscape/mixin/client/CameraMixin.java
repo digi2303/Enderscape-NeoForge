@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
@@ -12,7 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Environment(EnvType.CLIENT)
 @Mixin(Camera.class)
 public abstract class CameraMixin {
 

@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.gui.hud;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -9,7 +7,6 @@ import net.penumbra.enderscape.EnderscapeClient;
 import net.penumbra.enderscape.config.EnderscapeConfig;
 import net.penumbra.enderscape.manager.ClientsideVariables;
 
-@Environment(EnvType.CLIENT)
 public abstract class EnderscapeHudElement implements HudElement {
 
     protected final Minecraft minecraft = Minecraft.getInstance();

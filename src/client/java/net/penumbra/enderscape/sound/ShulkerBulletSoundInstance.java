@@ -1,13 +1,10 @@
 package net.penumbra.enderscape.sound;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.penumbra.enderscape.registry.sound.EnderscapeEntitySounds;
 
-@Environment(EnvType.CLIENT)
 public class ShulkerBulletSoundInstance extends AbstractTickableSoundInstance {
     protected final ShulkerBullet bullet;
 

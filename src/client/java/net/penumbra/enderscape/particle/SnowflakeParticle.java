@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -10,7 +8,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import org.jspecify.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
 public class SnowflakeParticle extends ExplodeParticle {
 
     protected SnowflakeParticle(ClientLevel level, double x, double y, double z, double xa, double ya, double za, SpriteSet sprites) {
@@ -40,7 +37,6 @@ public class SnowflakeParticle extends ExplodeParticle {
         return Layer.TRANSLUCENT;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

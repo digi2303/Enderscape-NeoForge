@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -13,7 +11,6 @@ import net.minecraft.util.Ease;
 import net.minecraft.util.RandomSource;
 import net.penumbra.enderscape.util.ClientsideLightUtil;
 
-@Environment(EnvType.CLIENT)
 public class EndermanVoidParticle extends SingleQuadParticle {
     private final double xStart;
     private final double yStart;
@@ -91,7 +88,6 @@ public class EndermanVoidParticle extends SingleQuadParticle {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprite;
 

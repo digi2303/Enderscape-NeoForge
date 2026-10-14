@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client.renderer.entity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.monster.enderman.EndermanModel;
 import net.minecraft.client.renderer.entity.EndermanRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -19,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Environment(EnvType.CLIENT)
 @Mixin(EndermanRenderer.class)
 public abstract class EndermanRendererMixin extends MobRenderer<Enderman, EndermanRenderState, EndermanModel<EndermanRenderState>> {
 

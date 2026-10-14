@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.sound;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +7,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.penumbra.enderscape.registry.sound.EnderscapeItemSounds;
 
-@Environment(EnvType.CLIENT)
 public class ElytraSoundInstance extends AbstractTickableSoundInstance {
     private final Player player;
     private int time;

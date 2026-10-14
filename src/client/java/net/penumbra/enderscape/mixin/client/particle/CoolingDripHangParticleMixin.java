@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.DripParticle;
 import net.penumbra.enderscape.registry.tag.EnderscapeFluidTags;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.penumbra.enderscape.registry.particle.EnderscapeParticleProviders.VOID_LACHRYMA_PARTICLE_COLOR;
 
-@Environment(EnvType.CLIENT)
 @Mixin(targets = "net.minecraft.client.particle.DripParticle$CoolingDripHangParticle")
 public abstract class CoolingDripHangParticleMixin {
 

@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.renderer.item;
 
 import com.mojang.serialization.MapCodec;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperty;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,7 +11,6 @@ import net.penumbra.enderscape.item.component.Enabled;
 import net.penumbra.enderscape.item.component.FueledTool;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
 public record EnabledItemModelProperty() implements ConditionalItemModelProperty {
     public static final MapCodec<EnabledItemModelProperty> MAP_CODEC = MapCodec.unit(new EnabledItemModelProperty());
 

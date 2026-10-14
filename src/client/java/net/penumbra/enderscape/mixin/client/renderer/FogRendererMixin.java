@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client.renderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.fog.FogRenderer;
@@ -25,7 +23,6 @@ import java.util.List;
 
 import static net.penumbra.enderscape.renderer.level.EnderscapeSkybox.scaleWithoutOverflow;
 
-@Environment(EnvType.CLIENT)
 @Mixin(FogRenderer.class)
 public abstract class FogRendererMixin {
 

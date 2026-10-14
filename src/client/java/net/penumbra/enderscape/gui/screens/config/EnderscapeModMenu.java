@@ -4,8 +4,6 @@ import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.api.controller.ControllerBuilder;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.penumbra.enderscape.Enderscape;
@@ -15,10 +13,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Environment(EnvType.CLIENT)
 public class EnderscapeModMenu {
 
-    @Environment(EnvType.CLIENT)
     public static Screen buildMenu(Screen parent) {
         return YetAnotherConfigLib.create(EnderscapeConfig.HANDLER, EnderscapeModMenu::menuBuilder).generateScreen(parent);
     }

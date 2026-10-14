@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client.renderer.entity;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.state.EndermanRenderState;
 import net.minecraft.world.entity.AnimationState;
 import net.penumbra.enderscape.renderer.entity.StoresSkylightFactor;
@@ -9,7 +7,6 @@ import net.penumbra.enderscape.renderer.entity.enderman.ImprovedEndermanRenderSt
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Environment(EnvType.CLIENT)
 @Mixin(EndermanRenderState.class)
 public abstract class EndermanRenderStateMixin implements ImprovedEndermanRenderState, StoresSkylightFactor {
 

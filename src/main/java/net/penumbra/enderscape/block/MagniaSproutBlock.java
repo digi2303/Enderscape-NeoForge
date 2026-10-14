@@ -2,8 +2,6 @@ package net.penumbra.enderscape.block;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -256,7 +254,6 @@ public class MagniaSproutBlock extends DirectionalVegetationBlock implements Has
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         BlockPos relative = pos.relative(getFacing(state));
 

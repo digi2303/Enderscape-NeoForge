@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.gui.hud;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
@@ -19,7 +17,6 @@ import net.penumbra.enderscape.item.component.value.FuelHud;
 
 import static net.penumbra.enderscape.registry.component.EnderscapeDataComponents.ENABLED;
 
-@Environment(EnvType.CLIENT)
 public class FueledToolHud extends EnderscapeHudElement {
 
     private Identifier emptySegments;

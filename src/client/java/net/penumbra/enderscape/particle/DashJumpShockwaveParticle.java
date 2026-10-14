@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -18,7 +16,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-@Environment(EnvType.CLIENT)
 public class DashJumpShockwaveParticle extends SingleQuadParticle {
     private final SpriteSet sprites;
     private final DashJumpShockwaveParticleOptions options;
@@ -93,7 +90,6 @@ public class DashJumpShockwaveParticle extends SingleQuadParticle {
         return Math.max(ClientsideLightUtil.scaledLight(0.2F), super.getLightCoords(delta));
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<DashJumpShockwaveParticleOptions> {
         private final SpriteSet sprites;
 

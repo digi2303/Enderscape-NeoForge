@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.mixin.client.renderer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelEventHandler;
 import net.minecraft.core.BlockPos;
@@ -33,7 +31,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import static net.penumbra.enderscape.registry.entity.EnderscapeAttachments.HAS_END_TRIAL_SPAWNER_EFFECTS;
 
-@Environment(EnvType.CLIENT)
 @Mixin(LevelEventHandler.class)
 public abstract class LevelEventHandlerMixin {
 

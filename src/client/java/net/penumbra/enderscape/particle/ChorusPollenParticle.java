@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -13,7 +11,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.penumbra.enderscape.util.ClientsideLightUtil;
 
-@Environment(EnvType.CLIENT)
 public class ChorusPollenParticle extends SingleQuadParticle {
 
     protected ChorusPollenParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
@@ -47,7 +44,6 @@ public class ChorusPollenParticle extends SingleQuadParticle {
         alpha = 1.0F - Ease.inQuart(progress);
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

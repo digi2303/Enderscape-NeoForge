@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -12,7 +10,6 @@ import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
 
-@Environment(EnvType.CLIENT)
 public class DashJumpSparksParticle extends SimpleAnimatedParticle {
 
     DashJumpSparksParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
@@ -37,7 +34,6 @@ public class DashJumpSparksParticle extends SimpleAnimatedParticle {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

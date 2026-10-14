@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.sound;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -10,7 +8,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.Enderman;
 import net.penumbra.enderscape.registry.sound.EnderscapeEntitySounds;
 
-@Environment(EnvType.CLIENT)
 public class EndermanStareSoundInstance extends AbstractTickableSoundInstance {
     private final Minecraft client;
     private final int entityId;

@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.mixin.client.multiplayer;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvent;
@@ -17,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Environment(EnvType.CLIENT)
 @Mixin(ClientLevel.class)
 public abstract class ClientLevelMixin {
 

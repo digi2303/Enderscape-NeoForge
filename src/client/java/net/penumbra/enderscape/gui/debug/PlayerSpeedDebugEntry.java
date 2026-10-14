@@ -1,8 +1,6 @@
 package net.penumbra.enderscape.gui.debug;
 
 import com.google.common.collect.Lists;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
@@ -19,7 +17,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
-@Environment(EnvType.CLIENT)
 public class PlayerSpeedDebugEntry implements DebugScreenEntry {
 
     private static final Minecraft CLIENT = Minecraft.getInstance();

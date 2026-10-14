@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.gui.hud;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -15,7 +13,6 @@ import net.penumbra.enderscape.sound.VoidedLoopSoundInstance;
 
 import java.util.Optional;
 
-@Environment(EnvType.CLIENT)
 public class VoidNoiseScreenEffect extends EnderscapeHudElement {
 
     public static final Identifier VOID_VIGNETTE_INVERTED = Enderscape.id("textures/misc/void_vignette_inverted.png");

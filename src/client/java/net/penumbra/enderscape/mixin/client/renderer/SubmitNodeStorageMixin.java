@@ -3,8 +3,6 @@ package net.penumbra.enderscape.mixin.client.renderer;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollection;
 import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
@@ -18,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
 @Mixin(SubmitNodeStorage.class)
 public class SubmitNodeStorageMixin implements ItemEntityTint {
 

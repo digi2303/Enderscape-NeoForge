@@ -1,8 +1,6 @@
 package net.penumbra.enderscape;
 
 import com.google.common.reflect.Reflection;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
@@ -31,7 +29,6 @@ import net.penumbra.enderscape.registry.renderer.EnderscapeRenderPipelines;
 import net.penumbra.enderscape.renderer.block.EndHavenCoreRenderer;
 import net.penumbra.enderscape.renderer.block.MagniaSproutRenderer;
 
-@Environment(EnvType.CLIENT)
 public class EnderscapeClient {
 
     private static final ClientsideVariables CLIENTSIDE_VARIABLES = new ClientsideVariables();

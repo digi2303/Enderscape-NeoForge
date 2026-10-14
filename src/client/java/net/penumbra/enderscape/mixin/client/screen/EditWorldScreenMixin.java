@@ -3,8 +3,6 @@ package net.penumbra.enderscape.mixin.client.screen;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -25,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.io.IOException;
 
-@Environment(EnvType.CLIENT)
 @Mixin(EditWorldScreen.class)
 public abstract class EditWorldScreenMixin {
 

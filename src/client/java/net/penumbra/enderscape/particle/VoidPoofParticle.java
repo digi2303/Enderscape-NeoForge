@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.particle.Particle;
@@ -11,7 +9,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
-@Environment(EnvType.CLIENT)
 public class VoidPoofParticle extends ExplodeParticle {
 
     protected VoidPoofParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
@@ -23,7 +20,6 @@ public class VoidPoofParticle extends ExplodeParticle {
         bCol = color * 1.4F;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

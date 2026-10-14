@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -11,7 +9,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.penumbra.enderscape.util.ClientsideLightUtil;
 
-@Environment(EnvType.CLIENT)
 public class GlowParticle extends SimpleAnimatedParticle {
     GlowParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites, GlowParticleOptions options) {
         super(level, x, y, z, sprites, 0);
@@ -45,7 +42,6 @@ public class GlowParticle extends SimpleAnimatedParticle {
         return ClientsideLightUtil.scaledLight(1.0F);
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<GlowParticleOptions> {
         private final SpriteSet sprites;
 

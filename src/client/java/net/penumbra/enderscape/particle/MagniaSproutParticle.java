@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -10,7 +8,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.util.RandomSource;
 import net.penumbra.enderscape.util.ClientsideLightUtil;
 
-@Environment(EnvType.CLIENT)
 public class MagniaSproutParticle extends SingleQuadParticle {
 
     protected final SpriteSet sprites;
@@ -88,7 +85,6 @@ public class MagniaSproutParticle extends SingleQuadParticle {
         return Layer.TRANSLUCENT;
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<MagniaParticleOptions> {
         private final SpriteSet sprites;
 
