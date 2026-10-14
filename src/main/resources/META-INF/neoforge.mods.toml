@@ -12,6 +12,7 @@ logoFile="assets/enderscape/icon.png"
 credits="Patbox"
 authors="lunarbunten, hivye, Konci, Ninni, Orcinus"
 description='''Total overhaul of The End with new generation, biomes, mobs, and other features.'''
+rrv_client="net.penumbra.enderscape.plugins.rrv.EnderscapeRRV"
 
 [[mixins]]
 config="enderscape.mixins.json"

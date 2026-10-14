@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.item.crafting.RustleRecipe;
 import net.penumbra.enderscape.item.crafting.VoidLachrymaRecipe;
+import net.penumbra.enderscape.neoforge.client.EnderscapeSyncedRecipes;
 import net.penumbra.enderscape.plugins.jei.category.RustleRecipeCategory;
 import net.penumbra.enderscape.plugins.jei.category.VoidLachrymaRecipeCategory;
 import net.penumbra.enderscape.registry.component.EnderscapeDataComponents;
@@ -80,6 +81,6 @@ public class EnderscapeJEI implements IModPlugin {
         if (level == null) {
             throw new NullPointerException("Level is null trying to access recipes for recipe type " + type);
         }
-        return new ArrayList<>(level.recipeAccess().getSynchronizedRecipes().getAllOfType(type));
+        return new ArrayList<>(EnderscapeSyncedRecipes.get().byType(type));
     }
 }
