@@ -39,9 +39,6 @@ public abstract class ScreenEffectRendererMixin {
     private static final int TOTEM_SHATTER_TIMESTAMP = 12;
 
     @Unique
-    private final ClientsideVariables variables = EnderscapeClient.clientsideVariables();
-
-    @Unique
     private float glitchTime;
 
     @Unique
@@ -52,10 +49,9 @@ public abstract class ScreenEffectRendererMixin {
                                                   @Local(argsOnly = true, name = "playerRenderState") PlayerRenderState playerRenderState,
                                                   @Local(argsOnly = true, name = "partialTicks") float partialTicks) {
         var itemActivationTicks = playerRenderState.itemActivation != null ? playerRenderState.itemActivation.ticks : 0;
-
         glitchTime += partialTicks;
 
-        if (variables.displayVoidedTotemEffect) {
+        if (EnderscapeClient.clientsideVariables().displayVoidedTotemEffect) {
             if (itemActivationTicks <= TOTEM_SHATTER_TIMESTAMP) {
                 original.call(pose, 0.0F, 0.0F, -9999.0F);
 
@@ -86,7 +82,7 @@ public abstract class ScreenEffectRendererMixin {
     @WrapOperation(method = "renderItemActivationAnimation", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;rotateDegrees(Lcom/mojang/math/Axis;F)V", ordinal = 0))
     public void Enderscape$changeTotemRotationYP(PoseStack pose, Axis axis, float angle, Operation<Void> original,
                                                  @Local(argsOnly = true, name = "playerRenderState") PlayerRenderState playerRenderState) {
-        boolean voided = variables.displayVoidedTotemEffect && playerRenderState.itemActivation != null && playerRenderState.itemActivation.ticks <= TOTEM_GLITCH_TIMESTAMP;
+        boolean voided = EnderscapeClient.clientsideVariables().displayVoidedTotemEffect && playerRenderState.itemActivation != null && playerRenderState.itemActivation.ticks <= TOTEM_GLITCH_TIMESTAMP;
         if (!voided) previousAngleY = angle;
         original.call(pose, axis, voided ? previousAngleY : angle);
     }
@@ -94,7 +90,7 @@ public abstract class ScreenEffectRendererMixin {
     @WrapOperation(method = "renderItemActivationAnimation", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;rotateDegrees(Lcom/mojang/math/Axis;F)V", ordinal = 1))
     public void Enderscape$changeTotemRotationXP(PoseStack pose, Axis axis, float angle, Operation<Void> original,
                                                  @Local(argsOnly = true, name = "playerRenderState") PlayerRenderState playerRenderState) {
-        boolean voided = variables.displayVoidedTotemEffect && playerRenderState.itemActivation != null && playerRenderState.itemActivation.ticks  <= TOTEM_GLITCH_TIMESTAMP;
+        boolean voided = EnderscapeClient.clientsideVariables().displayVoidedTotemEffect && playerRenderState.itemActivation != null && playerRenderState.itemActivation.ticks  <= TOTEM_GLITCH_TIMESTAMP;
         if (!voided) previousAngleX = angle;
         original.call(pose, axis, voided ? previousAngleX : angle);
     }
@@ -102,7 +98,7 @@ public abstract class ScreenEffectRendererMixin {
     @WrapOperation(method = "renderItemActivationAnimation", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;rotateDegrees(Lcom/mojang/math/Axis;F)V", ordinal = 2))
     public void Enderscape$changeTotemRotationZP(PoseStack pose, Axis axis, float angle, Operation<Void> original,
                                                  @Local(argsOnly = true, name = "playerRenderState") PlayerRenderState playerRenderState) {
-        boolean voided = variables.displayVoidedTotemEffect && playerRenderState.itemActivation != null && playerRenderState.itemActivation.ticks  <= TOTEM_GLITCH_TIMESTAMP;
+        boolean voided = EnderscapeClient.clientsideVariables().displayVoidedTotemEffect && playerRenderState.itemActivation != null && playerRenderState.itemActivation.ticks  <= TOTEM_GLITCH_TIMESTAMP;
         if (!voided) previousAngleZ = angle;
         original.call(pose, axis, voided ? previousAngleZ : angle);
     }
