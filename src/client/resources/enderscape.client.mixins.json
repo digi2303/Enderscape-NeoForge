@@ -16,6 +16,7 @@
         "multiplayer.ClientPacketListenerMixin",
         "neoforge.MinecraftInitMixin",
         "neoforge.OptionsMixin",
+        "neoforge.RecipeBuilderIdMixin",
         "particle.CoolingDripHangParticleMixin",
         "particle.PortalParticleMixin",
         "renderer.AtmosphericFogEnvironmentMixin",

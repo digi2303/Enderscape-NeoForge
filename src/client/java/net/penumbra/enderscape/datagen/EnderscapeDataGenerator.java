@@ -8,6 +8,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.neoforge.data.event.PackGenerator;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.datagen.advancement.EnderscapeAdvancementProvider;
 import net.penumbra.enderscape.datagen.loot.EnderscapeBlockLootProvider;
 import net.penumbra.enderscape.datagen.loot.EnderscapeChestLootProvider;
@@ -16,6 +17,7 @@ import net.penumbra.enderscape.datagen.loot.EnderscapeVaultLootProvider;
 import net.penumbra.enderscape.datagen.model.EnderscapeModelProvider;
 import net.penumbra.enderscape.datagen.recipe.EnderscapeRecipeProvider;
 import net.penumbra.enderscape.datagen.tag.*;
+import net.penumbra.enderscape.neoforge.client.EnderscapeRecipeIds;
 import net.penumbra.enderscape.neoforge.registry.EnderscapeBiomeModifiers;
 import net.penumbra.enderscape.registry.EnderscapeRegistries;
 import net.penumbra.enderscape.registry.block.EnderscapeBannerPatterns;
@@ -93,6 +95,6 @@ public class EnderscapeDataGenerator {
 				new LootTableProvider.SubProviderEntry(EnderscapeVaultLootProvider::new, LootContextParamSets.VAULT)
 		);
 		builder.advancement(EnderscapeAdvancementProvider::new);
-		builder.recipe(EnderscapeRecipeProvider::createRecipeProvider);
+		builder.gatherFor(Enderscape.MOD_ID, "minecraft").add(EnderscapeRecipeIds.inNamespace(Enderscape.MOD_ID, EnderscapeRecipeProvider::createRecipeProvider));
 	}
 }
