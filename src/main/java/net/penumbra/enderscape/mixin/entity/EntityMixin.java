@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Silverfish;
@@ -73,23 +74,23 @@ public abstract class EntityMixin {
         return original;
     }
 
-    @ModifyArg(method = "playCombinationStepSounds", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
+    @ModifyArg(method = "playCombinationStepSounds", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;playStepSound(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;FF)V"), index = 3)
     public float Enderscape$adjustCombinationStepSoundVolume(float original) {
         return Math.max(0, original * (float) EnderscapeAttributes.getStealthMultiplier(self));
     }
 
-    @ModifyArg(method = "playStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
+    @ModifyArg(method = "playStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;playStepSound(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;FF)V"), index = 3)
     public float Enderscape$adjustStepSoundVolume(float original) {
         return Math.max(0, original * (float) EnderscapeAttributes.getStealthMultiplier(self));
     }
 
-    @ModifyArg(method = "playMuffledStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), index = 1)
+    @ModifyArg(method = "playMuffledStepSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;playStepSound(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;FF)V"), index = 3)
     public float Enderscape$adjustMuffledStepSoundVolume(float original) {
         return Math.max(0, original * (float) EnderscapeAttributes.getStealthMultiplier(self));
     }
 
-    @WrapWithCondition(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;restituteMovementAfterCollisions(Lnet/minecraft/world/level/block/state/BlockState;ZZLnet/minecraft/world/phys/Vec3;)V"))
-    private boolean Enderscape$handleLegacyBounce(Entity instance, BlockState effectState, boolean xCollision, boolean zCollision, Vec3 movement) {
+    @WrapWithCondition(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;restituteMovementAfterCollisions(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;ZZLnet/minecraft/world/phys/Vec3;)V"))
+    private boolean Enderscape$handleLegacyBounce(Entity instance, BlockPos effectPos, BlockState effectState, boolean xCollision, boolean zCollision, Vec3 movement) {
         if (effectState.getBlock() instanceof DriftJellyBlock block) {
             block.updateEntityMovementAfterFallOn((Entity) (Object) this);
             return false;

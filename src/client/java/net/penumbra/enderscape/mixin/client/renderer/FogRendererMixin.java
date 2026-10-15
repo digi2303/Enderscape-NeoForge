@@ -35,10 +35,10 @@ public abstract class FogRendererMixin {
         FOG_ENVIRONMENTS.addFirst(new VoidLachrymaFogEnvironment());
     }
 
-    @ModifyArgs(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"))
+    @ModifyArgs(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;getFogColor(Lnet/minecraft/client/Camera;FLnet/minecraft/client/multiplayer/ClientLevel;IFFFFLorg/joml/Vector4f;)V"))
     public void Enderscape$getBrightnessDependentFogColor(Args args) {
         ClientLevel level = Minecraft.getInstance().level;
-        Vector3f original = new Vector3f(args.get(0), args.get(1), args.get(2));
+        Vector3f original = new Vector3f(args.get(5), args.get(6), args.get(7));
 
         if (level != null && level.dimension() == Level.END) {
             if (EnderscapeConfig.getInstance().skyboxUpdateEnabled) {
@@ -49,9 +49,9 @@ public abstract class FogRendererMixin {
             float brightness = EndFlashParameters.skyboxBrightness();
             original = scaleWithoutOverflow(original, brightness);
 
-            args.set(0, original.x());
-            args.set(1, original.y());
-            args.set(2, original.z());
+            args.set(5, original.x());
+            args.set(6, original.y());
+            args.set(7, original.z());
         }
     }
 }

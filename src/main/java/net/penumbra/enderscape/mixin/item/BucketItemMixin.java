@@ -31,7 +31,7 @@ public abstract class BucketItemMixin extends Item {
         return content.is(EnderscapeFluidTags.VOID_LACHRYMA) ? EnderscapeItemSounds.VOID_LACHRYMA_BUCKET_EMPTY : sound;
     }
 
-    @WrapOperation(method = "emptyContents", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/material/Fluid;is(Lnet/minecraft/tags/TagKey;)Z"))
+    @WrapOperation(method = "emptyContents(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/BlockHitResult;Lnet/minecraft/world/item/ItemStack;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/material/Fluid;is(Lnet/minecraft/tags/TagKey;)Z"))
     private boolean Enderscape$lachrymaEvaporatesInNether(Fluid instance, TagKey<Fluid> tag, Operation<Boolean> original) {
         return original.call(instance, tag) || instance.is(EnderscapeFluidTags.VOID_LACHRYMA);
     }
