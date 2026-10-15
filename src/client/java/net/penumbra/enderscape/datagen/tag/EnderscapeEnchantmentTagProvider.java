@@ -1,13 +1,14 @@
 package net.penumbra.enderscape.datagen.tag;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagAppender;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.penumbra.enderscape.Enderscape;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,10 +17,10 @@ import static net.minecraft.world.item.enchantment.Enchantments.FEATHER_FALLING;
 import static net.penumbra.enderscape.registry.enchantment.EnderscapeEnchantments.*;
 import static net.penumbra.enderscape.registry.tag.EnderscapeEnchantmentTags.PREVENTS_DRIFTER_STOMP_DAMAGE;
 
-public class EnderscapeEnchantmentTagProvider extends FabricTagsProvider<Enchantment> {
+public class EnderscapeEnchantmentTagProvider extends TagsProvider<Enchantment> {
 
-    public EnderscapeEnchantmentTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-        super(output, Registries.ENCHANTMENT, future);
+    public EnderscapeEnchantmentTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+        super(output, Registries.ENCHANTMENT, future, Enderscape.MOD_ID);
     }
 
     @Override

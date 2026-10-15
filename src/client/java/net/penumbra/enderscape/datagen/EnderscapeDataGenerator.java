@@ -1,35 +1,22 @@
 package net.penumbra.enderscape.datagen;
 
 import dev.worldgen.lithostitched.api.registry.LithostitchedRegistries;
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
+import net.neoforged.neoforge.data.event.PackGenerator;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.penumbra.enderscape.datagen.advancement.EnderscapeAdvancementProvider;
-import net.penumbra.enderscape.datagen.block.EnderscapeBannerPatternProvider;
-import net.penumbra.enderscape.datagen.block.EnderscapeTrialSpawnerProvider;
-import net.penumbra.enderscape.datagen.enchantment.EnderscapeEnchantmentProvider;
-import net.penumbra.enderscape.datagen.entity.EnderscapeDamageTypeProvider;
-import net.penumbra.enderscape.datagen.entity.EnderscapePaintingVariantProvider;
-import net.penumbra.enderscape.datagen.entity.EnderscapeRubblemiteVariantProvider;
-import net.penumbra.enderscape.datagen.item.EnderscapeTrimMaterialProvider;
-import net.penumbra.enderscape.datagen.item.EnderscapeTrimPatternProvider;
-import net.penumbra.enderscape.datagen.level.*;
-import net.penumbra.enderscape.datagen.lithostitched.EnderscapeWorldgenModifierProvider;
 import net.penumbra.enderscape.datagen.loot.EnderscapeBlockLootProvider;
 import net.penumbra.enderscape.datagen.loot.EnderscapeChestLootProvider;
 import net.penumbra.enderscape.datagen.loot.EnderscapeEntityLootProvider;
 import net.penumbra.enderscape.datagen.loot.EnderscapeVaultLootProvider;
 import net.penumbra.enderscape.datagen.model.EnderscapeModelProvider;
 import net.penumbra.enderscape.datagen.recipe.EnderscapeRecipeProvider;
-import net.penumbra.enderscape.datagen.sound.EnderscapeJukeboxSongProvider;
-import net.penumbra.enderscape.datagen.sound.EnderscapeMagniaRadioSongProvider;
-import net.penumbra.enderscape.datagen.sound.EnderscapeStructureMusicProvider;
-import net.penumbra.enderscape.datagen.structure.EnderscapeProcessorListProvider;
-import net.penumbra.enderscape.datagen.structure.EnderscapeStructureProvider;
-import net.penumbra.enderscape.datagen.structure.EnderscapeStructureSetProvider;
-import net.penumbra.enderscape.datagen.structure.EnderscapeTemplatePoolProvider;
 import net.penumbra.enderscape.datagen.tag.*;
+import net.penumbra.enderscape.neoforge.registry.EnderscapeBiomeModifiers;
 import net.penumbra.enderscape.registry.EnderscapeRegistries;
 import net.penumbra.enderscape.registry.block.EnderscapeBannerPatterns;
 import net.penumbra.enderscape.registry.block.EnderscapeTrialSpawnerConfigs;
@@ -49,61 +36,30 @@ import net.penumbra.enderscape.registry.structure.EnderscapeStructureSets;
 import net.penumbra.enderscape.registry.structure.EnderscapeStructures;
 import net.penumbra.enderscape.registry.structure.EnderscapeTemplatePools;
 
-public class EnderscapeDataGenerator implements DataGeneratorEntrypoint {
+public class EnderscapeDataGenerator {
 
-	@Override
-	public void onInitializeDataGenerator(FabricDataGenerator generator) {
-		FabricDataGenerator.Pack pack = generator.createPack();
+	public static void onInitializeDataGenerator(GatherDataEvent.Client generator) {
+		PackGenerator pack = generator.getDefaultPackGenerator();
 
-		pack.addProvider(EnderscapeAdvancementProvider::new);
-		pack.addProvider(EnderscapeBannerPatternProvider::new);
-		pack.addProvider(EnderscapeBannerPatternTagProvider::new);
-		pack.addProvider(EnderscapeBiomeProvider::new);
-		pack.addProvider(EnderscapeBiomeTagProvider::new);
-		pack.addProvider(EnderscapeBlockLootProvider::new);
-		pack.addProvider(EnderscapeBlockTagProvider::new);
-		pack.addProvider(EnderscapeChestLootProvider::new);
-		pack.addProvider(EnderscapeConfiguredFeatureProvider::new);
-		pack.addProvider(EnderscapeDamageTypeProvider::new);
-		pack.addProvider(EnderscapeDamageTypeTagProvider::new);
-		pack.addProvider(EnderscapeEnchantmentProvider::new);
-		pack.addProvider(EnderscapeEnchantmentTagProvider::new);
-		pack.addProvider(EnderscapeEntityLootProvider::new);
-		pack.addProvider(EnderscapeEntityTagProvider::new);
-		pack.addProvider(EnderscapeFluidTagProvider::new);
-		pack.addProvider(EnderscapeItemTagProvider::new);
-		pack.addProvider(EnderscapeJukeboxSongProvider::new);
-		pack.addProvider(EnderscapeMaterialRulesProvider::new);
-		pack.addProvider(EnderscapeMobEffectTagProvider::new);
-		pack.addProvider(EnderscapeModelProvider::new);
-		pack.addProvider(EnderscapeNoiseProvider::new);
-		pack.addProvider(EnderscapePaintingVariantProvider::new);
-		pack.addProvider(EnderscapePaintingVariantTagProvider::new);
-		pack.addProvider(EnderscapePlacedFeatureProvider::new);
-		pack.addProvider(EnderscapePoiTagProvider::new);
-		pack.addProvider(EnderscapeProcessorListProvider::new);
-		pack.addProvider(EnderscapeRecipeProvider::new);
-		pack.addProvider(EnderscapeSoundEventTagProvider::new);
-		pack.addProvider(EnderscapeStructureProvider::new);
-		pack.addProvider(EnderscapeStructureSetProvider::new);
-		pack.addProvider(EnderscapeStructureTagProvider::new);
-		pack.addProvider(EnderscapeTemplatePoolProvider::new);
-		pack.addProvider(EnderscapeTrialSpawnerProvider::new);
-		pack.addProvider(EnderscapeTrimMaterialProvider::new);
-		pack.addProvider(EnderscapeTrimPatternProvider::new);
-		pack.addProvider(EnderscapeVaultLootProvider::new);
-
-		pack.addProvider(EnderscapeMagniaRadioSongProvider::new);
-		pack.addProvider(EnderscapeRubblemiteVariantProvider::new);
-		pack.addProvider(EnderscapeStructureMusicProvider::new);
-
-		pack.addProvider(EnderscapeWorldgenModifierProvider::new);
+		pack.createProvider(EnderscapeBannerPatternTagProvider::new);
+		pack.createProvider(EnderscapeBiomeTagProvider::new);
+		pack.createProvider(EnderscapeBlockTagProvider::new);
+		pack.createProvider(EnderscapeDamageTypeTagProvider::new);
+		pack.createProvider(EnderscapeEnchantmentTagProvider::new);
+		pack.createProvider(EnderscapeEntityTagProvider::new);
+		pack.createProvider(EnderscapeFluidTagProvider::new);
+		pack.createProvider(EnderscapeItemTagProvider::new);
+		pack.createProvider(EnderscapeMobEffectTagProvider::new);
+		pack.createProvider(EnderscapeModelProvider::new);
+		pack.createProvider(EnderscapePaintingVariantTagProvider::new);
+		pack.createProvider(EnderscapePoiTagProvider::new);
+		pack.createProvider(EnderscapeSoundEventTagProvider::new);
+		pack.createProvider(EnderscapeStructureTagProvider::new);
 
 		EnderscapePacksProvider.initialize(generator);
 	}
 
-	@Override
-	public void buildRegistry(RegistrySetBuilder builder) {
+	public static void buildRegistry(GatherDataRegistryEntriesEvent builder) {
 		builder.add(Registries.BANNER_PATTERN, EnderscapeBannerPatterns::bootstrap);
 		builder.add(Registries.BIOME, EnderscapeBiomes::bootstrap);
 		builder.add(Registries.FEATURE, EnderscapeConfiguredFeatures::bootstrap);
@@ -127,5 +83,16 @@ public class EnderscapeDataGenerator implements DataGeneratorEntrypoint {
 		builder.add(EnderscapeRegistries.STRUCTURE_MUSIC, EnderscapeStructureMusic::bootstrap);
 
 		builder.add(LithostitchedRegistries.WORLDGEN_MODIFIER, EnderscapeWorldgenModifiers::bootstrap);
+
+		builder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, EnderscapeBiomeModifiers::bootstrap);
+
+		builder.lootTable(
+				new LootTableProvider.SubProviderEntry(EnderscapeBlockLootProvider::new, LootContextParamSets.BLOCK),
+				new LootTableProvider.SubProviderEntry(EnderscapeChestLootProvider::new, LootContextParamSets.CHEST),
+				new LootTableProvider.SubProviderEntry(EnderscapeEntityLootProvider::new, LootContextParamSets.ENTITY),
+				new LootTableProvider.SubProviderEntry(EnderscapeVaultLootProvider::new, LootContextParamSets.VAULT)
+		);
+		builder.advancement(EnderscapeAdvancementProvider::new);
+		builder.recipe(EnderscapeRecipeProvider::createRecipeProvider);
 	}
 }

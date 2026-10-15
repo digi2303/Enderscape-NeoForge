@@ -1,10 +1,8 @@
 package net.penumbra.enderscape.datagen.loot;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
@@ -15,7 +13,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
@@ -25,7 +22,6 @@ import net.penumbra.enderscape.registry.EnderscapeRegistries;
 import net.penumbra.enderscape.registry.block.EnderscapeBlocks;
 import net.penumbra.enderscape.registry.entity.EnderscapeEntityLootTables;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
 
@@ -33,19 +29,17 @@ import static net.penumbra.enderscape.registry.entity.EnderscapeEntities.*;
 import static net.penumbra.enderscape.registry.entity.EnderscapeEntityLootTables.*;
 import static net.penumbra.enderscape.registry.item.EnderscapeItems.RUBBLE_CHITIN;
 
-public class EnderscapeEntityLootProvider extends SimpleFabricLootTableSubProvider {
+public class EnderscapeEntityLootProvider implements LootTableSubProvider {
 
-    private final CompletableFuture<HolderLookup.Provider> lookup;
+    private final LootTableSubProvider.Context lookup;
 
-    public EnderscapeEntityLootProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
-        super(output, lookup, LootContextParamSets.ENTITY);
+    public EnderscapeEntityLootProvider(LootTableSubProvider.Context lookup) {
         this.lookup = lookup;
     }
 
-    @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
         try {
-            HolderGetter<RubblemiteVariant> variants = lookup.get().lookupOrThrow(EnderscapeRegistries.RUBBLEMITE_VARIANT);
+            HolderGetter<RubblemiteVariant> variants = lookup.lookup(EnderscapeRegistries.RUBBLEMITE_VARIANT);
 
             consumer.accept(
                     getLootTable(DRIFTER),
@@ -61,7 +55,7 @@ public class EnderscapeEntityLootProvider extends SimpleFabricLootTableSubProvid
                                             .add(
                                                     LootItem.lootTableItem(RUBBLE_CHITIN)
                                                             .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(1)))
-                                                            .apply(EnchantedCountIncreaseFunction.lootingMultiplier(lookup.get().lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.between(0, 1)))
+                                                            .apply(EnchantedCountIncreaseFunction.lootingMultiplier(lookup.lookup(Registries.ENCHANTMENT), ContextFloatProviders.between(0, 1)))
                                                             .when(LootItemRandomChanceCondition.randomChance(0.65F))
                                             )
                                             .when(LootItemKilledByPlayerCondition.killedByPlayer())
@@ -103,7 +97,7 @@ public class EnderscapeEntityLootProvider extends SimpleFabricLootTableSubProvid
                                         .add(
                                                 LootItem.lootTableItem(item)
                                                         .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 1)))
-                                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(lookup.get().lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.between(0, 1)))
+                                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(lookup.lookup(Registries.ENCHANTMENT), ContextFloatProviders.between(0, 1)))
                                         )
                                         .when(LootItemKilledByPlayerCondition.killedByPlayer())
                         )
@@ -116,6 +110,6 @@ public class EnderscapeEntityLootProvider extends SimpleFabricLootTableSubProvid
 
     @Override
     public void run() {
-        
+        generate(lookup::accept);
     }
 }

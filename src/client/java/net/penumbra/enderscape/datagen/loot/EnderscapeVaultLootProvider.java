@@ -1,13 +1,11 @@
 package net.penumbra.enderscape.datagen.loot;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -21,13 +19,11 @@ import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.SingleEntryContainerBase;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
 
@@ -38,16 +34,14 @@ import static net.penumbra.enderscape.registry.item.EnderscapeItems.*;
 import static net.penumbra.enderscape.registry.server.EnderscapeLootTables.END_CITY_ELYTRA_VAULT;
 import static net.penumbra.enderscape.registry.server.EnderscapeLootTables.END_CITY_VAULT;
 
-public class EnderscapeVaultLootProvider extends SimpleFabricLootTableSubProvider {
+public class EnderscapeVaultLootProvider implements LootTableSubProvider {
 
-    private final CompletableFuture<HolderLookup.Provider> lookup;
+    private final LootTableSubProvider.Context lookup;
 
-    public EnderscapeVaultLootProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
-        super(output, lookup, LootContextParamSets.VAULT);
+    public EnderscapeVaultLootProvider(LootTableSubProvider.Context lookup) {
         this.lookup = lookup;
     }
 
-    @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
         consumer.accept(END_CITY_VAULT, endCityVaultRewards());
         consumer.accept(END_CITY_ELYTRA_VAULT, endCityVaultRewards().withPool(
@@ -61,7 +55,7 @@ public class EnderscapeVaultLootProvider extends SimpleFabricLootTableSubProvide
     public LootTable.Builder endCityVaultRewards() {
         try {
             LootItemConditionalFunction.Builder<?> toolDamage = SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.4F, 1.0F));
-            EnchantWithLevelsFunction.Builder toolEnchantments = EnchantWithLevelsFunction.enchantWithLevels(lookup.get().lookupOrThrow(Registries.ENCHANTMENT), ContextIntProviders.between(20, 40));
+            EnchantWithLevelsFunction.Builder toolEnchantments = EnchantWithLevelsFunction.enchantWithLevels(lookup.lookup(Registries.ENCHANTMENT), ContextIntProviders.between(20, 40));
 
             return LootTable.lootTable()
                     .withPool(
@@ -181,17 +175,17 @@ public class EnderscapeVaultLootProvider extends SimpleFabricLootTableSubProvide
 
     @NotNull
     private SingleEntryContainerBase.Builder<?> createBiomeExclusiveItem(Item item, ResourceKey<Biome> biome, int weight) throws InterruptedException, ExecutionException {
-        return createItem(item, weight).when(LocationCheck.checkLocation(LocationPredicate.Builder.inBiome(lookup.get().lookupOrThrow(Registries.BIOME).getOrThrow(biome))));
+        return createItem(item, weight).when(LocationCheck.checkLocation(LocationPredicate.Builder.inBiome(lookup.lookup(Registries.BIOME).getOrThrow(biome))));
     }
 
     @NotNull
     private SingleEntryContainerBase.Builder<?> createEnchantedItem(Item item, int minEnchant, int maxEnchant, int weight) throws InterruptedException, ExecutionException {
-        return createItem(item, weight).apply(EnchantWithLevelsFunction.enchantWithLevels(lookup.get().lookupOrThrow(Registries.ENCHANTMENT), ContextIntProviders.between(minEnchant, maxEnchant)));
+        return createItem(item, weight).apply(EnchantWithLevelsFunction.enchantWithLevels(lookup.lookup(Registries.ENCHANTMENT), ContextIntProviders.between(minEnchant, maxEnchant)));
     }
 
     private SingleEntryContainerBase.Builder<?> createEnchantedTrimmed(Item item, int minEnchant, int maxEnchant, ResourceKey<TrimMaterial> material, ResourceKey<TrimPattern> pattern, int weight) throws InterruptedException, ExecutionException {
-        Holder.Reference<TrimMaterial> materialReference = lookup.get().lookupOrThrow(Registries.TRIM_MATERIAL).getOrThrow(material);
-        Holder.Reference<TrimPattern> patternReference = lookup.get().lookupOrThrow(Registries.TRIM_PATTERN).getOrThrow(pattern);
+        Holder.Reference<TrimMaterial> materialReference = lookup.lookup(Registries.TRIM_MATERIAL).getOrThrow(material);
+        Holder.Reference<TrimPattern> patternReference = lookup.lookup(Registries.TRIM_PATTERN).getOrThrow(pattern);
         return createEnchantedItem(item, minEnchant, maxEnchant, weight).apply(SetComponentsFunction.setComponent(DataComponents.TRIM, new ArmorTrim(materialReference, patternReference)));
     }
 
@@ -202,11 +196,11 @@ public class EnderscapeVaultLootProvider extends SimpleFabricLootTableSubProvide
 
     @NotNull
     private Holder.Reference<Enchantment> getEnchantmentReference(ResourceKey<Enchantment> enchantment) throws InterruptedException, ExecutionException {
-        return lookup.get().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(enchantment);
+        return lookup.lookup(Registries.ENCHANTMENT).getOrThrow(enchantment);
     }
 
     @Override
     public void run() {
-
+        generate(lookup::accept);
     }
 }

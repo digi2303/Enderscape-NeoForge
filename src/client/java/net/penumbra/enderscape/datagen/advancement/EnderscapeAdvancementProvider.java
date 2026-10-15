@@ -1,7 +1,5 @@
 package net.penumbra.enderscape.datagen.advancement;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRewards;
@@ -11,13 +9,13 @@ import net.minecraft.advancements.predicates.*;
 import net.minecraft.advancements.predicates.entity.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.EmptyTagLookupWrapper;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.advancements.AdvancementSubProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -45,8 +43,6 @@ import net.penumbra.enderscape.registry.tag.EnderscapeBlockTags;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 import static net.minecraft.advancements.triggers.CriteriaTriggers.FALL_FROM_HEIGHT;
 import static net.minecraft.world.item.Items.BUCKET;
@@ -55,7 +51,7 @@ import static net.penumbra.enderscape.registry.block.EnderscapeBlocks.*;
 import static net.penumbra.enderscape.registry.item.EnderscapeItems.*;
 import static net.penumbra.enderscape.registry.server.EnderscapeCriteria.*;
 
-public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
+public class EnderscapeAdvancementProvider extends AdvancementSubProvider {
 
     public static final List<ResourceKey<Biome>> EXPLORE_END_BIOMES = List.of(
             Biomes.THE_END, Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS,
@@ -66,18 +62,18 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
 
     public static final List<ResourceKey<Level>> ALL_DIMENSION_TYPES = List.of(Level.OVERWORLD, Level.NETHER, Level.END);
 
-    public EnderscapeAdvancementProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
-        super(output, registryLookup);
+    public EnderscapeAdvancementProvider(BootstrapContext<Advancement> output) {
+        super(output);
     }
 
     @Override
     @SuppressWarnings({"removal", "unused"})
-    public void generateAdvancement(HolderLookup.Provider provider, Consumer<AdvancementHolder> consumer) {
+    public void generate() {
 
-        HolderGetter<Item> items = provider.lookupOrThrow(Registries.ITEM);
-        HolderGetter<Block> blocks = provider.lookupOrThrow(Registries.BLOCK);
-        HolderLookup.RegistryLookup<Biome> biomes = provider.lookupOrThrow(Registries.BIOME);
-        HolderLookup.RegistryLookup<EntityType<?>> entities = provider.lookupOrThrow(Registries.ENTITY_TYPE);
+        HolderGetter<Item> items = output.lookup(Registries.ITEM);
+        HolderGetter<Block> blocks = output.lookup(Registries.BLOCK);
+        HolderGetter<Biome> biomes = output.lookup(Registries.BIOME);
+        HolderGetter<EntityType<?>> entities = output.lookup(Registries.ENTITY_TYPE);
 
         ResourceKey<Advancement> endGatewayKey = ResourceKey.create(Registries.ADVANCEMENT, Identifier.withDefaultNamespace("end/enter_end_gateway"));
         ResourceKey<Advancement> findEndCityKey = ResourceKey.create(Registries.ADVANCEMENT, Identifier.withDefaultNamespace("end/find_end_city"));
@@ -108,7 +104,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                                 Optional.of(DistancePredicate.vertical(MinMaxBounds.Doubles.atLeast(50))))
                         )
                 )
-                .save(consumer, Enderscape.id("fall_onto_chanterelle_cap"));
+                .save(output, Enderscape.id("fall_onto_chanterelle_cap").toString());
 
         AdvancementHolder rubbleShieldDash = Advancement.Builder.advancement()
                 .parent(endGatewayKey.identifier())
@@ -127,7 +123,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                                 Optional.empty()
                         ))
                 )
-                .save(consumer, Enderscape.id("rubble_shield_dash"));
+                .save(output, Enderscape.id("rubble_shield_dash").toString());
 
         AdvancementHolder rustleBucket = Advancement.Builder.advancement()
                 .parent(endGatewayKey.identifier())
@@ -146,7 +142,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                                 Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entities, EnderscapeEntities.RUSTLE)))
                         )
                 )
-                .save(consumer, Enderscape.id("rustle_bucket"));
+                .save(output, Enderscape.id("rustle_bucket").toString());
 
         AdvancementHolder bliss = Advancement.Builder.advancement()
                 .parent(rustleBucket)
@@ -158,7 +154,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         true, true, false
                 )
                 .addCriterion("obtained", InventoryChangeTrigger.TriggerInstance.hasItems(MUSIC_DISC_BLISS))
-                .save(consumer, Enderscape.id("music_disc_bliss"));
+                .save(output, Enderscape.id("music_disc_bliss").toString());
 
         AdvancementHolder unlockEndVault = Advancement.Builder.advancement()
                 .parent(findEndCityKey.identifier())
@@ -176,7 +172,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                                 ItemPredicate.Builder.item().of(items, END_CITY_KEY)
                         )
                 )
-                .save(consumer, Enderscape.id("unlock_end_vault"));
+                .save(output, Enderscape.id("unlock_end_vault").toString());
 
         Advancement.Builder exploreEnd = Advancement.Builder.advancement()
                 .parent(endGatewayKey.identifier())
@@ -194,7 +190,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                 )
         );
 
-        exploreEnd.save(consumer, Enderscape.id("explore_end"));
+        exploreEnd.save(output, Enderscape.id("explore_end").toString());
 
         AdvancementHolder obtainNebulite = Advancement.Builder.advancement()
                 .parent(endGatewayKey.identifier())
@@ -206,9 +202,9 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         true, true, false
                 )
                 .addCriterion("obtained", RecipeCraftedTrigger.TriggerInstance.craftedItem(
-                        HolderSet.direct(fakeRecipe(provider, ResourceKey.create(Registries.RECIPE, Enderscape.id("nebulite_from_shards")))))
+                        HolderSet.direct(fakeRecipe(output, ResourceKey.create(Registries.RECIPE, Enderscape.id("nebulite_from_shards")))))
                 )
-                .save(consumer, Enderscape.id("craft_nebulite"));
+                .save(output, Enderscape.id("craft_nebulite").toString());
 
         AdvancementHolder bottleDriftJelly = Advancement.Builder.advancement()
                 .parent(endGatewayKey.identifier())
@@ -220,7 +216,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         true, true, false
                 )
                 .addCriterion("obtained", InventoryChangeTrigger.TriggerInstance.hasItems(DRIFT_JELLY_BOTTLE))
-                .save(consumer, Enderscape.id("bottle_drift_jelly"));
+                .save(output, Enderscape.id("bottle_drift_jelly").toString());
 
         AdvancementHolder driftLeggings = Advancement.Builder.advancement()
                 .parent(bottleDriftJelly)
@@ -232,7 +228,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         true, true, false
                 )
                 .addCriterion("obtained", InventoryChangeTrigger.TriggerInstance.hasItems(DRIFT_LEGGINGS))
-                .save(consumer, Enderscape.id("drift_leggings"));
+                .save(output, Enderscape.id("drift_leggings").toString());
 
         AdvancementHolder glideOntoDrifter = Advancement.Builder.advancement()
                 .parent(driftLeggings)
@@ -260,7 +256,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         ),
                         Optional.empty()
                 )))
-                .save(consumer, Enderscape.id("glide_onto_drifter"));
+                .save(output, Enderscape.id("glide_onto_drifter").toString());
 
         Optional<ItemPredicate> mirrorItemPredicate = Optional.of(ItemPredicate.Builder.item().of(items, MIRROR).build());
 
@@ -281,7 +277,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         Optional.empty(),
                         Optional.empty()
                 )))
-                .save(consumer, Enderscape.id("mirror_teleport"));
+                .save(output, Enderscape.id("mirror_teleport").toString());
 
         AdvancementHolder longDistance = Advancement.Builder.advancement()
                 .parent(mirrorTeleport)
@@ -303,7 +299,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         ),
                         Optional.of(false)
                 )))
-                .save(consumer, Enderscape.id("long_distance"));
+                .save(output, Enderscape.id("long_distance").toString());
 
         Advancement.Builder.advancement()
                 .parent(longDistance)
@@ -323,7 +319,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         Optional.empty(),
                         Optional.of(true)
                 )))
-                .save(consumer, Enderscape.id("transdimensional"));
+                .save(output, Enderscape.id("transdimensional").toString());
 
         AdvancementHolder pullItemWithAttractor = Advancement.Builder.advancement()
                 .parent(obtainNebulite)
@@ -339,7 +335,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                         Optional.of(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(entities, EntityTypes.ITEM)).build()),
                         Optional.empty()
                 )))
-                .save(consumer, Enderscape.id("pull_item_with_attractor"));
+                .save(output, Enderscape.id("pull_item_with_attractor").toString());
 
         AdvancementHolder stunAttack = Advancement.Builder.advancement()
                 .parent(obtainNebulite)
@@ -360,7 +356,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                                 ))
                         ))
                 )
-                .save(consumer, Enderscape.id("stun_attack"));
+                .save(output, Enderscape.id("stun_attack").toString());
 
         AdvancementHolder activateEndHaven = Advancement.Builder.advancement()
                 .parent(obtainNebulite)
@@ -382,7 +378,7 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
                                 ItemPredicate.Builder.item()
                         )
                 )
-                .save(consumer, Enderscape.id("activate_end_haven"));
+                .save(output, Enderscape.id("activate_end_haven").toString());
 
 //        Advancement.Builder hearMagniaRadioSongs = Advancement.Builder.advancement()
 //                .parent(endGatewayKey.identifier())
@@ -404,9 +400,8 @@ public class EnderscapeAdvancementProvider extends FabricAdvancementProvider {
 //        hearMagniaRadioSongs.save(consumer, Enderscape.id("hear_magnia_radio_songs"));
     }
 
-    private Holder<Recipe<?>> fakeRecipe(HolderGetter.Provider provider, ResourceKey<Recipe<?>> recipeResourceKey) {
-        var recipe = provider.lookupOrThrow(Registries.RECIPE);
-        return Holder.Reference.createStandAlone(recipe instanceof EmptyTagLookupWrapper<Recipe<?>> wrapper ? wrapper.parent() : recipe, recipeResourceKey);
+    private Holder<Recipe<?>> fakeRecipe(BootstrapContext<Advancement> provider, ResourceKey<Recipe<?>> recipeResourceKey) {
+        return provider.lookup(Registries.RECIPE).getOrThrow(recipeResourceKey);
     }
 
     private static ItemStackTemplate mirrorTemplate(DyeColor color) {

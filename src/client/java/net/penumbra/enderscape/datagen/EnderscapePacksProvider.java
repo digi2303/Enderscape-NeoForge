@@ -1,6 +1,5 @@
 package net.penumbra.enderscape.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.DetectedVersion;
 import net.minecraft.data.metadata.PackMetadataGenerator;
 import net.minecraft.network.chat.Component;
@@ -9,6 +8,8 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.resources.ResourceFilterSection;
 import net.minecraft.util.IdentifierPattern;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.PackGenerator;
 import net.penumbra.enderscape.registry.EnderscapePacks;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class EnderscapePacksProvider {
-    static void initialize(FabricDataGenerator generator) {
+    static void initialize(GatherDataEvent generator) {
         createPack(generator, PackType.CLIENT_RESOURCES, EnderscapePacks.IMPROVED_VISUALS);
 
         createPack(generator, PackType.SERVER_DATA, EnderscapePacks.FIX_LEVITATION_ADVANCEMENT);
@@ -27,19 +28,19 @@ public class EnderscapePacksProvider {
         createPack(generator, PackType.SERVER_DATA, EnderscapePacks.NEW_TERRAIN);
     }
 
-    private static FabricDataGenerator.Pack createPack(FabricDataGenerator generator, PackType type, Identifier identifier) {
-        FabricDataGenerator.Pack pack = generator.createBuiltinResourcePack(identifier);
-        pack.addProvider(createPackMetadata(type, identifier));
+    private static PackGenerator createPack(GatherDataEvent generator, PackType type, Identifier identifier) {
+        PackGenerator pack = generator.getPackGenerator(generator.getGenerator().getPackOutput("resourcepacks/" + identifier.getPath()));
+        pack.createProvider(createPackMetadata(type, identifier));
         return pack;
     }
 
-    private static FabricDataGenerator.Pack createPack(FabricDataGenerator generator, Identifier identifier, FabricDataGenerator.Pack.Factory<PackMetadataGenerator> packMetadata) {
-        FabricDataGenerator.Pack pack = generator.createBuiltinResourcePack(identifier);
-        pack.addProvider(packMetadata);
+    private static PackGenerator createPack(GatherDataEvent generator, Identifier identifier, PackGenerator.DataProviderFromOutput<PackMetadataGenerator> packMetadata) {
+        PackGenerator pack = generator.getPackGenerator(generator.getGenerator().getPackOutput("resourcepacks/" + identifier.getPath()));
+        pack.createProvider(packMetadata);
         return pack;
     }
 
-    private static FabricDataGenerator.Pack.Factory<PackMetadataGenerator> createPackMetadata(PackType type, Identifier identifier) {
+    private static PackGenerator.DataProviderFromOutput<PackMetadataGenerator> createPackMetadata(PackType type, Identifier identifier) {
         return output -> {
             PackMetadataGenerator metadata = new PackMetadataGenerator(output);
 
@@ -52,7 +53,7 @@ public class EnderscapePacksProvider {
         };
     }
 
-    private static FabricDataGenerator.Pack.Factory<PackMetadataGenerator> fixVanillaRecipesMetadata() {
+    private static PackGenerator.DataProviderFromOutput<PackMetadataGenerator> fixVanillaRecipesMetadata() {
         return output -> {
             PackMetadataGenerator metadata = new PackMetadataGenerator(output);
 

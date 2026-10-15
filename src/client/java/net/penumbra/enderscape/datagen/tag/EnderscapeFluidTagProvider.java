@@ -1,18 +1,21 @@
 package net.penumbra.enderscape.datagen.tag;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.level.material.Fluid;
+import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.references.EnderscapeFluidIds;
 
 import java.util.concurrent.CompletableFuture;
 
 import static net.penumbra.enderscape.registry.tag.EnderscapeFluidTags.VOID_LACHRYMA;
 
-public class EnderscapeFluidTagProvider extends FabricTagsProvider.FluidTagsProvider {
+public class EnderscapeFluidTagProvider extends TagsProvider<Fluid> {
 
-    public EnderscapeFluidTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, registriesFuture);
+    public EnderscapeFluidTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, Registries.FLUID, registriesFuture, Enderscape.MOD_ID);
     }
 
     @Override

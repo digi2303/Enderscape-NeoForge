@@ -3,11 +3,8 @@ package net.penumbra.enderscape.datagen.recipe;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -41,7 +38,6 @@ import net.penumbra.enderscape.registry.sound.EnderscapeEntitySounds;
 import net.penumbra.enderscape.registry.tag.EnderscapeItemTags;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import static net.minecraft.data.recipes.RecipeProvider.getItemName;
@@ -50,14 +46,10 @@ import static net.penumbra.enderscape.registry.block.EnderscapeBlocks.*;
 import static net.penumbra.enderscape.registry.item.EnderscapeItems.*;
 import static net.penumbra.enderscape.registry.item.EnderscapePotions.*;
 
-public class EnderscapeRecipeProvider extends FabricRecipeProvider {
+public class EnderscapeRecipeProvider {
 
     private static final ImmutableList<ItemLike> NEBULITE_SMELTABLES = ImmutableList.of(NEBULITE_ORE, MIRESTONE_NEBULITE_ORE);
     private static final ImmutableList<ItemLike> SHADOLINE_SMELTABLES = ImmutableList.of(SHADOLINE_ORE, MIRESTONE_SHADOLINE_ORE, RAW_SHADOLINE);
-
-    public EnderscapeRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-        super(output, future);
-    }
 
     public static Stream<VanillaRecipeProvider.TrimTemplate> smithingTrims() {
         return Stream.of(
@@ -71,8 +63,7 @@ public class EnderscapeRecipeProvider extends FabricRecipeProvider {
                 });
     }
 
-    @Override
-    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+    public static RecipeProvider createRecipeProvider(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
         return new RecipeProvider(recipes, advancements) {
 
             @Override
@@ -781,7 +772,7 @@ public class EnderscapeRecipeProvider extends FabricRecipeProvider {
                 DataComponentPatch patch = DataComponentPatch.builder().set(EnderscapeDataComponents.RUBBLE_SHIELD_VARIANT, variant).build();
                 ItemStackTemplate template = new ItemStackTemplate(RUBBLE_SHIELD, patch);
 
-                new ShapedRecipeBuilder(registries.lookupOrThrow(Registries.ITEM), RecipeCategory.COMBAT, template)
+                new ShapedRecipeBuilder(recipes.lookup(Registries.ITEM), RecipeCategory.COMBAT, template)
                         .define('C', RUBBLE_CHITIN)
                         .define('S', SHADOLINE_INGOT)
                         .define('#', variantItem)
@@ -795,10 +786,6 @@ public class EnderscapeRecipeProvider extends FabricRecipeProvider {
         };
     }
 
-    @Override
-    public String getName() {
-        return "Recipes";
-    }
 
 
     private static class EnderscapeBrewingProvider extends BrewingProvider {

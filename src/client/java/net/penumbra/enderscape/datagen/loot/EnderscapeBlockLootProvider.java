@@ -1,13 +1,13 @@
 package net.penumbra.enderscape.datagen.loot;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.minecraft.advancements.predicates.BlockPredicate;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -32,17 +32,23 @@ import net.penumbra.enderscape.block.VeiledLeafPileBlock;
 import net.penumbra.enderscape.block.state.StateProperties;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Set;
 import java.util.function.Function;
 
 import static net.minecraft.world.item.Items.END_STONE;
 import static net.penumbra.enderscape.registry.block.EnderscapeBlocks.*;
 import static net.penumbra.enderscape.registry.item.EnderscapeItems.*;
 
-public class EnderscapeBlockLootProvider extends FabricBlockLootSubProvider {
+public class EnderscapeBlockLootProvider extends BlockLootSubProvider {
 
-    public EnderscapeBlockLootProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
-        super(output, lookup);
+    public EnderscapeBlockLootProvider(LootTableSubProvider.Context output) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), output);
+    }
+
+    @Override
+    public void run() {
+        generate();
+        map.forEach(output::accept);
     }
 
     @Override

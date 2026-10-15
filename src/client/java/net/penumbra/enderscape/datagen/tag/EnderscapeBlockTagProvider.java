@@ -1,11 +1,13 @@
 package net.penumbra.enderscape.datagen.tag;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.BlockItemTagAppender;
+import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -14,24 +16,30 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SignBlock;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.penumbra.enderscape.Enderscape;
 
 import java.util.concurrent.CompletableFuture;
 
-import static net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags.*;
 import static net.minecraft.references.BlockItemIds.*;
+import static net.neoforged.neoforge.common.Tags.Blocks.CHAINS;
+import static net.neoforged.neoforge.common.Tags.Blocks.ORES;
+import static net.neoforged.neoforge.common.Tags.Blocks.STORAGE_BLOCKS;
+import static net.neoforged.neoforge.common.Tags.Blocks.STRIPPED_LOGS;
+import static net.neoforged.neoforge.common.Tags.Blocks.STRIPPED_WOODS;
 import static net.penumbra.enderscape.references.EnderscapeBlockItemIds.*;
 import static net.penumbra.enderscape.references.EnderscapeBlockIds.*;
 import static net.penumbra.enderscape.registry.tag.EnderscapeBlockTags.*;
 
-public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
+public class EnderscapeBlockTagProvider extends BlockTagsProvider {
 
-    public EnderscapeBlockTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, registriesFuture);
+    public EnderscapeBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture, Enderscape.MOD_ID);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider lookup) {
-        builder(ALL_ETCHED_MAGNIA_BLOCKS).forceAddTag(ETCHED_ALLURING_MAGNIA_BLOCKS).forceAddTag(ETCHED_REPULSIVE_MAGNIA_BLOCKS);
+        builder(ALL_ETCHED_MAGNIA_BLOCKS).addTag(ETCHED_ALLURING_MAGNIA_BLOCKS).addTag(ETCHED_REPULSIVE_MAGNIA_BLOCKS);
         builder(BASE_STONE_END).add(END_STONE, MIRESTONE, VERADITE, KURODITE);
 
         builder(POWERS_BULB_FLOWER).add(CELESTIAL_OVERGROWTH);
@@ -56,9 +64,9 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         ).add(
                 CELESTIAL_WALL_HANGING_SIGN,
                 CELESTIAL_WALL_SIGN
-        ).forceAddTag(CELESTIAL_STEMS);
+        ).addTag(CELESTIAL_STEMS);
 
-        builder(CHANTERELLE_BRICK_BLOCKS).forceAddTag(CELESTIAL_BRICK_BLOCKS).forceAddTag(MURUBLIGHT_BRICK_BLOCKS);
+        builder(CHANTERELLE_BRICK_BLOCKS).addTag(CELESTIAL_BRICK_BLOCKS).addTag(MURUBLIGHT_BRICK_BLOCKS);
         builder(CHANTERELLE_CAP_BLOCKS).add(CELESTIAL_CAP, MURUBLIGHT_CAP);
         builder(CORRUPTION_PURIFIES_ON);
         builder(DUSK_PURPUR_BLOCKS).add(DUSK_PURPUR_BLOCK, DUSK_PURPUR_PILLAR, DUSK_PURPUR_STAIRS, DUSK_PURPUR_SLAB, DUSK_PURPUR_WALL, CHISELED_DUSK_PURPUR);
@@ -68,28 +76,28 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         builder(ETCHED_REPULSIVE_MAGNIA_BLOCKS).add(ETCHED_REPULSIVE_MAGNIA, ETCHED_REPULSIVE_MAGNIA_STAIRS, ETCHED_REPULSIVE_MAGNIA_SLAB, ETCHED_REPULSIVE_MAGNIA_WALL);
         builder(PURUBERRY_VINE_SUPPORTS).add(PURUBERRY_FLOWER, UNRIPE_PURUBERRY_BLOCK, RIPE_PURUBERRY_BLOCK);
 
-        builder(SUPPORTS_BULB_FLOWER).forceAddTag(SUPPORTS_CELESTIAL_VEGETATION);
-        builder(SUPPORTS_CELESTIAL_CHANTERELLE).forceAddTag(SUPPORTS_CELESTIAL_VEGETATION);
-        builder(SUPPORTS_CELESTIAL_GROWTH).forceAddTag(SUPPORTS_CELESTIAL_VEGETATION);
-        builder(SUPPORTS_CELESTIAL_VEGETATION).add(END_STONE, MIRESTONE, VEILED_END_STONE).forceAddTag(OVERGROWTH_BLOCKS).forceAddTag(BlockTags.SUPPORTS_VEGETATION);
-        builder(SUPPORTS_CHORUS_SPROUTS).forceAddTag(BlockTags.SUPPORTS_CHORUS_PLANT);
-        builder(SUPPORTS_CORRUPT_GROWTH).forceAddTag(SUPPORTS_CORRUPT_VEGETATION);
-        builder(SUPPORTS_CORRUPT_VEGETATION).add(END_STONE, MIRESTONE, VEILED_END_STONE).forceAddTag(OVERGROWTH_BLOCKS).forceAddTag(BlockTags.SUPPORTS_VEGETATION);
-        builder(SUPPORTS_DRY_END_GROWTH).forceAddTag(BlockTags.SUPPORTS_CHORUS_PLANT);
-        builder(SUPPORTS_PURUBERRY_VINE).forceAddTag(CHANTERELLE_CAP_BLOCKS);
-        builder(SUPPORTS_MURUBLIGHT_CHANTERELLE).forceAddTag(SUPPORTS_CORRUPT_VEGETATION);
+        builder(SUPPORTS_BULB_FLOWER).addTag(SUPPORTS_CELESTIAL_VEGETATION);
+        builder(SUPPORTS_CELESTIAL_CHANTERELLE).addTag(SUPPORTS_CELESTIAL_VEGETATION);
+        builder(SUPPORTS_CELESTIAL_GROWTH).addTag(SUPPORTS_CELESTIAL_VEGETATION);
+        builder(SUPPORTS_CELESTIAL_VEGETATION).add(END_STONE, MIRESTONE, VEILED_END_STONE).addTag(OVERGROWTH_BLOCKS).addTag(BlockTags.SUPPORTS_VEGETATION);
+        builder(SUPPORTS_CHORUS_SPROUTS).addTag(BlockTags.SUPPORTS_CHORUS_PLANT);
+        builder(SUPPORTS_CORRUPT_GROWTH).addTag(SUPPORTS_CORRUPT_VEGETATION);
+        builder(SUPPORTS_CORRUPT_VEGETATION).add(END_STONE, MIRESTONE, VEILED_END_STONE).addTag(OVERGROWTH_BLOCKS).addTag(BlockTags.SUPPORTS_VEGETATION);
+        builder(SUPPORTS_DRY_END_GROWTH).addTag(BlockTags.SUPPORTS_CHORUS_PLANT);
+        builder(SUPPORTS_PURUBERRY_VINE).addTag(CHANTERELLE_CAP_BLOCKS);
+        builder(SUPPORTS_MURUBLIGHT_CHANTERELLE).addTag(SUPPORTS_CORRUPT_VEGETATION);
         builder(SUPPORTS_VEILED_VEGETATION).add(END_STONE, VEILED_END_STONE, CELESTIAL_OVERGROWTH);
-        builder(SUPPORTS_VEILED_SAPLING).forceAddTag(SUPPORTS_VEILED_VEGETATION);
-        builder(SUPPORTS_WISP_FLOWER).forceAddTag(SUPPORTS_VEILED_VEGETATION);
-        builder(SUPPORTS_WISP_GROWTH).forceAddTag(SUPPORTS_VEILED_VEGETATION);
-        builder(SUPPORTS_WISP_SPROUTS).forceAddTag(SUPPORTS_VEILED_VEGETATION);
+        builder(SUPPORTS_VEILED_SAPLING).addTag(SUPPORTS_VEILED_VEGETATION);
+        builder(SUPPORTS_WISP_FLOWER).addTag(SUPPORTS_VEILED_VEGETATION);
+        builder(SUPPORTS_WISP_GROWTH).addTag(SUPPORTS_VEILED_VEGETATION);
+        builder(SUPPORTS_WISP_SPROUTS).addTag(SUPPORTS_VEILED_VEGETATION);
         builder(VOID_FIRE_BASE_BLOCKS)
                 .add(VOID_SHALE, NEBULITE_BLOCK, CORRUPT_OVERGROWTH, MURUBLIGHT_CAP)
-                .forceAddTag(KURODITE_BLOCKS)
-                .forceAddTag(MURUBLIGHT_BRICK_BLOCKS)
-                .forceAddTag(MURUBLIGHT_STEMS)
-                .forceAddTag(MURUBLIGHT_WOOD_BLOCKS);
-        builder(VOID_LACHRYMA_TURNS_TO_VOID_SHALE).forceAddTag(BASE_STONE_END);
+                .addTag(KURODITE_BLOCKS)
+                .addTag(MURUBLIGHT_BRICK_BLOCKS)
+                .addTag(MURUBLIGHT_STEMS)
+                .addTag(MURUBLIGHT_WOOD_BLOCKS);
+        builder(VOID_LACHRYMA_TURNS_TO_VOID_SHALE).addTag(BASE_STONE_END);
 
         builder(KURODITE_BLOCKS).add(
                 CHISELED_KURODITE,
@@ -109,10 +117,10 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
                 POLISHED_KURODITE_WALL
         );
 
-        builder(MAGNIA_ARCH_REPLACEABLE).add(ALLURING_MAGNIA).forceAddTag(BASE_STONE_END);
+        builder(MAGNIA_ARCH_REPLACEABLE).add(ALLURING_MAGNIA).addTag(BASE_STONE_END);
         builder(MAGNIA_BLOCKS).add(ALLURING_MAGNIA, REPULSIVE_MAGNIA);
         builder(MAGNIA_SPROUTS).add(ALLURING_MAGNIA_SPROUT, REPULSIVE_MAGNIA_SPROUT);
-        builder(MAGNIA_TOWER_REPLACEABLE).forceAddTag(BASE_STONE_END).forceAddTag(MAGNIA_BLOCKS);
+        builder(MAGNIA_TOWER_REPLACEABLE).addTag(BASE_STONE_END).addTag(MAGNIA_BLOCKS);
 
         builder(MIRESTONE_BLOCKS).add(
                 MIRESTONE,
@@ -157,7 +165,7 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         ).add(
                 MURUBLIGHT_WALL_HANGING_SIGN,
                 MURUBLIGHT_WALL_SIGN
-        ).forceAddTag(MURUBLIGHT_STEMS);
+        ).addTag(MURUBLIGHT_STEMS);
 
         builder(NEW_END_STONE_BLOCKS).add(
                 CHISELED_END_STONE,
@@ -178,11 +186,11 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         );
 
         builder(NEW_PURPUR_BLOCKS).add(CHISELED_PURPUR, PURPUR_WALL);
-        builder(ORE_REPLACEABLE).forceAddTag(BASE_STONE_END);
+        builder(ORE_REPLACEABLE).addTag(BASE_STONE_END);
         builder(OVERGROWTH_BLOCKS).add(CELESTIAL_OVERGROWTH, CORRUPT_OVERGROWTH);
         builder(OVERHEATS_MAGNIA_SPROUTS).add(MAGMA_BLOCK);
         builder(PURPUR_TILE_BLOCKS).add(PURPUR_TILES, PURPUR_TILE_STAIRS, PURPUR_TILE_SLAB);
-        builder(RUBBLEMITES_SPAWNABLE_ON).add(VEILED_END_STONE).forceAddTag(BASE_STONE_END).forceAddTag(OVERGROWTH_BLOCKS).forceAddTag(MAGNIA_BLOCKS);
+        builder(RUBBLEMITES_SPAWNABLE_ON).add(VEILED_END_STONE).addTag(BASE_STONE_END).addTag(OVERGROWTH_BLOCKS).addTag(MAGNIA_BLOCKS);
         builder(EDIBLE_FOR_RUSTLE).add(MURUBLIGHT_CHANTERELLE);
         builder(RUSTLE_PREFER_WALK_ON).add(VEILED_END_STONE);
         builder(RUSTLES_SPAWNABLE_ON).add(VEILED_END_STONE, END_STONE);
@@ -203,7 +211,7 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         );
 
         builder(VEILED_LOGS).add(VEILED_LOG, STRIPPED_VEILED_LOG, VEILED_WOOD, STRIPPED_VEILED_WOOD);
-        builder(VEILED_LOG_REPLACEABLE).forceAddTag(BlockTags.SCULK_REPLACEABLE).forceAddTag(BlockTags.REPLACEABLE);
+        builder(VEILED_LOG_REPLACEABLE).addTag(BlockTags.SCULK_REPLACEABLE).addTag(BlockTags.REPLACEABLE);
         builder(VEILED_SAPLING_GROWS_ON).add(VEILED_END_STONE);
 
         builder(VEILED_WOOD_BLOCKS).add(
@@ -222,7 +230,7 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         ).add(
                 VEILED_WALL_HANGING_SIGN,
                 VEILED_WALL_SIGN
-        ).forceAddTag(VEILED_LOGS);
+        ).addTag(VEILED_LOGS);
 
         builder(VERADITE_BLOCKS).add(
                 CHISELED_VERADITE,
@@ -242,7 +250,7 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
                 VERADITE_WALL
         );
 
-        builder(RUBBLEMITE_MIRESTONE_VARIANTS_SPAWN_ON).add(CORRUPT_OVERGROWTH).forceAddTag(MIRESTONE_BLOCKS).forceAddTag(DUSK_PURPUR_BLOCKS);
+        builder(RUBBLEMITE_MIRESTONE_VARIANTS_SPAWN_ON).add(CORRUPT_OVERGROWTH).addTag(MIRESTONE_BLOCKS).addTag(DUSK_PURPUR_BLOCKS);
         builder(RUBBLEMITE_VERADITE_VARIANTS_SPAWN_ON).add(VERADITE);
         builder(RUBBLEMITE_KURODITE_VARIANTS_SPAWN_ON).add(KURODITE);
 
@@ -262,18 +270,18 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         builder(BlockTags.FENCE_GATES).add(VEILED_FENCE_GATE, CELESTIAL_FENCE_GATE, MURUBLIGHT_FENCE_GATE);
         builder(BlockTags.FIRE).add(VOID_FIRE);
         builder(BlockTags.FLOWERS).add(WISP_FLOWER, PURUBERRY_FLOWER);
-        builder(BlockTags.HUGE_BROWN_MUSHROOM_CAN_PLACE_ON).forceAddTag(OVERGROWTH_BLOCKS);
-        builder(BlockTags.HUGE_RED_MUSHROOM_CAN_PLACE_ON).forceAddTag(OVERGROWTH_BLOCKS);
+        builder(BlockTags.HUGE_BROWN_MUSHROOM_CAN_PLACE_ON).addTag(OVERGROWTH_BLOCKS);
+        builder(BlockTags.HUGE_RED_MUSHROOM_CAN_PLACE_ON).addTag(OVERGROWTH_BLOCKS);
         builder(BlockTags.LANTERNS).add(BULB_LANTERN, VOID_LANTERN);
         builder(BlockTags.LEAVES).add(VEILED_LEAVES);
-        builder(BlockItemTags.LOGS_THAT_BURN.block()).forceAddTag(CELESTIAL_STEMS).forceAddTag(MURUBLIGHT_STEMS).forceAddTag(VEILED_LOGS);
+        builder(BlockItemTags.LOGS_THAT_BURN.block()).addTag(CELESTIAL_STEMS).addTag(MURUBLIGHT_STEMS).addTag(VEILED_LOGS);
         builder(BlockTags.NEEDS_DIAMOND_TOOL).add(NEBULITE_ORE, MIRESTONE_NEBULITE_ORE, NEBULITE_BLOCK);
-        builder(BlockTags.NEEDS_STONE_TOOL).add(SHADOLINE_ORE, MIRESTONE_SHADOLINE_ORE).forceAddTag(SHADOLINE_BLOCKS);
-        builder(BlockTags.OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT).forceAddTag(OVERGROWTH_BLOCKS);
+        builder(BlockTags.NEEDS_STONE_TOOL).add(SHADOLINE_ORE, MIRESTONE_SHADOLINE_ORE).addTag(SHADOLINE_BLOCKS);
+        builder(BlockTags.OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT).addTag(OVERGROWTH_BLOCKS);
         builder(BlockTags.PLANKS).add(VEILED_PLANKS, CELESTIAL_PLANKS, MURUBLIGHT_PLANKS);
         builder(BlockTags.REPLACEABLE).add(DRY_END_GROWTH, CHORUS_SPROUTS, WISP_SPROUTS, WISP_GROWTH);
         builder(BlockItemTags.SAPLINGS.block()).add(VEILED_SAPLING);
-        builder(BlockTags.SCULK_REPLACEABLE).add(VEILED_END_STONE, BLISTERED_MAGNIA, VOID_SHALE).forceAddTag(BASE_STONE_END).forceAddTag(OVERGROWTH_BLOCKS).forceAddTag(MAGNIA_BLOCKS);
+        builder(BlockTags.SCULK_REPLACEABLE).add(VEILED_END_STONE, BLISTERED_MAGNIA, VOID_SHALE).addTag(BASE_STONE_END).addTag(OVERGROWTH_BLOCKS).addTag(MAGNIA_BLOCKS);
         builder(BlockTags.SHEARS_MINOR_BREAKING_SPEED).add(BLINKLIGHT_VINES_BODY, BLINKLIGHT_VINES_HEAD, PURUBERRY_VINE).add(VEILED_VINES);
         builder(BlockTags.SMALL_FLOWERS).add(BULB_FLOWER);
         builder(BlockTags.STANDING_SIGNS).add(VEILED_SIGN, CELESTIAL_SIGN, MURUBLIGHT_SIGN);
@@ -281,9 +289,9 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         builder(BlockTags.STONE_PRESSURE_PLATES).add(POLISHED_END_STONE_PRESSURE_PLATE, POLISHED_MIRESTONE_PRESSURE_PLATE, POLISHED_VERADITE_PRESSURE_PLATE, POLISHED_KURODITE_PRESSURE_PLATE);
         builder(BlockTags.SUPPORTS_CHORUS_FLOWER).add(VEILED_END_STONE, CELESTIAL_OVERGROWTH);
         builder(BlockTags.SUPPORTS_CHORUS_PLANT).add(VEILED_END_STONE, CELESTIAL_OVERGROWTH);
-        builder(BlockTags.SUPPORTS_NETHER_SPROUTS).forceAddTag(OVERGROWTH_BLOCKS);
-        builder(BlockTags.SUPPORTS_WARPED_FUNGUS).forceAddTag(OVERGROWTH_BLOCKS);
-        builder(BlockTags.SUPPORTS_WARPED_ROOTS).forceAddTag(OVERGROWTH_BLOCKS);
+        builder(BlockTags.SUPPORTS_NETHER_SPROUTS).addTag(OVERGROWTH_BLOCKS);
+        builder(BlockTags.SUPPORTS_WARPED_FUNGUS).addTag(OVERGROWTH_BLOCKS);
+        builder(BlockTags.SUPPORTS_WARPED_ROOTS).addTag(OVERGROWTH_BLOCKS);
         builder(BlockTags.WALL_HANGING_SIGNS).add(VEILED_WALL_HANGING_SIGN, CELESTIAL_WALL_HANGING_SIGN, MURUBLIGHT_WALL_HANGING_SIGN);
         builder(BlockTags.WALL_POST_OVERRIDE).add(VOID_TORCH);
         builder(BlockTags.WALL_SIGNS).add(VEILED_WALL_SIGN, CELESTIAL_WALL_SIGN, MURUBLIGHT_WALL_SIGN);
@@ -298,11 +306,11 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
 
         builder(BlockTags.MINEABLE_WITH_AXE)
                 .add(VEILED_VINES, VOID_CAMPFIRE).add(PURUBERRY_VINE, BLINKLIGHT_VINES_BODY, BLINKLIGHT_VINES_HEAD)
-                .forceAddTag(CELESTIAL_WOOD_BLOCKS).forceAddTag(MURUBLIGHT_WOOD_BLOCKS).forceAddTag(VEILED_WOOD_BLOCKS);
+                .addTag(CELESTIAL_WOOD_BLOCKS).addTag(MURUBLIGHT_WOOD_BLOCKS).addTag(VEILED_WOOD_BLOCKS);
 
         builder(BlockTags.MINEABLE_WITH_HOE)
                 .add(VEILED_LEAF_PILE, RIPE_PURUBERRY_BLOCK, UNRIPE_PURUBERRY_BLOCK, PURUBERRY_FLOWER, VEILED_LEAVES)
-                .forceAddTag(CHANTERELLE_CAP_BLOCKS)
+                .addTag(CHANTERELLE_CAP_BLOCKS)
         ;
 
         builder(BlockTags.MINEABLE_WITH_PICKAXE)
@@ -321,20 +329,20 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
                         VOID_SHALE,
                         VOID_LANTERN
                 )
-                .forceAddTag(ALL_ETCHED_MAGNIA_BLOCKS)
-                .forceAddTag(CHANTERELLE_BRICK_BLOCKS)
-                .forceAddTag(DUSK_PURPUR_BLOCKS)
-                .forceAddTag(END_ORE_BLOCKS)
-                .forceAddTag(KURODITE_BLOCKS)
-                .forceAddTag(MAGNIA_BLOCKS)
-                .forceAddTag(MAGNIA_SPROUTS)
-                .forceAddTag(MIRESTONE_BLOCKS)
-                .forceAddTag(NEW_END_STONE_BLOCKS)
-                .forceAddTag(NEW_PURPUR_BLOCKS)
-                .forceAddTag(OVERGROWTH_BLOCKS)
-                .forceAddTag(PURPUR_TILE_BLOCKS)
-                .forceAddTag(SHADOLINE_BLOCKS)
-                .forceAddTag(VERADITE_BLOCKS);
+                .addTag(ALL_ETCHED_MAGNIA_BLOCKS)
+                .addTag(CHANTERELLE_BRICK_BLOCKS)
+                .addTag(DUSK_PURPUR_BLOCKS)
+                .addTag(END_ORE_BLOCKS)
+                .addTag(KURODITE_BLOCKS)
+                .addTag(MAGNIA_BLOCKS)
+                .addTag(MAGNIA_SPROUTS)
+                .addTag(MIRESTONE_BLOCKS)
+                .addTag(NEW_END_STONE_BLOCKS)
+                .addTag(NEW_PURPUR_BLOCKS)
+                .addTag(OVERGROWTH_BLOCKS)
+                .addTag(PURPUR_TILE_BLOCKS)
+                .addTag(SHADOLINE_BLOCKS)
+                .addTag(VERADITE_BLOCKS);
 
         builder(BlockTags.DRAGON_IMMUNE)
                 .add(
@@ -346,12 +354,12 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
                         END_VAULT,
                         END_HAVEN_CORE
                 )
-                .forceAddTag(END_ORE_BLOCKS)
-                .forceAddTag(KURODITE_BLOCKS)
-                .forceAddTag(MIRESTONE_BLOCKS)
-                .forceAddTag(NEW_END_STONE_BLOCKS)
-                .forceAddTag(SHADOLINE_BLOCKS)
-                .forceAddTag(VERADITE_BLOCKS);
+                .addTag(END_ORE_BLOCKS)
+                .addTag(KURODITE_BLOCKS)
+                .addTag(MIRESTONE_BLOCKS)
+                .addTag(NEW_END_STONE_BLOCKS)
+                .addTag(SHADOLINE_BLOCKS)
+                .addTag(VERADITE_BLOCKS);
 
         builder(BlockTags.FLOWER_POTS).add(
                 POTTED_ALLURING_MAGNIA_SPROUT,
@@ -451,8 +459,8 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
         builder(CHAINS).add(SHADOLINE_CHAIN);
         builder(STRIPPED_LOGS).add(STRIPPED_VEILED_LOG, STRIPPED_CELESTIAL_STEM, STRIPPED_MURUBLIGHT_STEM);
         builder(STRIPPED_WOODS).add(STRIPPED_VEILED_WOOD, STRIPPED_CELESTIAL_HYPHAE, STRIPPED_MURUBLIGHT_HYPHAE);
-        builder(ORES).forceAddTag(END_ORE_BLOCKS);
-        builder(STORAGE_BLOCKS).forceAddTag(NEBULITE_STORAGE_BLOCKS).forceAddTag(RAW_SHADOLINE_STORAGE_BLOCKS).forceAddTag(SHADOLINE_STORAGE_BLOCKS);
+        builder(ORES).addTag(END_ORE_BLOCKS);
+        builder(STORAGE_BLOCKS).addTag(NEBULITE_STORAGE_BLOCKS).addTag(RAW_SHADOLINE_STORAGE_BLOCKS).addTag(SHADOLINE_STORAGE_BLOCKS);
 
         builder(NEBULITE_ORES).add(NEBULITE_ORE, MIRESTONE_NEBULITE_ORE);
         builder(NEBULITE_STORAGE_BLOCKS).add(NEBULITE_BLOCK);
@@ -462,7 +470,7 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
 
         // Misc
 
-        builder(externalKey("antixray", "hidden_only_ores")).forceAddTag(NEBULITE_ORES);
+        builder(externalKey("antixray", "hidden_only_ores")).addTag(NEBULITE_ORES);
 
         builder(externalKey("create", "tree_attachments")).add(MURUBLIGHT_BRACKET);
         builder(externalKey("create", "tree_roots")).add(VEILED_LOG, VEILED_WOOD);
@@ -492,6 +500,15 @@ public class EnderscapeBlockTagProvider extends FabricTagsProvider.BlockTagsProv
                 washedAwayByFluids.add(block.builtInRegistryHolder().key());
             }
         }
+    }
+
+    private BlockItemTagAppender<Block> builder(TagKey<Block> tag) {
+        return new BlockItemTagAppender<>(tag(tag)) {
+            @Override
+            protected ResourceKey<Block> convertElement(BlockItemId element) {
+                return element.block();
+            }
+        };
     }
 
     private TagKey<Block> externalKey(String namespace, String path) {

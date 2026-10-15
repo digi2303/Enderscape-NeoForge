@@ -1,13 +1,14 @@
 package net.penumbra.enderscape.datagen.tag;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagAppender;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
+import net.penumbra.enderscape.Enderscape;
 import net.penumbra.enderscape.registry.sound.EnderscapeMusic;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,10 +17,10 @@ import static net.minecraft.sounds.SoundEvents.*;
 import static net.penumbra.enderscape.registry.tag.EnderscapeSoundEventTags.AMBIENCE_REPLACEABLE_BY_ENDERSCAPE;
 import static net.penumbra.enderscape.registry.tag.EnderscapeSoundEventTags.STRUCTURE_MUSIC;
 
-public class EnderscapeSoundEventTagProvider extends FabricTagsProvider<SoundEvent> {
+public class EnderscapeSoundEventTagProvider extends TagsProvider<SoundEvent> {
 
-    public EnderscapeSoundEventTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-        super(output, Registries.SOUND_EVENT, future);
+    public EnderscapeSoundEventTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+        super(output, Registries.SOUND_EVENT, future, Enderscape.MOD_ID);
     }
 
     @Override

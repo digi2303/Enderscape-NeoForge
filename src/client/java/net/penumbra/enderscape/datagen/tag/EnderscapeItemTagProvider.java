@@ -1,32 +1,33 @@
 package net.penumbra.enderscape.datagen.tag;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
+import net.penumbra.enderscape.Enderscape;
 
 import java.util.concurrent.CompletableFuture;
 
-import static net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags.*;
 import static net.minecraft.references.BlockItemIds.*;
 import static net.minecraft.references.ItemIds.*;
 import static net.minecraft.tags.BlockItemTags.LANTERNS;
 import static net.minecraft.tags.BlockItemTags.SLABS;
 import static net.minecraft.tags.ItemTags.*;
+import static net.neoforged.neoforge.common.Tags.Items.*;
 import static net.penumbra.enderscape.references.EnderscapeBlockItemIds.*;
 import static net.penumbra.enderscape.references.EnderscapeItemIds.*;
 import static net.penumbra.enderscape.registry.tag.EnderscapeItemTags.*;
 
-public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
+public class EnderscapeItemTagProvider extends ItemTagsProvider {
 
-    public EnderscapeItemTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, registriesFuture, null);
+    public EnderscapeItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture, Enderscape.MOD_ID);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
         tag(MAGNIA_ATTRACTOR_ENCHANTABLE).add(MAGNIA_ATTRACTOR);
         tag(MIRROR_ENCHANTABLE).add(MIRROR);
         tag(NEBULITE_TOOLS).add(DAGGER, MIRROR, MAGNIA_ATTRACTOR);
-        tag(NEBULITE_TOOL_ENCHANTABLE).forceAddTag(NEBULITE_TOOLS);
+        tag(NEBULITE_TOOL_ENCHANTABLE).addTag(NEBULITE_TOOLS);
         tag(NEBULITE_TOOL_FUELS).add(NEBULITE);
         tag(REPAIRS_DRIFT_LEGGINGS).add(DRIFT_JELLY_BOTTLE);
         tag(REPAIRS_RUBBLE_SHIELDS).add(RUBBLE_CHITIN);
@@ -118,7 +119,7 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
                 VOID_LANTERN.item(),
                 VOID_SHALE.item(),
                 VOID_TORCH
-        ).forceAddTag(ItemTags.SHULKER_BOXES).forceAddTag(SHADOLINE_BLOCKS).forceAddTag(DUSK_PURPUR_BLOCKS).forceAddTag(KURODITE_BLOCKS).forceAddTag(MURUBLIGHT_BRICK_BLOCKS).forceAddTag(MURUBLIGHT_STEMS).forceAddTag(MURUBLIGHT_WOOD_ITEMS);
+        ).addTag(ItemTags.SHULKER_BOXES).addTag(SHADOLINE_BLOCKS).addTag(DUSK_PURPUR_BLOCKS).addTag(KURODITE_BLOCKS).addTag(MURUBLIGHT_BRICK_BLOCKS).addTag(MURUBLIGHT_STEMS).addTag(MURUBLIGHT_WOOD_ITEMS);
 
         tag(DUSK_PURPUR_BLOCKS).add(DUSK_PURPUR_BLOCK.item(), DUSK_PURPUR_PILLAR.item(), DUSK_PURPUR_STAIRS.item(), DUSK_PURPUR_SLAB.item(), DUSK_PURPUR_WALL.item(), CHISELED_DUSK_PURPUR.item());
         tag(END_ORE_BLOCKS).add(NEBULITE_ORE.item(), SHADOLINE_ORE.item(), MIRESTONE_NEBULITE_ORE.item(), MIRESTONE_SHADOLINE_ORE.item());
@@ -156,12 +157,12 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
                 PURPUR_TILE_SLAB.item()
         );
 
-        tag(CHANTERELLE_BRICK_BLOCKS).forceAddTag(CELESTIAL_BRICK_BLOCKS).forceAddTag(MURUBLIGHT_BRICK_BLOCKS);
+        tag(CHANTERELLE_BRICK_BLOCKS).addTag(CELESTIAL_BRICK_BLOCKS).addTag(MURUBLIGHT_BRICK_BLOCKS);
         tag(CHANTERELLE_CAP_BLOCKS).add(CELESTIAL_CAP.item(), MURUBLIGHT_CAP.item());
 
         tag(CELESTIAL_BRICK_BLOCKS).add(CELESTIAL_BRICKS.item(), CELESTIAL_BRICK_SLAB.item(), CELESTIAL_BRICK_STAIRS.item(), CELESTIAL_BRICK_WALL.item());
         tag(CELESTIAL_STEMS).add(CELESTIAL_STEM.item(), STRIPPED_CELESTIAL_STEM.item(), CELESTIAL_HYPHAE.item(), STRIPPED_CELESTIAL_HYPHAE.item());
-        tag(CELESTIAL_WOOD_ITEMS).forceAddTag(CELESTIAL_STEMS).add(
+        tag(CELESTIAL_WOOD_ITEMS).addTag(CELESTIAL_STEMS).add(
                 CELESTIAL_BUTTON.item(),
                 CELESTIAL_DOOR.item(),
                 CELESTIAL_FENCE.item(),
@@ -177,7 +178,7 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
         );
 
         tag(VEILED_LOGS).add(VEILED_LOG.item(), STRIPPED_VEILED_LOG.item(), VEILED_WOOD.item(), STRIPPED_VEILED_WOOD.item());
-        tag(VEILED_WOOD_ITEMS).forceAddTag(VEILED_LOGS).add(
+        tag(VEILED_WOOD_ITEMS).addTag(VEILED_LOGS).add(
                 VEILED_BUTTON.item(),
                 VEILED_DOOR.item(),
                 VEILED_FENCE.item(),
@@ -195,7 +196,7 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
         tag(MURUBLIGHT_BRICK_BLOCKS).add(MURUBLIGHT_BRICKS.item(), MURUBLIGHT_BRICK_SLAB.item(), MURUBLIGHT_BRICK_STAIRS.item(), MURUBLIGHT_BRICK_WALL.item());
         tag(MURUBLIGHT_STEMS).add(MURUBLIGHT_STEM.item(), STRIPPED_MURUBLIGHT_STEM.item(), MURUBLIGHT_HYPHAE.item(), STRIPPED_MURUBLIGHT_HYPHAE.item());
 
-        tag(MURUBLIGHT_WOOD_ITEMS).forceAddTag(MURUBLIGHT_STEMS).add(
+        tag(MURUBLIGHT_WOOD_ITEMS).addTag(MURUBLIGHT_STEMS).add(
                 MURUBLIGHT_BUTTON.item(),
                 MURUBLIGHT_DOOR.item(),
                 MURUBLIGHT_FENCE.item(),
@@ -319,7 +320,7 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
         tag(ItemTags.WOODEN_FENCES).add(VEILED_FENCE.item(), CELESTIAL_FENCE.item(), MURUBLIGHT_FENCE.item());
         tag(LEAVES).add(VEILED_LEAVES.item());
         tag(LEG_ARMOR).add(SHADOLINE_LEGGINGS, DRIFT_LEGGINGS);
-        tag(LOGS_THAT_BURN).forceAddTag(VEILED_LOGS).forceAddTag(CELESTIAL_STEMS).forceAddTag(MURUBLIGHT_STEMS);
+        tag(LOGS_THAT_BURN).addTag(VEILED_LOGS).addTag(CELESTIAL_STEMS).addTag(MURUBLIGHT_STEMS);
         tag(LOOM_PATTERNS).add(CRESCENT_BANNER_PATTERN);
         tag(PLANKS).add(VEILED_PLANKS.item(), CELESTIAL_PLANKS.item(), MURUBLIGHT_PLANKS.item());
         tag(SAPLINGS).add(VEILED_SAPLING.item());
@@ -408,7 +409,7 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
         tag(STONE_CRAFTING_MATERIALS).add(END_STONE.item(), VERADITE.item(), MIRESTONE.item(), KURODITE.item());
         tag(STONE_TOOL_MATERIALS).add(END_STONE.item(), VERADITE.item(), MIRESTONE.item(), KURODITE.item());
 
-        tag(SULFUR_CUBE_ARCHETYPE_REGULAR).forceAddTag(OVERGROWTH_BLOCKS);
+        tag(SULFUR_CUBE_ARCHETYPE_REGULAR).addTag(OVERGROWTH_BLOCKS);
 
         tag(SULFUR_CUBE_ARCHETYPE_SLOW_BOUNCY).add(
                 ALLURING_MAGNIA.item(),
@@ -461,7 +462,7 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
                 SHADOLINE_PILLAR.item()
         );
 
-        tag(SULFUR_CUBE_ARCHETYPE_SLOW_SLIDING).forceAddTag(CHANTERELLE_CAP_BLOCKS);
+        tag(SULFUR_CUBE_ARCHETYPE_SLOW_SLIDING).addTag(CHANTERELLE_CAP_BLOCKS);
 
         tag(MELEE_WEAPON_ENCHANTABLE).add(DAGGER);
         tag(METAL_NUGGETS).add(SHADOLINE_NUGGET);
@@ -483,23 +484,23 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
         // Conventional Tags
 
         tag(ARMORS).add(SHADOLINE_HELMET, SHADOLINE_CHESTPLATE, SHADOLINE_LEGGINGS, SHADOLINE_BOOTS, DRIFT_LEGGINGS);
-        tag(HUMANOID_ARMORS).add(SHADOLINE_HELMET, SHADOLINE_CHESTPLATE, SHADOLINE_LEGGINGS, SHADOLINE_BOOTS, DRIFT_LEGGINGS);
-        tag(BERRY_FOODS).add(PURUBERRY);
+        tag(ARMORS_HUMANOID).add(SHADOLINE_HELMET, SHADOLINE_CHESTPLATE, SHADOLINE_LEGGINGS, SHADOLINE_BOOTS, DRIFT_LEGGINGS);
+        tag(FOODS_BERRY).add(PURUBERRY);
         tag(BUCKETS).add(RUSTLE_BUCKET, VOID_LACHRYMA_BUCKET);
-        tag(ConventionalItemTags.CHAINS).add(SHADOLINE_CHAIN.item());
+        tag(Tags.Items.CHAINS).add(SHADOLINE_CHAIN.item());
         tag(DRIFT_JELLY_DRINKS).add(DRIFT_JELLY_BOTTLE);
         tag(DRINKS).add(DRIFT_JELLY_BOTTLE);
         tag(DRINK_CONTAINING_BOTTLE).add(DRIFT_JELLY_BOTTLE);
-        tag(EDIBLE_WHEN_PLACED_FOODS).add(CHORUS_CAKE_ROLL);
+        tag(FOODS_EDIBLE_WHEN_PLACED).add(CHORUS_CAKE_ROLL);
         tag(FOODS).add(DRIFT_JELLY_BOTTLE);
         tag(GEMS).add(NEBULITE);
         tag(INGOTS).add(SHADOLINE_INGOT);
         tag(NUGGETS).add(SHADOLINE_NUGGET);
-        tag(MAGIC_DRINKS).add(DRIFT_JELLY_BOTTLE);
+        tag(DRINKS_MAGIC).add(DRIFT_JELLY_BOTTLE);
         tag(MUSIC_DISCS).add(MUSIC_DISC_GLARE, MUSIC_DISC_DECAY, MUSIC_DISC_BLISS);
         tag(MELEE_WEAPON_TOOLS).add(DAGGER);
         tag(NEBULITE_GEMS).add(NEBULITE);
-        tag(ConventionalItemTags.ORES).forceAddTag(END_ORE_BLOCKS);
+        tag(Tags.Items.ORES).addTag(END_ORE_BLOCKS);
         tag(NEBULITE_ORES).add(NEBULITE_ORE.item(), MIRESTONE_NEBULITE_ORE.item());
         tag(NEBULITE_STORAGE_BLOCKS).add(NEBULITE_BLOCK.item());
         tag(RAW_MATERIALS).add(RAW_SHADOLINE);
@@ -509,8 +510,8 @@ public class EnderscapeItemTagProvider extends FabricTagsProvider.ItemTagsProvid
         tag(SHADOLINE_ORES).add(SHADOLINE_ORE.item(), MIRESTONE_SHADOLINE_ORE.item());
         tag(SHADOLINE_RAW_MATERIALS).add(RAW_SHADOLINE);
         tag(SHADOLINE_STORAGE_BLOCKS).add(SHADOLINE_BLOCK.item());
-        tag(SHIELD_TOOLS).add(RUBBLE_SHIELD);
-        tag(STORAGE_BLOCKS).forceAddTag(NEBULITE_STORAGE_BLOCKS).forceAddTag(RAW_SHADOLINE_STORAGE_BLOCKS).forceAddTag(SHADOLINE_STORAGE_BLOCKS);
+        tag(TOOLS_SHIELD).add(RUBBLE_SHIELD);
+        tag(STORAGE_BLOCKS).addTag(NEBULITE_STORAGE_BLOCKS).addTag(RAW_SHADOLINE_STORAGE_BLOCKS).addTag(SHADOLINE_STORAGE_BLOCKS);
         tag(STRIPPED_LOGS).add(STRIPPED_VEILED_LOG.item(), STRIPPED_CELESTIAL_STEM.item(), STRIPPED_MURUBLIGHT_STEM.item());
         tag(STRIPPED_WOODS).add(STRIPPED_VEILED_WOOD.item(), STRIPPED_CELESTIAL_HYPHAE.item(), STRIPPED_MURUBLIGHT_HYPHAE.item());
         tag(TOOLS).add(DAGGER, MIRROR, MAGNIA_ATTRACTOR, RUBBLE_SHIELD);

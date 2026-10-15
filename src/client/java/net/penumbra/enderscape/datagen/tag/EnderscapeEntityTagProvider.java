@@ -1,13 +1,14 @@
 package net.penumbra.enderscape.datagen.tag;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.penumbra.enderscape.Enderscape;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -15,10 +16,10 @@ import static net.minecraft.world.entity.EntityTypeIds.*;
 import static net.penumbra.enderscape.references.EnderscapeEntityIds.*;
 import static net.penumbra.enderscape.registry.tag.EnderscapeEntityTags.*;
 
-public class EnderscapeEntityTagProvider extends FabricTagsProvider.EntityTypeTagsProvider {
+public class EnderscapeEntityTagProvider extends TagsProvider<EntityType<?>> {
 
-    public EnderscapeEntityTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, registriesFuture);
+    public EnderscapeEntityTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, Registries.ENTITY_TYPE, registriesFuture, Enderscape.MOD_ID);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class EnderscapeEntityTagProvider extends FabricTagsProvider.EntityTypeTa
         tag(VOID).add(ENDERMAN, ENDERMITE, ENDER_DRAGON, RUBBLEMITE);
         tag(VOID_IMMUNE).addTag(VOID).add(RUSTLE);
         tag(VOID_LACHRYMA_WALKABLE_MOBS).addTag(VOID);
-        tag(VOID_SHALE_WALKABLE_MOBS).forceAddTag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS);
+        tag(VOID_SHALE_WALKABLE_MOBS).addTag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS);
 
         tag(EntityTypeTags.ARTHROPOD).add(RUBBLEMITE);
         tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(DRIFTER);

@@ -1,24 +1,25 @@
 package net.penumbra.enderscape.datagen.tag;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagAppender;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
+import net.penumbra.enderscape.Enderscape;
 
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.world.effect.MobEffects.ABSORPTION;
 import static net.penumbra.enderscape.registry.tag.EnderscapeMobEffectTags.UNSUPPORTED_WITH_VOIDED_HEALTH;
 
-public class EnderscapeMobEffectTagProvider extends FabricTagsProvider<MobEffect> {
+public class EnderscapeMobEffectTagProvider extends TagsProvider<MobEffect> {
 
-    public EnderscapeMobEffectTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-        super(output, Registries.MOB_EFFECT, future);
+    public EnderscapeMobEffectTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+        super(output, Registries.MOB_EFFECT, future, Enderscape.MOD_ID);
     }
 
     @Override

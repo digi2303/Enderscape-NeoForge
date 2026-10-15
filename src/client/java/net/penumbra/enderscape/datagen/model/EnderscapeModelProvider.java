@@ -1,9 +1,8 @@
 package net.penumbra.enderscape.datagen.model;
 
-import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
@@ -14,9 +13,12 @@ import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -35,7 +37,10 @@ import net.penumbra.enderscape.renderer.item.RubbleShieldVariantItemModelPropert
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static net.minecraft.client.data.models.BlockModelGenerators.*;
 import static net.minecraft.client.data.models.model.ModelLocationUtils.getModelLocation;
@@ -44,7 +49,7 @@ import static net.minecraft.world.level.block.Blocks.END_STONE;
 import static net.penumbra.enderscape.datagen.model.EnderscapeModelTemplates.*;
 import static net.penumbra.enderscape.registry.block.EnderscapeBlocks.*;
 
-public class EnderscapeModelProvider extends FabricModelProvider {
+public class EnderscapeModelProvider extends ModelProvider {
 
     private static final PropertyDispatch<VariantMutator> ROTATIONS_COLUMN_WITH_FACING = PropertyDispatch.modify(StateProperties.FACING)
             .select(Direction.DOWN, X_ROT_180)
@@ -76,15 +81,35 @@ public class EnderscapeModelProvider extends FabricModelProvider {
     public static final List<ModelTemplate> OVERGROWTH_MODEL_TEMPLATES = List.of(TEMPLATE_OVERGROWTH_1, TEMPLATE_OVERGROWTH_2, TEMPLATE_OVERGROWTH_3, TEMPLATE_OVERGROWTH_4);
     public static final List<ModelTemplate> PATH_MODEL_TEMPLATES = List.of(TEMPLATE_PATH_1, TEMPLATE_PATH_2, TEMPLATE_PATH_3, TEMPLATE_PATH_4);
 
-    public EnderscapeModelProvider(FabricPackOutput output) {
-        super(output);
+    private final Set<Block> generatedBlocks = new HashSet<>();
+
+    public EnderscapeModelProvider(PackOutput output) {
+        super(output, Enderscape.MOD_ID);
+    }
+
+    @Override
+    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+        generateBlockStateModels(new BlockModelGenerators(generator -> {
+            generatedBlocks.add(generator.block());
+            blockModels.blockStateOutput.accept(generator);
+        }, blockModels.itemModelOutput, blockModels.modelOutput));
+        generateItemModels(itemModels);
+    }
+
+    @Override
+    protected Stream<? extends Holder<Block>> getKnownBlocks() {
+        return Stream.empty();
+    }
+
+    @Override
+    protected Stream<? extends Holder<Item>> getKnownItems() {
+        return super.getKnownItems().filter(holder -> holder.value() instanceof BlockItem blockItem && generatedBlocks.contains(blockItem.getBlock()));
     }
 
     /*
         Block states and block models
      */
 
-    @Override
     public void generateBlockStateModels(BlockModelGenerators generators) {
         EnderscapeBlockFamilies.getAllFamilies().filter(BlockFamily::shouldGenerateModel).forEach(family -> generators.family(family.getBaseBlock()).generateFor(family));
 
@@ -600,7 +625,6 @@ public class EnderscapeModelProvider extends FabricModelProvider {
         Item Models
      */
 
-    @Override
     public void generateItemModels(ItemModelGenerators generators) {
         generators.generateFlatItem(EnderscapeItems.DAGGER, FLAT_HANDHELD_ITEM);
 
