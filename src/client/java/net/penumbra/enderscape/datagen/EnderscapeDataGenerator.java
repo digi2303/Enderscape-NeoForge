@@ -17,6 +17,7 @@ import net.penumbra.enderscape.datagen.loot.EnderscapeVaultLootProvider;
 import net.penumbra.enderscape.datagen.model.EnderscapeModelProvider;
 import net.penumbra.enderscape.datagen.recipe.EnderscapeRecipeProvider;
 import net.penumbra.enderscape.datagen.tag.*;
+import net.penumbra.enderscape.neoforge.client.EnderscapeDataMapProvider;
 import net.penumbra.enderscape.neoforge.client.EnderscapeRecipeIds;
 import net.penumbra.enderscape.neoforge.registry.EnderscapeBiomeModifiers;
 import net.penumbra.enderscape.registry.EnderscapeRegistries;
@@ -47,6 +48,7 @@ public class EnderscapeDataGenerator {
 		pack.createProvider(EnderscapeBiomeTagProvider::new);
 		pack.createProvider(EnderscapeBlockTagProvider::new);
 		pack.createProvider(EnderscapeDamageTypeTagProvider::new);
+		pack.createProvider(EnderscapeDataMapProvider::new);
 		pack.createProvider(EnderscapeEnchantmentTagProvider::new);
 		pack.createProvider(EnderscapeEntityTagProvider::new);
 		pack.createProvider(EnderscapeFluidTagProvider::new);

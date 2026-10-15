@@ -1,0 +1,166 @@
+{
+  "values": {
+    "enderscape:celestial_hyphae": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "enderscape:celestial_hyphae"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "enderscape:stripped_celestial_hyphae",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "enderscape:celestial_stem": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "enderscape:celestial_stem"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "enderscape:stripped_celestial_stem",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "enderscape:murublight_hyphae": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "enderscape:murublight_hyphae"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "enderscape:stripped_murublight_hyphae",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "enderscape:murublight_stem": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "enderscape:murublight_stem"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "enderscape:stripped_murublight_stem",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "enderscape:veiled_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "enderscape:veiled_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "enderscape:stripped_veiled_log",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "enderscape:veiled_wood": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "enderscape:veiled_wood"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "enderscape:stripped_veiled_wood",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    }
+  }
+}
