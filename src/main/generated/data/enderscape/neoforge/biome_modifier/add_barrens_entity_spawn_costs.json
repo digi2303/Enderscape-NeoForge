@@ -1,0 +1,15 @@
+{
+  "type": "enderscape:add_spawn_costs",
+  "biomes": {
+    "type": "neoforge:and",
+    "values": [
+      "#minecraft:is_end",
+      "#enderscape:enderscape/has_barrens_additions"
+    ]
+  },
+  "entity_types": "enderscape:rubblemite",
+  "spawn_cost": {
+    "charge": 0.2,
+    "energy_budget": 0.6
+  }
+}

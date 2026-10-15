@@ -1,0 +1,8 @@
+{
+  "type": "enderscape:add_features_alongside",
+  "alongside": "minecraft:chorus_plant",
+  "biomes": "#minecraft:is_end",
+  "features": "enderscape:chorus_plants",
+  "step": "vegetal_decoration",
+  "unconditional_biomes": "minecraft:end_midlands"
+}

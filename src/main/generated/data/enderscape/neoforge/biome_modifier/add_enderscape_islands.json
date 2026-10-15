@@ -1,0 +1,7 @@
+{
+  "type": "enderscape:add_features_alongside",
+  "alongside": "minecraft:end_island_decorated",
+  "biomes": "#minecraft:is_end",
+  "features": "enderscape:sky_islands",
+  "step": "raw_generation"
+}

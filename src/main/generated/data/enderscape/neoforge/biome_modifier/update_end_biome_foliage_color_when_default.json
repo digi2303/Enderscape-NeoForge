@@ -1,0 +1,6 @@
+{
+  "type": "enderscape:default_end_ambience",
+  "biomes": "#minecraft:is_end",
+  "overriding_biomes": "#enderscape:enderscape/overrides_default_ambience",
+  "property": "foliage_color"
+}
